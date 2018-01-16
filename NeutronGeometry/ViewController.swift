@@ -26,8 +26,14 @@ class ViewController: NSViewController {
         showCounters()
     }
     
-    fileprivate var counters = [NSView]()
+    fileprivate var counters = [CounterView]()
     fileprivate weak var chamberView: NSView?
+    
+    fileprivate var presures = [Int: HeliumPressure]()
+    
+    fileprivate func presureForCounterIndex(_ index: Int) -> HeliumPressure {
+        return presures[index] ?? .high
+    }
     
     override func viewDidAppear() {
         super.viewDidAppear()
@@ -48,8 +54,9 @@ class ViewController: NSViewController {
         chamberView = chamber
     }
     
-    fileprivate var counterRadius: CGFloat {
-        return CGFloat(max(counterRadius7AtmField.floatValue, 1)) // TODO: 4 atm counters support
+    fileprivate func counterRadiusForPresure(_ presure: HeliumPressure) -> CGFloat {
+        let field = (presure == .high) ? counterRadius7AtmField : counterRadius4AtmField
+        return CGFloat(max(field!.floatValue, 1))
     }
     
     fileprivate func showCounters() {
@@ -58,11 +65,10 @@ class ViewController: NSViewController {
         }
         counters.removeAll()
         
-        // Вычитаем половину счетчика из заданного радиуса
         let minLayerRadius: CGFloat = 100
-        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius) - counterRadius/2
-        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius) - counterRadius/2
-        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius) - counterRadius/2
+        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius)
+        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius)
+        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius)
         
         let minCountersPerLayer = 2
         let total1 = max(layer1CountField.integerValue, minCountersPerLayer)
@@ -82,16 +88,43 @@ class ViewController: NSViewController {
     
     fileprivate func addCountersLayer(tag: Int, total: Int, paddingAngle: CGFloat, countersLayerCenterRadius: CGFloat, color: NSColor) {
         let bounds = self.view.bounds
-        let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
         for i in 0...total-1 {
+            let counterIndex = counters.count
+            let presure = presureForCounterIndex(counterIndex)
+            let counterRadius = counterRadiusForPresure(presure)
+            let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
-            let x = center.x + countersLayerCenterRadius * cos(angle)
-            let y = center.y + countersLayerCenterRadius * sin(angle)
-            let counter = NSView(frame: NSRect(x: x, y: y, width: counterRadius, height: counterRadius))
+            let layerCenter = countersLayerCenterRadius - counterRadius/2 // Вычитаем половину счетчика из заданного радиуса
+            let x = center.x + layerCenter * cos(angle)
+            let y = center.y + layerCenter * sin(angle)
+            let frame = NSRect(x: x, y: y, width: counterRadius, height: counterRadius)
+            
+            let counter = CounterView(frame: frame)
+            counter.index = counterIndex
+            counter.presure = presure
+            counter.onChangePresure = { [weak self] in
+                self?.presures[counterIndex] = presure == .high ? .low : .high
+                self?.showCounters() // TODO: optimisation, refresh single counter
+            }
             counter.wantsLayer = true
             counter.layer?.cornerRadius = counterRadius/2
             counter.layer?.masksToBounds = true
             counter.layer?.backgroundColor = color.cgColor
+            counter.layer?.borderColor = NSColor.brown.cgColor
+            counter.layer?.borderWidth = presure == .low ? 2 : 0
+            
+            let label = NSTextField(frame: NSRect(x: 0, y: 0, width: frame.width, height: frame.height))
+            label.isBezeled = false
+            label.drawsBackground = false
+            label.isEditable = false
+            label.isSelectable = false
+            label.alignment = .center
+            label.textColor = NSColor.white
+            label.font = NSFont.boldSystemFont(ofSize: 12)
+            label.integerValue = counterIndex
+            counter.addSubview(label)
+            counter.label = label
+            
             self.view.addSubview(counter)
             counters.append(counter)
         }
