@@ -13,6 +13,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer1CountField: NSTextField!
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
+    @IBOutlet weak var layer1RadiusField: NSTextField!
+    @IBOutlet weak var layer2RadiusField: NSTextField!
+    @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     
     @IBAction func updateButton(_ sender: Any) {
@@ -50,13 +53,15 @@ class ViewController: NSViewController {
         }
         counters.removeAll()
         
-        let countersLayerCenterRadius1 = 200 - counterRadius/2 // 20 cm - половина счетчика
-        let countersLayerCenterRadius2 = 300 - counterRadius/2 // 30 cm - половина счетчика
-        let countersLayerCenterRadius3 = 400 - counterRadius/2 // 40 cm - половина счетчика
+        let minLayerRadius: CGFloat = 100
+        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 20 cm - половина счетчика
+        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 30 cm - половина счетчика
+        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 40 cm - половина счетчика
         
-        let total1 = max(layer1CountField.integerValue, 2)
-        let total2 = max(layer2CountField.integerValue, 2)
-        let total3 = max(layer3CountField.integerValue, 2)
+        let minCountersPerLayer = 2
+        let total1 = max(layer1CountField.integerValue, minCountersPerLayer)
+        let total2 = max(layer2CountField.integerValue, minCountersPerLayer)
+        let total3 = max(layer3CountField.integerValue, minCountersPerLayer)
         
         // Layer 1
         var paddingAngle: CGFloat = 0 // смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
