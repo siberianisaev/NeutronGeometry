@@ -10,12 +10,15 @@ import Cocoa
 
 class ViewController: NSViewController {
 
+    @IBOutlet weak var counterRadius4AtmField: NSTextField!
+    @IBOutlet weak var counterRadius7AtmField: NSTextField!
     @IBOutlet weak var layer1CountField: NSTextField!
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
     @IBOutlet weak var layer1RadiusField: NSTextField!
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
+    @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     
     @IBAction func updateButton(_ sender: Any) {
@@ -36,16 +39,18 @@ class ViewController: NSViewController {
     fileprivate func showChamber() {
         chamberView?.removeFromSuperview()
         let bounds = self.view.bounds
-        let chamberDimention: CGFloat = 200 // 20 cm
-        let chamberCenter = CGPoint(x: bounds.width/2 - chamberDimention/2, y: bounds.height/2 - chamberDimention/2)
-        let view = NSView(frame: NSRect(x: chamberCenter.x, y: chamberCenter.y, width: chamberDimention, height: chamberDimention))
-        view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.lightGray.cgColor
-        self.view.addSubview(view)
-        chamberView = view
+        let size = CGFloat(max(chamberSizeField.floatValue, 100))
+        let center = CGPoint(x: bounds.width/2 - size/2, y: bounds.height/2 - size/2)
+        let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: size, height: size))
+        chamber.wantsLayer = true
+        chamber.layer?.backgroundColor = NSColor.lightGray.cgColor
+        self.view.addSubview(chamber)
+        chamberView = chamber
     }
     
-    fileprivate let counterRadius: CGFloat = 30 // 30 mm
+    fileprivate var counterRadius: CGFloat {
+        return CGFloat(max(counterRadius7AtmField.floatValue, 1)) // TODO: 4 atm counters support
+    }
     
     fileprivate func showCounters() {
         for view in counters {
@@ -53,10 +58,11 @@ class ViewController: NSViewController {
         }
         counters.removeAll()
         
+        // Вычитаем половину счетчика из заданного радиуса
         let minLayerRadius: CGFloat = 100
-        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 20 cm - половина счетчика
-        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 30 cm - половина счетчика
-        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius) - counterRadius/2 // 40 cm - половина счетчика
+        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius) - counterRadius/2
+        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius) - counterRadius/2
+        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius) - counterRadius/2
         
         let minCountersPerLayer = 2
         let total1 = max(layer1CountField.integerValue, minCountersPerLayer)
@@ -64,7 +70,7 @@ class ViewController: NSViewController {
         let total3 = max(layer3CountField.integerValue, minCountersPerLayer)
         
         // Layer 1
-        var paddingAngle: CGFloat = 0 // смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
+        var paddingAngle: CGFloat = 0 // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
         addCountersLayer(tag: 1, total: total1, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius1, color: NSColor.green)
         // Layer 2
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1)) / 2
@@ -78,16 +84,16 @@ class ViewController: NSViewController {
         let bounds = self.view.bounds
         let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
         for i in 0...total-1 {
-            let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // угл центра счетчика относительно оси OX
+            let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
             let x = center.x + countersLayerCenterRadius * cos(angle)
             let y = center.y + countersLayerCenterRadius * sin(angle)
-            let counterView = NSView(frame: NSRect(x: x, y: y, width: counterRadius, height: counterRadius))
-            counterView.wantsLayer = true
-            counterView.layer?.cornerRadius = counterRadius/2
-            counterView.layer?.masksToBounds = true
-            counterView.layer?.backgroundColor = color.cgColor
-            self.view.addSubview(counterView)
-            counters.append(counterView)
+            let counter = NSView(frame: NSRect(x: x, y: y, width: counterRadius, height: counterRadius))
+            counter.wantsLayer = true
+            counter.layer?.cornerRadius = counterRadius/2
+            counter.layer?.masksToBounds = true
+            counter.layer?.backgroundColor = color.cgColor
+            self.view.addSubview(counter)
+            counters.append(counter)
         }
     }
 
