@@ -19,15 +19,18 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
+    @IBOutlet weak var barrelSizeField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     
     @IBAction func updateButton(_ sender: Any) {
+        showBarrel() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
         showChamber() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
         showCounters()
     }
     
     fileprivate var counters = [CounterView]()
     fileprivate weak var chamberView: NSView?
+    fileprivate weak var barrelView: NSView?
     
     fileprivate var presures = [Int: HeliumPressure]()
     
@@ -38,8 +41,21 @@ class ViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         
+        showBarrel()
         showChamber()
         showCounters()
+    }
+    
+    fileprivate func showBarrel() {
+        barrelView?.removeFromSuperview()
+        let bounds = self.view.bounds
+        let size = CGFloat(max(barrelSizeField.floatValue, 400))
+        let center = CGPoint(x: bounds.width/2 - size/2, y: bounds.height/2 - size/2)
+        let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: size, height: size))
+        barrel.wantsLayer = true
+        barrel.layer?.backgroundColor = NSColor.lightGray.cgColor
+        self.view.addSubview(barrel, positioned: .below, relativeTo: nil)
+        barrelView = barrel
     }
     
     fileprivate func showChamber() {
@@ -49,7 +65,7 @@ class ViewController: NSViewController {
         let center = CGPoint(x: bounds.width/2 - size/2, y: bounds.height/2 - size/2)
         let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: size, height: size))
         chamber.wantsLayer = true
-        chamber.layer?.backgroundColor = NSColor.lightGray.cgColor
+        chamber.layer?.backgroundColor = NSColor.darkGray.cgColor
         self.view.addSubview(chamber)
         chamberView = chamber
     }
