@@ -21,12 +21,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
-    
-    @IBAction func updateButton(_ sender: Any) {
-        showBarrel() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
-        showChamber() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
-        showCounters()
-    }
+    @IBOutlet weak var calculateButton: NSButton!
     
     fileprivate var counters = [CounterView]()
     fileprivate weak var chamberView: NSView?
@@ -36,6 +31,22 @@ class ViewController: NSViewController {
     
     fileprivate func presureForCounterIndex(_ index: Int) -> HeliumPressure {
         return presures[index] ?? .high
+    }
+    
+    @IBAction func updateButton(_ sender: Any) {
+        showBarrel() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
+        showChamber() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
+        showCounters()
+    }
+    
+    @IBAction func calculateButton(_ sender: Any) {
+        print("\nConfiguration results:")
+        let bounds = self.view.bounds
+        let center = CGPoint(x: bounds.width/2, y: bounds.height/2)
+        for counter in counters {
+            let origin = counter.frame.origin
+            print("Counter: \(counter.index), center: (\(origin.x - center.x), \(origin.y - center.y)), presure: \(counter.presure.rawValue) atm.")
+        }
     }
     
     override func viewDidAppear() {
