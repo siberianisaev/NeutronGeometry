@@ -93,9 +93,9 @@ class ViewController: NSViewController {
         counters.removeAll()
         
         let minLayerRadius: CGFloat = 100
-        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius)
-        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius)
-        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius)
+        let layerCenter1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius)
+        let layerCenter2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius)
+        let layerCenter3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius)
         
         let minCountersPerLayer = 2
         let total1 = max(layer1CountField.integerValue, minCountersPerLayer)
@@ -104,16 +104,16 @@ class ViewController: NSViewController {
         
         // Layer 1
         var paddingAngle: CGFloat = 0 // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
-        addCountersLayer(tag: 1, total: total1, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius1)
+        addCountersLayer(tag: 1, total: total1, paddingAngle: paddingAngle, layerCenter: layerCenter1)
         // Layer 2
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1)) / 2
-        addCountersLayer(tag: 2, total: total2, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius2)
+        addCountersLayer(tag: 2, total: total2, paddingAngle: paddingAngle, layerCenter: layerCenter2)
         // Layer 3
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2)) / 2
-        addCountersLayer(tag: 3, total: total3, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius3)
+        addCountersLayer(tag: 3, total: total3, paddingAngle: paddingAngle, layerCenter: layerCenter3)
     }
     
-    fileprivate func addCountersLayer(tag: Int, total: Int, paddingAngle: CGFloat, countersLayerCenterRadius: CGFloat) {
+    fileprivate func addCountersLayer(tag: Int, total: Int, paddingAngle: CGFloat, layerCenter: CGFloat) {
         let bounds = self.view.bounds
         for i in 0...total-1 {
             let counterIndex = counters.count
@@ -121,7 +121,6 @@ class ViewController: NSViewController {
             let counterRadius = counterRadiusForPresure(presure)
             let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
-            let layerCenter = countersLayerCenterRadius - counterRadius/2 // Вычитаем половину счетчика из заданного радиуса
             let x = center.x + layerCenter * cos(angle)
             let y = center.y + layerCenter * sin(angle)
             let frame = NSRect(x: x, y: y, width: counterRadius, height: counterRadius)
