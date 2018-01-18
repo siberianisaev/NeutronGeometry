@@ -9,9 +9,16 @@
 import Cocoa
 
 class ViewController: NSViewController {
+    
+    enum Projection {
+        case front, side
+    }
 
+    @IBOutlet weak var frontView: NSView!
+    @IBOutlet weak var sideView: NSView!
     @IBOutlet weak var counterRadius4AtmField: NSTextField!
     @IBOutlet weak var counterRadius7AtmField: NSTextField!
+    @IBOutlet weak var counterLenghtField: NSTextField!
     @IBOutlet weak var layer1CountField: NSTextField!
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
@@ -22,13 +29,17 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer4RadiusField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
+    @IBOutlet weak var barrelLenghtField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
     
-    fileprivate var counters = [CounterView]()
-    fileprivate weak var chamberView: NSView?
-    fileprivate weak var barrelView: NSView?
+    fileprivate var countersFront = [CounterView]()
+    fileprivate weak var chamberFrontView: NSView?
+    fileprivate weak var barrelFrontView: NSView?
+    fileprivate var countersSide = [NSView]()
+    fileprivate weak var chamberSideView: NSView?
+    fileprivate weak var barrelSideView: NSView?
     
     fileprivate var presures = [Int: HeliumPressure]()
     
@@ -44,16 +55,19 @@ class ViewController: NSViewController {
     }
     
     @IBAction func updateButton(_ sender: Any?) {
-        showBarrel() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
-        showChamber() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
-        showCounters()
+        showBarrelFront()
+        showChamberFront()
+        showCountersFront()
+        showBarrelSide()
+        showChamberSide()
+        showCountersSide()
     }
     
     @IBAction func calculateButton(_ sender: Any) {
         print("\nConfiguration results:")
-        let bounds = self.view.bounds
-        let center = CGPoint(x: bounds.width/2, y: bounds.height/2)
-        for counter in counters {
+        let frontSize = frontView.frame.size
+        let center = CGPoint(x: frontSize.width/2, y: frontSize.height/2)
+        for counter in countersFront {
             let origin = counter.frame.origin
             print("Counter: \(counter.index), center: (\(origin.x - center.x), \(origin.y - center.y)), presure: \(counter.presure.rawValue) atm.")
         }
@@ -62,33 +76,71 @@ class ViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        showBarrel()
-        showChamber()
-        showCounters()
+        setupProjections()
+        updateButton(nil)
     }
     
-    fileprivate func showBarrel() {
-        barrelView?.removeFromSuperview()
-        let bounds = self.view.bounds
-        let size = CGFloat(max(barrelSizeField.floatValue, 400))
-        let center = CGPoint(x: bounds.width/2 - size/2, y: bounds.height/2 - size/2)
-        let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: size, height: size))
+    fileprivate func setupProjections() {
+        for view in [frontView, sideView] {
+            view?.wantsLayer = true
+            view?.layer?.borderColor = NSColor.black.cgColor
+            view?.layer?.borderWidth = 1
+            view?.layer?.backgroundColor = NSColor.white.cgColor
+        }
+    }
+    
+    fileprivate func containerFor(_ projection: Projection) -> NSView {
+        return projection == .front ? frontView : sideView
+    }
+    
+    fileprivate func showBarrel(_ projection: Projection) {
+        let isFront = projection == .front
+        (isFront ? barrelFrontView : barrelSideView)?.removeFromSuperview()
+        let width = CGFloat((isFront ? barrelSizeField : barrelLenghtField)!.floatValue)
+        let height = CGFloat(barrelSizeField.floatValue)
+        let container = containerFor(projection)
+        let containerSize = container.frame.size
+        let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
+        let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
         barrel.wantsLayer = true
         barrel.layer?.backgroundColor = NSColor.lightGray.cgColor
-        self.view.addSubview(barrel, positioned: .below, relativeTo: nil)
-        barrelView = barrel
+        container.addSubview(barrel)
+        isFront ? (barrelFrontView = barrel) : (barrelSideView = barrel)
     }
     
-    fileprivate func showChamber() {
-        chamberView?.removeFromSuperview()
-        let bounds = self.view.bounds
-        let size = CGFloat(max(chamberSizeField.floatValue, 100))
-        let center = CGPoint(x: bounds.width/2 - size/2, y: bounds.height/2 - size/2)
-        let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: size, height: size))
+    fileprivate func showBarrelSide() {
+        showBarrel(.side)
+    }
+    
+    fileprivate func showBarrelFront() {
+        showBarrel(.front)
+    }
+    
+    fileprivate func showChamber(_ projection: Projection) {
+        let isFront = projection == .front
+        (isFront ? chamberFrontView : chamberSideView)?.removeFromSuperview()
+        let width = isFront ? CGFloat(chamberSizeField.floatValue) : CGFloat(barrelLenghtField.floatValue)
+        let height = CGFloat(chamberSizeField.floatValue)
+        let container = containerFor(projection)
+        let containerSize = container.frame.size
+        let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
+        let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
         chamber.wantsLayer = true
-        chamber.layer?.backgroundColor = NSColor.darkGray.cgColor
-        self.view.addSubview(chamber)
-        chamberView = chamber
+        chamber.layer?.backgroundColor = NSColor.brown.cgColor
+        container.addSubview(chamber)
+        isFront ? (chamberFrontView = chamber) : (chamberSideView = chamber)
+    }
+    
+    fileprivate func showChamberSide() {
+        showChamber(.side)
+    }
+    
+    fileprivate func showChamberFront() {
+        showChamber(.front)
+    }
+    
+    fileprivate func showCountersSide() {
+        //TODO: !
     }
     
     fileprivate func counterRadiusForPresure(_ presure: HeliumPressure) -> CGFloat {
@@ -104,43 +156,43 @@ class ViewController: NSViewController {
         return max(textField.integerValue, 2)
     }
     
-    fileprivate func showCounters() {
-        for view in counters {
+    fileprivate func showCountersFront() {
+        for view in countersFront {
             view.removeFromSuperview()
         }
-        counters.removeAll()
+        countersFront.removeAll()
         
         // Layer 1
         let layerCenter1 = layerRadiusFrom(layer1RadiusField)
         let total1 = layerCountFrom(layer1CountField)
         var paddingAngle: CGFloat = 0 // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
-        addCountersLayer(tag: 1, total: total1, paddingAngle: paddingAngle, layerCenter: layerCenter1)
+        addCountersLayerFront(tag: 1, total: total1, paddingAngle: paddingAngle, layerCenter: layerCenter1)
         // Layer 2
         let layerCenter2 = layerRadiusFrom(layer2RadiusField)
         let total2 = layerCountFrom(layer2CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1)) / 2
-        addCountersLayer(tag: 2, total: total2, paddingAngle: paddingAngle, layerCenter: layerCenter2)
+        addCountersLayerFront(tag: 2, total: total2, paddingAngle: paddingAngle, layerCenter: layerCenter2)
         // Layer 3
         let layerCenter3 = layerRadiusFrom(layer3RadiusField)
         let total3 = layerCountFrom(layer3CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2)) / 2
-        addCountersLayer(tag: 3, total: total3, paddingAngle: paddingAngle, layerCenter: layerCenter3)
+        addCountersLayerFront(tag: 3, total: total3, paddingAngle: paddingAngle, layerCenter: layerCenter3)
         // Layer 4
         if layer4Control.state == .on {
             let layerCenter4 = layerRadiusFrom(layer4RadiusField)
             let total4 = layerCountFrom(layer4CountField)
             paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3)) / 2
-            addCountersLayer(tag: 4, total: total4, paddingAngle: paddingAngle, layerCenter: layerCenter4)
+            addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, layerCenter: layerCenter4)
         }
     }
     
-    fileprivate func addCountersLayer(tag: Int, total: Int, paddingAngle: CGFloat, layerCenter: CGFloat) {
-        let bounds = self.view.bounds
+    fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, layerCenter: CGFloat) {
+        let frontSize = frontView.frame.size
         for i in 0...total-1 {
-            let counterIndex = counters.count
+            let counterIndex = countersFront.count
             let presure = presureForCounterIndex(counterIndex, tag: tag)
             let counterRadius = counterRadiusForPresure(presure)
-            let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
+            let center = CGPoint(x: frontSize.width/2 - counterRadius/2, y: frontSize.height/2 - counterRadius/2)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
             let x = center.x + layerCenter * cos(angle)
             let y = center.y + layerCenter * sin(angle)
@@ -151,7 +203,9 @@ class ViewController: NSViewController {
             counter.presure = presure
             counter.onChangePresure = { [weak self] in
                 self?.presures[counterIndex] = presure == .high ? .low : .high
-                self?.showCounters() // TODO: optimisation, refresh single counter
+                 // TODO: optimisation, refresh single counter
+                self?.showCountersFront()
+                self?.showCountersSide()
             }
             counter.wantsLayer = true
             counter.layer?.cornerRadius = counterRadius/2
@@ -166,13 +220,13 @@ class ViewController: NSViewController {
             label.isSelectable = false
             label.alignment = .center
             label.textColor = NSColor.white
-            label.font = NSFont.boldSystemFont(ofSize: 12)
+            label.font = NSFont.boldSystemFont(ofSize: 10)
             label.integerValue = counterIndex
             counter.addSubview(label)
             counter.label = label
             
-            self.view.addSubview(counter)
-            counters.append(counter)
+            frontView.addSubview(counter)
+            countersFront.append(counter)
         }
     }
 
@@ -182,6 +236,4 @@ class ViewController: NSViewController {
         }
     }
 
-
 }
-
