@@ -139,8 +139,41 @@ class ViewController: NSViewController {
         showChamber(.front)
     }
     
+    fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
+        let layerCenter = layerRadiusFrom(raduisField)
+        let width = CGFloat(counterLenghtField.floatValue)
+        let presure: HeliumPressure = tag == 4 ? .low : .high
+        let height = counterRadiusForPresure(presure)
+        let container = containerFor(.side)
+        let containerSize = container.frame.size
+        let zArray = [1, -1] as [CGFloat]
+        for z in zArray {
+            let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 + z * layerCenter - height/2) // +- layerCenter
+            let counter = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+            counter.wantsLayer = true
+            counter.layer?.backgroundColor = counterColorForPresure(presure)
+            container.addSubview(counter)
+            countersSide.append(counter)
+        }
+    }
+    
     fileprivate func showCountersSide() {
-        //TODO: !
+        for view in countersSide {
+            view.removeFromSuperview()
+        }
+        countersSide.removeAll()
+        
+        var fields = [layer1RadiusField, layer2RadiusField, layer3RadiusField] as [NSTextField]
+        if layer4Control.state == .on {
+            fields.append(layer4RadiusField)
+        }
+        for field in fields {
+            showCountersSide(field, tag: 1 + fields.index(of: field)!)
+        }
+    }
+    
+    fileprivate func counterColorForPresure(_ presure: HeliumPressure) -> CGColor {
+        return (presure == .high ? NSColor.blue : NSColor.red).cgColor
     }
     
     fileprivate func counterRadiusForPresure(_ presure: HeliumPressure) -> CGFloat {
@@ -210,8 +243,7 @@ class ViewController: NSViewController {
             counter.wantsLayer = true
             counter.layer?.cornerRadius = counterRadius/2
             counter.layer?.masksToBounds = true
-            let color = presure == .high ? NSColor.blue : NSColor.red
-            counter.layer?.backgroundColor = color.cgColor
+            counter.layer?.backgroundColor = counterColorForPresure(presure)
             
             let label = NSTextField(frame: NSRect(x: 0, y: 0, width: frame.width, height: frame.height))
             label.isBezeled = false
