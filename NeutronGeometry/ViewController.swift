@@ -108,7 +108,7 @@ class ViewController: NSViewController {
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
         let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
         barrel.wantsLayer = true
-        barrel.layer?.backgroundColor = NSColor.lightGray.cgColor
+        barrel.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.4).cgColor
         container.addSubview(barrel)
         isFront ? (barrelFrontView = barrel) : (barrelSideView = barrel)
     }
@@ -131,7 +131,7 @@ class ViewController: NSViewController {
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
         let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
         chamber.wantsLayer = true
-        chamber.layer?.backgroundColor = NSColor.brown.cgColor
+        chamber.layer?.backgroundColor = NSColor.brown.withAlphaComponent(0.7).cgColor
         container.addSubview(chamber)
         isFront ? (chamberFrontView = chamber) : (chamberSideView = chamber)
     }
