@@ -14,8 +14,8 @@ class ViewController: NSViewController {
         case front, side
     }
 
-    @IBOutlet weak var frontView: NSView!
-    @IBOutlet weak var sideView: NSView!
+    @IBOutlet weak var frontView: ProjectionView!
+    @IBOutlet weak var sideView: ProjectionView!
     @IBOutlet weak var counterRadius4AtmField: NSTextField!
     @IBOutlet weak var counterRadius7AtmField: NSTextField!
     @IBOutlet weak var counterLenghtField: NSTextField!
@@ -33,6 +33,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var updateButton: NSButton!
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
+    @IBOutlet weak var gridStepField: NSTextField!
     
     fileprivate var countersFront = [CounterView]()
     fileprivate weak var chamberFrontView: NSView?
@@ -55,6 +56,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func updateButton(_ sender: Any?) {
+        setupProjections()
         showBarrelFront()
         showChamberFront()
         showCountersFront()
@@ -79,16 +81,16 @@ class ViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        setupProjections()
         updateButton(nil)
     }
     
     fileprivate func setupProjections() {
-        for view in [frontView, sideView] {
-            view?.wantsLayer = true
-            view?.layer?.borderColor = NSColor.black.cgColor
-            view?.layer?.borderWidth = 1
-            view?.layer?.backgroundColor = NSColor.white.cgColor
+        let newStep = max(gridStepField.integerValue, 1)
+        for view in [frontView, sideView] as [ProjectionView] {
+            if view.step != newStep {
+                view.step = newStep
+                view.setNeedsDisplay(view.visibleRect)
+            }
         }
     }
     
@@ -185,7 +187,7 @@ class ViewController: NSViewController {
     }
     
     fileprivate func layerRadiusFrom(_ textField: NSTextField) -> CGFloat {
-        return max(CGFloat(textField.floatValue), 100)
+        return max(CGFloat(textField.floatValue), 10)
     }
     
     fileprivate func layerCountFrom(_ textField: NSTextField) -> Int {
