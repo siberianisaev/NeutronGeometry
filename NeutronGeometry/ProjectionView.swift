@@ -23,8 +23,8 @@ class ProjectionView: NSView {
         NSBezierPath.defaultLineWidth = 1
         NSColor.cyan.withAlphaComponent(0.25).set()
         let count = Int(dirtyRect.width / CGFloat(step))
-        for x in 0..<count {
-            for y in 0..<count {
+        for x in 0...count {
+            for y in 0...count {
                 let p1 = NSPoint(x: x * step, y: y * step)
                 let p2 = NSPoint(x: (x+1) * step, y: y * step)
                 let p3 = NSPoint(x: x * step, y: (y+1) * step)
