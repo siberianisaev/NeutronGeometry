@@ -15,13 +15,16 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer1CountField: NSTextField!
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
+    @IBOutlet weak var layer4CountField: NSTextField!
     @IBOutlet weak var layer1RadiusField: NSTextField!
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
+    @IBOutlet weak var layer4RadiusField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     @IBOutlet weak var calculateButton: NSButton!
+    @IBOutlet weak var layer4Control: NSButton!
     
     fileprivate var counters = [CounterView]()
     fileprivate weak var chamberView: NSView?
@@ -29,11 +32,18 @@ class ViewController: NSViewController {
     
     fileprivate var presures = [Int: HeliumPressure]()
     
-    fileprivate func presureForCounterIndex(_ index: Int) -> HeliumPressure {
-        return presures[index] ?? .high
+    fileprivate func presureForCounterIndex(_ index: Int, tag: Int) -> HeliumPressure {
+        return presures[index] ?? (tag == 4 ? .low : .high)
     }
     
-    @IBAction func updateButton(_ sender: Any) {
+    @IBAction func layer4Control(_ sender: Any) {
+        let isOn = layer4Control.state == .on
+        layer4RadiusField.isEnabled = isOn
+        layer4CountField.isEnabled = isOn
+        updateButton(nil)
+    }
+    
+    @IBAction func updateButton(_ sender: Any?) {
         showBarrel() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
         showChamber() // TODO: временно добавлено, есть небольшой сдвиг по Y при первом обновлении
         showCounters()
@@ -86,38 +96,49 @@ class ViewController: NSViewController {
         return CGFloat(max(field!.floatValue, 1))
     }
     
+    fileprivate func layerRadiusFrom(_ textField: NSTextField) -> CGFloat {
+        return max(CGFloat(textField.floatValue), 100)
+    }
+    
+    fileprivate func layerCountFrom(_ textField: NSTextField) -> Int {
+        return max(textField.integerValue, 2)
+    }
+    
     fileprivate func showCounters() {
         for view in counters {
             view.removeFromSuperview()
         }
         counters.removeAll()
         
-        let minLayerRadius: CGFloat = 100
-        let countersLayerCenterRadius1 = max(CGFloat(layer1RadiusField.floatValue), minLayerRadius)
-        let countersLayerCenterRadius2 = max(CGFloat(layer2RadiusField.floatValue), minLayerRadius)
-        let countersLayerCenterRadius3 = max(CGFloat(layer3RadiusField.floatValue), minLayerRadius)
-        
-        let minCountersPerLayer = 2
-        let total1 = max(layer1CountField.integerValue, minCountersPerLayer)
-        let total2 = max(layer2CountField.integerValue, minCountersPerLayer)
-        let total3 = max(layer3CountField.integerValue, minCountersPerLayer)
-        
         // Layer 1
+        let countersLayerCenterRadius1 = layerRadiusFrom(layer1RadiusField)
+        let total1 = layerCountFrom(layer1CountField)
         var paddingAngle: CGFloat = 0 // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
         addCountersLayer(tag: 1, total: total1, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius1)
         // Layer 2
+        let countersLayerCenterRadius2 = layerRadiusFrom(layer2RadiusField)
+        let total2 = layerCountFrom(layer2CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1)) / 2
         addCountersLayer(tag: 2, total: total2, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius2)
         // Layer 3
+        let countersLayerCenterRadius3 = layerRadiusFrom(layer3RadiusField)
+        let total3 = layerCountFrom(layer3CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2)) / 2
         addCountersLayer(tag: 3, total: total3, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius3)
+        // Layer 4
+        if layer4Control.state == .on {
+            let countersLayerCenterRadius4 = layerRadiusFrom(layer4RadiusField)
+            let total4 = layerCountFrom(layer4CountField)
+            paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3)) / 2
+            addCountersLayer(tag: 4, total: total4, paddingAngle: paddingAngle, countersLayerCenterRadius: countersLayerCenterRadius4)
+        }
     }
     
     fileprivate func addCountersLayer(tag: Int, total: Int, paddingAngle: CGFloat, countersLayerCenterRadius: CGFloat) {
         let bounds = self.view.bounds
         for i in 0...total-1 {
             let counterIndex = counters.count
-            let presure = presureForCounterIndex(counterIndex)
+            let presure = presureForCounterIndex(counterIndex, tag: tag)
             let counterRadius = counterRadiusForPresure(presure)
             let center = CGPoint(x: bounds.width/2 - counterRadius/2, y: bounds.height/2 - counterRadius/2)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX

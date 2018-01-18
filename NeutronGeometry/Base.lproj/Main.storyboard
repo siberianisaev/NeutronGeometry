@@ -818,7 +818,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0X-tU-ZqR">
-                                <rect key="frame" x="8" y="872" width="81" height="32"/>
+                                <rect key="frame" x="14" y="837" width="81" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="x30-T8-LyY">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -901,7 +901,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dvq-vQ-57s">
-                                <rect key="frame" x="8" y="840" width="81" height="32"/>
+                                <rect key="frame" x="14" y="805" width="81" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Calculate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gav-fN-Zzv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -909,6 +909,35 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="calculateButton:" target="XfG-lQ-9wD" id="fxN-tb-shM"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pR4-WF-eEo">
+                                <rect key="frame" x="58" y="881" width="37" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="60" drawsBackground="YES" id="DNx-fk-PEW">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f2t-OJ-IY7">
+                                <rect key="frame" x="108" y="881" width="37" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="350" drawsBackground="YES" id="huz-Kt-5Bt">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lQE-wC-Tu5">
+                                <rect key="frame" x="6" y="883" width="40" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="4" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="wbJ-HQ-NAK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="layer4Control:" target="XfG-lQ-9wD" id="djG-C9-dA0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -925,6 +954,9 @@
                         <outlet property="layer2RadiusField" destination="hBK-6T-dwl" id="2bE-wP-HHg"/>
                         <outlet property="layer3CountField" destination="tJW-sU-Qva" id="M5I-xg-vSX"/>
                         <outlet property="layer3RadiusField" destination="FSD-ik-Rsx" id="LHN-sk-iz8"/>
+                        <outlet property="layer4Control" destination="lQE-wC-Tu5" id="ie1-3V-BZE"/>
+                        <outlet property="layer4CountField" destination="pR4-WF-eEo" id="J8y-Th-6NZ"/>
+                        <outlet property="layer4RadiusField" destination="f2t-OJ-IY7" id="kAt-M4-gmq"/>
                         <outlet property="updateButton" destination="e0X-tU-ZqR" id="Rv1-YD-Nhv"/>
                     </connections>
                 </viewController>
