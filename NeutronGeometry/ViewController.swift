@@ -262,14 +262,15 @@ class ViewController: NSViewController {
             counter.layer?.masksToBounds = true
             counter.layer?.backgroundColor = counterColorForPresure(presure)
             
-            let label = NSTextField(frame: NSRect(x: 0, y: 0, width: frame.width, height: frame.height))
+            let labelHeight: CGFloat = 14
+            let label = NSTextField(frame: NSRect(x: 0, y: frame.height/2 - labelHeight/2, width: frame.width, height: labelHeight))
             label.isBezeled = false
             label.drawsBackground = false
             label.isEditable = false
             label.isSelectable = false
             label.alignment = .center
             label.textColor = NSColor.white
-            label.font = NSFont.boldSystemFont(ofSize: 10)
+            label.font = NSFont.boldSystemFont(ofSize: labelHeight - 4)
             label.integerValue = counterIndex
             counter.addSubview(label)
             counter.label = label
