@@ -73,11 +73,13 @@ class ViewController: NSViewController {
             let frame = counter.frame
             let size = frame.size
             let origin = frame.origin
-            print("Counter: \(counter.index), center: (\(origin.x + size.height/2 - center.x), \(origin.y + size.height/2 - center.y)), presure: \(counter.presure.rawValue) atm.")
+            let x = (origin.x + size.height/2 - center.x)/10
+            let y = (origin.y + size.height/2 - center.y)/10
+            print("Counter: \(counter.index), center: (\(x), \(y)) cm, presure: \(counter.presure.rawValue) atm.")
         }
-        print("Barrel size: \(barrelSizeField.floatValue)")
-        print("Barrel lenght: \(barrelLenghtField.floatValue)")
-        print("Counter lenght: \(counterLenghtField.floatValue)")
+        print("Barrel size: \(barrelSizeField.floatValue/10) cm")
+        print("Barrel lenght: \(barrelLenghtField.floatValue/10) cm")
+        print("Counter lenght: \(counterLenghtField.floatValue/10) cm")
     }
     
     override func viewDidAppear() {
