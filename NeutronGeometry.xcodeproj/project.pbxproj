@@ -13,6 +13,7 @@
 		5A3C1619200E30C2004E281A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A3C1617200E30C2004E281A /* Main.storyboard */; };
 		5A3C1626200E87EE004E281A /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C1625200E87EE004E281A /* CounterView.swift */; };
 		5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7DB3612011191D00A0209E /* ProjectionView.swift */; };
+		65C846412013B49E00E84562 /* MCNPInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C846402013B49E00E84562 /* MCNPInput.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		5A3C161B200E30C2004E281A /* NeutronGeometry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NeutronGeometry.entitlements; sourceTree = "<group>"; };
 		5A3C1625200E87EE004E281A /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		5A7DB3612011191D00A0209E /* ProjectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionView.swift; sourceTree = "<group>"; };
+		65C846402013B49E00E84562 /* MCNPInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPInput.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				5A3C1613200E30C2004E281A /* ViewController.swift */,
 				5A3C1625200E87EE004E281A /* CounterView.swift */,
 				5A7DB3612011191D00A0209E /* ProjectionView.swift */,
+				65C846402013B49E00E84562 /* MCNPInput.swift */,
 				5A3C1615200E30C2004E281A /* Assets.xcassets */,
 				5A3C1617200E30C2004E281A /* Main.storyboard */,
 				5A3C161A200E30C2004E281A /* Info.plist */,
@@ -143,6 +146,7 @@
 				5A3C1614200E30C2004E281A /* ViewController.swift in Sources */,
 				5A3C1612200E30C2004E281A /* AppDelegate.swift in Sources */,
 				5A3C1626200E87EE004E281A /* CounterView.swift in Sources */,
+				65C846412013B49E00E84562 /* MCNPInput.swift in Sources */,
 				5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

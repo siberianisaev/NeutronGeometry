@@ -67,19 +67,26 @@ class ViewController: NSViewController {
     
     @IBAction func calculateButton(_ sender: Any) {
         print("\nConfiguration results:")
-        let frontSize = frontView.frame.size
-        let center = CGPoint(x: frontSize.width/2, y: frontSize.height/2)
         for counter in countersFront {
-            let frame = counter.frame
-            let size = frame.size
-            let origin = frame.origin
-            let x = (origin.x + size.height/2 - center.x)/10
-            let y = (origin.y + size.height/2 - center.y)/10
-            print("Counter: \(counter.index), center: (\(x), \(y)) cm, presure: \(counter.presure.rawValue) atm.")
+            let center = counter.center()
+            print("Counter: \(counter.index), center: (\(center.x), \(center.y)) cm, presure: \(counter.presure.rawValue) atm.")
         }
         print("Barrel size: \(barrelSizeField.floatValue/10) cm")
         print("Barrel lenght: \(barrelLenghtField.floatValue/10) cm")
         print("Counter lenght: \(counterLenghtField.floatValue/10) cm")
+        // MCNP
+        var layers = [[CounterView]]()
+        let layerIndexes = countersFront.map { (c: CounterView) -> Int in
+            return c.layerIndex
+        }
+        for i in Set(layerIndexes) {
+            let layer = countersFront.filter({ (c: CounterView) -> Bool in
+                return c.layerIndex == i
+            })
+            layers.append(layer)
+        }
+        print("------- MCNP Input -------")
+        print(MCNPInput.generate(layers))
     }
     
     override func viewDidAppear() {
@@ -242,6 +249,7 @@ class ViewController: NSViewController {
             
             let counter = CounterView(frame: frame)
             counter.index = counterIndex
+            counter.layerIndex = tag
             counter.presure = presure
             counter.onChangePresure = { [weak self] in
                 self?.presures[counterIndex] = presure == .high ? .low : .high
