@@ -70,8 +70,10 @@ class ViewController: NSViewController {
         let frontSize = frontView.frame.size
         let center = CGPoint(x: frontSize.width/2, y: frontSize.height/2)
         for counter in countersFront {
-            let origin = counter.frame.origin
-            print("Counter: \(counter.index), center: (\(origin.x - center.x), \(origin.y - center.y)), presure: \(counter.presure.rawValue) atm.")
+            let frame = counter.frame
+            let size = frame.size
+            let origin = frame.origin
+            print("Counter: \(counter.index), center: (\(origin.x + size.height/2 - center.x), \(origin.y + size.height/2 - center.y)), presure: \(counter.presure.rawValue) atm.")
         }
         print("Barrel size: \(barrelSizeField.floatValue)")
         print("Barrel lenght: \(barrelLenghtField.floatValue)")
