@@ -86,7 +86,15 @@ class ViewController: NSViewController {
             layers.append(layer)
         }
         print("------- MCNP Input -------")
-        print(MCNPInput.generate(layers))
+        let result = MCNPInput.generate(layers)
+        print(result)
+        // Files
+        let timeStamp = String.timeStamp()
+        let mcnpPath = FileManager.mcnpFilePath(timeStamp)
+        FileManager.writeString(result, path: mcnpPath)
+        let screenshot = view.window?.screenshot()
+        let screenshotPath = FileManager.screenshotFilePath(timeStamp)
+        FileManager.writeImage(screenshot, path: screenshotPath)
     }
     
     override func viewDidAppear() {
