@@ -424,7 +424,7 @@ class ViewController: NSViewController {
         let layerCenter = layerRadiusFrom(raduisField)
         let width = CGFloat(counterLenghtField.floatValue)
         let presure: HeliumPressure = tag == 4 ? .low : .high
-        let height = counterRadiusForPresure(presure)
+        let height = counterRadiusForPresure(presure) * 2
         let container = containerFor(.side)
         let containerSize = container.frame.size
         let zArray = [1, -1] as [CGFloat]
