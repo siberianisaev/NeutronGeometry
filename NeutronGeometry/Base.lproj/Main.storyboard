@@ -765,9 +765,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vmc-te-BFe">
-                                <rect key="frame" x="140" y="863" width="44" height="17"/>
+                                <rect key="frame" x="140" y="863" width="41" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Space" id="RBA-Ww-Y2j">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Gap" id="RBA-Ww-Y2j">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1103,17 +1103,17 @@
                         <outlet property="frontView" destination="di2-2n-rdn" id="4n8-jb-SjR"/>
                         <outlet property="gridStepField" destination="fBw-bs-7g8" id="fOg-uf-LIs"/>
                         <outlet property="layer1CountField" destination="azL-ul-1Zr" id="ENa-kU-Z5Y"/>
-                        <outlet property="layer1InteritemSpaceField" destination="tex-zi-aLp" id="4gu-kp-ySD"/>
+                        <outlet property="layer1CountersGapField" destination="tex-zi-aLp" id="LFe-GL-0c4"/>
                         <outlet property="layer1RadiusField" destination="whA-WE-Oud" id="S6F-VJ-cR8"/>
                         <outlet property="layer2CountField" destination="axz-XC-h1y" id="1wM-k3-nTN"/>
-                        <outlet property="layer2InteritemSpaceField" destination="0Ol-5M-Hez" id="o6p-nv-z1w"/>
+                        <outlet property="layer2CountersGapField" destination="0Ol-5M-Hez" id="pLp-zS-ZCt"/>
                         <outlet property="layer2RadiusField" destination="hBK-6T-dwl" id="2bE-wP-HHg"/>
                         <outlet property="layer3CountField" destination="tJW-sU-Qva" id="M5I-xg-vSX"/>
-                        <outlet property="layer3InteritemSpaceField" destination="xcv-cu-wgY" id="utH-23-ztX"/>
+                        <outlet property="layer3CountersGapField" destination="xcv-cu-wgY" id="1Jl-FR-SSE"/>
                         <outlet property="layer3RadiusField" destination="FSD-ik-Rsx" id="LHN-sk-iz8"/>
                         <outlet property="layer4Control" destination="lQE-wC-Tu5" id="ie1-3V-BZE"/>
                         <outlet property="layer4CountField" destination="pR4-WF-eEo" id="J8y-Th-6NZ"/>
-                        <outlet property="layer4InteritemSpaceField" destination="dFF-OK-f2N" id="Lup-0f-vRh"/>
+                        <outlet property="layer4CountersGapField" destination="dFF-OK-f2N" id="TH4-al-TYQ"/>
                         <outlet property="layer4RadiusField" destination="f2t-OJ-IY7" id="kAt-M4-gmq"/>
                         <outlet property="loadButton" destination="3oB-nl-KBI" id="um1-dD-WTE"/>
                         <outlet property="saveButton" destination="Wlh-2k-Gar" id="bcg-ej-zai"/>

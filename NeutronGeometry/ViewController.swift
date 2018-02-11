@@ -28,10 +28,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var layer4RadiusField: NSTextField!
-    @IBOutlet weak var layer1InteritemSpaceField: NSTextField!
-    @IBOutlet weak var layer2InteritemSpaceField: NSTextField!
-    @IBOutlet weak var layer3InteritemSpaceField: NSTextField!
-    @IBOutlet weak var layer4InteritemSpaceField: NSTextField!
+    @IBOutlet weak var layer1CountersGapField: NSTextField!
+    @IBOutlet weak var layer2CountersGapField: NSTextField!
+    @IBOutlet weak var layer3CountersGapField: NSTextField!
+    @IBOutlet weak var layer4CountersGapField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
@@ -67,10 +67,10 @@ class ViewController: NSViewController {
         let isOn = layer4Control.state == .on
         layer4RadiusField.isEnabled = isOn
         layer4CountField.isEnabled = isOn
-        layer4InteritemSpaceField.isHidden = !isOn
+        layer4CountersGapField.isHidden = !isOn
     }
     
-    fileprivate func showInteritemSpace() {
+    fileprivate func showCountersGap() {
         let layers = counterLayers()
         for i in 0...3 {
             var result: Int = 0
@@ -89,16 +89,19 @@ class ViewController: NSViewController {
                     result = lroundf(Float(distance - radius1 - radius2))
                 }
             }
+            var textField: NSTextField?
             switch i {
             case 0:
-                layer1InteritemSpaceField.integerValue = result
+                textField = layer1CountersGapField
             case 1:
-                layer2InteritemSpaceField.integerValue = result
+                textField = layer2CountersGapField
             case 2:
-                layer3InteritemSpaceField.integerValue = result
+                textField = layer3CountersGapField
             default:
-                layer4InteritemSpaceField.integerValue = result
+                textField = layer4CountersGapField
             }
+            textField?.integerValue = result
+            textField?.textColor = result > 0 ? NSColor.darkGray : NSColor.red
         }
     }
     
@@ -110,7 +113,7 @@ class ViewController: NSViewController {
         showBarrelSide()
         showChamberSide()
         showCountersSide()
-        showInteritemSpace()
+        showCountersGap()
     }
     
     @IBAction func saveButton(_ sender: Any) {
