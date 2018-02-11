@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AppKit
 
 class ViewController: NSViewController {
     
@@ -54,10 +55,14 @@ class ViewController: NSViewController {
     }
     
     @IBAction func layer4Control(_ sender: Any) {
+        layer4ControlValueChanged()
+        updateButton(nil)
+    }
+    
+    fileprivate func layer4ControlValueChanged() {
         let isOn = layer4Control.state == .on
         layer4RadiusField.isEnabled = isOn
         layer4CountField.isEnabled = isOn
-        updateButton(nil)
     }
     
     @IBAction func updateButton(_ sender: Any?) {
@@ -77,6 +82,29 @@ class ViewController: NSViewController {
         FileManager.writeString(result, path: geometryPath)
     }
     
+    fileprivate let keyCounterInfo = "COUNTER_INFO"
+    fileprivate let keyRadius = "RADIUS"
+    fileprivate func keyRadiusAtm(_ value: Int) -> String {
+        return "\(keyRadius)_\(value)ATM"
+    }
+    fileprivate func keyLayer(_ value: Int) -> String {
+        return "LAYER_\(value)"
+    }
+    fileprivate func keyCounter(_ value: Int) -> String {
+        return "COUNTER_\(value)"
+    }
+    fileprivate let keyCount = "COUNT"
+    fileprivate let keyBarrel = "BARREL"
+    fileprivate let keyChamber = "CHAMBER"
+    fileprivate let keyGrid = "GRID"
+    fileprivate let keyStep = "STEP"
+    fileprivate let keyLenght = "LENGHT"
+    fileprivate let keySize = "SIZE"
+    fileprivate let keyPresure = "PRESURE"
+    fileprivate let keyThickness = "THICKNESS"
+    fileprivate let keyCenterX = "X"
+    fileprivate let keyCenterY = "Y"
+    
     fileprivate func getGeometry() -> String {
         var strings = [String]()
         var layerCountFields = [layer1CountField, layer2CountField, layer3CountField]
@@ -87,26 +115,138 @@ class ViewController: NSViewController {
         }
         // LAYERS INFO
         for i in 0..<layerCountFields.count {
-            strings.append("LAYER_\(i+1) RADIUS=\(layerRadiusFields[i]!.integerValue) COUNT=\(layerCountFields[i]!.integerValue)")
+            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue)")
         }
         // COUNTER INFO
-        strings.append("COUNTER_INFO RADIUS_4ATM=\(counterRadius4AtmField.integerValue) RADIUS_7ATM=\(counterRadius7AtmField.integerValue) LENGHT=\(counterLenghtField.integerValue)")
+        strings.append(keyCounterInfo + " \(keyRadiusAtm(4))=\(counterRadius4AtmField.integerValue) \(keyRadiusAtm(7))=\(counterRadius7AtmField.integerValue) \(keyLenght)=\(counterLenghtField.integerValue)")
         // COUNTERS
         for counter in countersFront {
             let center = counter.center()
-            strings.append("COUNTER_\(counter.index+1) X=\(center.x) Y=\(center.y) PRESURE=\(counter.presure.rawValue)")
+            strings.append(keyCounter(counter.index+1) + " \(keyCenterX)=\(center.x) \(keyCenterY)=\(center.y) \(keyPresure)=\(counter.presure.rawValue)")
         }
         // BARREL
-        strings.append("BARREL SIZE=\(barrelSizeField.integerValue) LENGHT=\(barrelLenghtField.integerValue)")
+        strings.append(keyBarrel + " \(keySize)=\(barrelSizeField.integerValue) \(keyLenght)=\(barrelLenghtField.integerValue)")
         // CHAMBER
-        strings.append("CHAMBER SIZE=\(chamberSizeField.integerValue) THICKNESS=\(chamberThicknessField.integerValue)")
+        strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
         // GRID
-        strings.append("GRID STEP=\(gridStepField.integerValue)")
+        strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
         return strings.joined(separator: "\n")
     }
     
     @IBAction func loadButton(_ sender: Any) {
-        //TODO:
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = false
+        panel.begin { [weak self] (result) -> Void in
+            if result.rawValue == NSFileHandlingPanelOKButton {
+                if let path = panel.urls.first?.path, path.hasSuffix(".geometry") {
+                    do {
+                        let content = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
+                        self?.restoreGeometry(content)
+                    } catch {
+                        print("Error load geometry from file at path \(path): \(error)")
+                    }
+                }
+            }
+        }
+    }
+    
+    fileprivate func restoreGeometry(_ content: String) {
+        let tuples = content.components(separatedBy: "\n").map({ (string: String) -> (String, [String]) in
+            var values = string.components(separatedBy: " ")
+            if values.count > 0 {
+                let key = values.removeFirst()
+                return (key, values)
+            } else {
+                return ("", values)
+            }
+        })
+        var dict = [String: [String]]()
+        for tuple in tuples {
+            dict[tuple.0] = tuple.1
+        }
+        
+        func preferenceFor(key: String, preferences: [String]) -> Int? {
+            let prefix = key + "="
+            let preference = preferences.filter { (s: String) -> Bool in
+                return s.hasPrefix(prefix)
+            }.first
+            if let preference = preference, let range = preference.range(of: prefix) {
+                let end = preference.index(preference.endIndex, offsetBy: 0)
+                let result = String(preference[range.upperBound..<end])
+                return Int(result)
+            } else {
+                return nil
+            }
+        }
+        
+        // LAYERS INFO
+        var countersCount = 0
+        for i in 0...3 {
+            let values = dict[keyLayer(i+1)]
+            if let values = values, let count = preferenceFor(key: keyCount, preferences: values), let radius = preferenceFor(key: keyRadius, preferences: values) {
+                countersCount += count
+                
+                var countField: NSTextField?
+                var radiusField: NSTextField?
+                switch i {
+                case 0:
+                    countField = layer1CountField
+                    radiusField = layer1RadiusField
+                case 1:
+                    countField = layer2CountField
+                    radiusField = layer2RadiusField
+                case 2:
+                    countField = layer3CountField
+                    radiusField = layer3RadiusField
+                default:
+                    countField = layer4CountField
+                    radiusField = layer4RadiusField
+                }
+                countField?.integerValue = count
+                radiusField?.integerValue = radius
+            }
+            if i == 3 {
+                layer4Control.state = values == nil ? .off : .on
+                layer4ControlValueChanged()
+            }
+        }
+        // COUNTER INFO
+        if let values = dict[keyCounterInfo], let radius4Atm = preferenceFor(key: keyRadiusAtm(4), preferences: values), let radius7Atm = preferenceFor(key: keyRadiusAtm(7), preferences: values), let lenght = preferenceFor(key: keyLenght, preferences: values) {
+            counterRadius4AtmField.integerValue = radius4Atm
+            counterRadius7AtmField.integerValue = radius7Atm
+            counterLenghtField.integerValue = lenght
+        }
+        // BARREL
+        if let values = dict[keyBarrel], let size = preferenceFor(key: keySize, preferences: values), let lenght = preferenceFor(key: keyLenght, preferences: values) {
+            barrelSizeField.integerValue = size
+            barrelLenghtField.integerValue = lenght
+        }
+        // CHAMBER
+        if let values = dict[keyChamber], let size = preferenceFor(key: keySize, preferences: values), let thickness = preferenceFor(key: keyThickness, preferences: values) {
+            chamberSizeField.integerValue = size
+            chamberThicknessField.integerValue = thickness
+        }
+        // GRID
+        if let values = dict[keyGrid], let step = preferenceFor(key: keyStep, preferences: values) {
+            gridStepField.integerValue = step
+        }
+        
+        // UPDATE GEOMETRY
+        updateButton(nil)
+            
+        // COUNTERS
+        // We update only presure there. Counter center point will be automaticly set after geometry re-drawing.
+        if countersCount > 0 {
+            for i in 0..<countersCount {
+                if let values = dict[keyCounter(i+1)], let p = preferenceFor(key: keyPresure, preferences: values), let presure = HeliumPressure(rawValue: p) {
+                    presures[i] = presure
+                }
+            }
+            showCountersFront()
+            showCountersSide()
+        }
     }
     
     @IBAction func calculateButton(_ sender: Any) {
