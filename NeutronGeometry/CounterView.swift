@@ -21,6 +21,9 @@ class CounterView: NSView {
     var presure: HeliumPressure = .high
     var onChangePresure: (()->())?
     
+    /**
+     In centimeters.
+     */
     func center() -> CGPoint {
         let frontSize = superview!.frame.size
         let center = CGPoint(x: frontSize.width/2, y: frontSize.height/2)

@@ -28,6 +28,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var layer4RadiusField: NSTextField!
+    @IBOutlet weak var layer1InteritemSpaceField: NSTextField!
+    @IBOutlet weak var layer2InteritemSpaceField: NSTextField!
+    @IBOutlet weak var layer3InteritemSpaceField: NSTextField!
+    @IBOutlet weak var layer4InteritemSpaceField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
@@ -63,6 +67,39 @@ class ViewController: NSViewController {
         let isOn = layer4Control.state == .on
         layer4RadiusField.isEnabled = isOn
         layer4CountField.isEnabled = isOn
+        layer4InteritemSpaceField.isHidden = !isOn
+    }
+    
+    fileprivate func showInteritemSpace() {
+        let layers = counterLayers()
+        for i in 0...3 {
+            var result: Int = 0
+            if i < layers.count {
+                let layer =  layers[i]
+                if layer.count > 1 {
+                    let counter1 = layer[0]
+                    let counter2 = layer[1]
+                    let p1 = counter1.center()
+                    let p2 = counter2.center()
+                    let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
+                    let presure1 = counter1.presure
+                    let presure2 = counter2.presure
+                    let radius1 = counterRadiusForPresure(presure1)
+                    let radius2 = counterRadiusForPresure(presure2)
+                    result = lroundf(Float(distance - radius1 - radius2))
+                }
+            }
+            switch i {
+            case 0:
+                layer1InteritemSpaceField.integerValue = result
+            case 1:
+                layer2InteritemSpaceField.integerValue = result
+            case 2:
+                layer3InteritemSpaceField.integerValue = result
+            default:
+                layer4InteritemSpaceField.integerValue = result
+            }
+        }
     }
     
     @IBAction func updateButton(_ sender: Any?) {
@@ -73,6 +110,7 @@ class ViewController: NSViewController {
         showBarrelSide()
         showChamberSide()
         showCountersSide()
+        showInteritemSpace()
     }
     
     @IBAction func saveButton(_ sender: Any) {
@@ -249,6 +287,25 @@ class ViewController: NSViewController {
         }
     }
     
+    fileprivate func counterLayers() -> [[CounterView]] {
+        var layers = [[CounterView]]()
+        let layerIndexes = countersFront.map { (c: CounterView) -> Int in
+            return c.layerIndex
+        }
+        let indexes = Array(Set(layerIndexes)).sorted { (i1: Int, i2: Int) -> Bool in
+            return i1 < i2
+        }
+        for i in indexes {
+            let layer = countersFront.filter({ (c: CounterView) -> Bool in
+                return c.layerIndex == i
+            }).sorted(by: { (c1: CounterView, c2: CounterView) -> Bool in
+                return c1.index < c2.index
+            })
+            layers.append(layer)
+        }
+        return layers
+    }
+    
     @IBAction func calculateButton(_ sender: Any) {
         print("\nConfiguration results:")
         for counter in countersFront {
@@ -260,16 +317,7 @@ class ViewController: NSViewController {
         print("Counter lenght: \(counterLenghtField.floatValue/10) cm")
         
         // MCNP
-        var layers = [[CounterView]]()
-        let layerIndexes = countersFront.map { (c: CounterView) -> Int in
-            return c.layerIndex
-        }
-        for i in Set(layerIndexes) {
-            let layer = countersFront.filter({ (c: CounterView) -> Bool in
-                return c.layerIndex == i
-            })
-            layers.append(layer)
-        }
+        let layers = counterLayers()
         print("------- MCNP Input -------")
         let result = MCNPInput.generate(layers)
         print(result)
@@ -458,11 +506,11 @@ class ViewController: NSViewController {
             let counterIndex = countersFront.count
             let presure = presureForCounterIndex(counterIndex, tag: tag)
             let counterRadius = counterRadiusForPresure(presure)
-            let center = CGPoint(x: frontSize.width/2 - counterRadius/2, y: frontSize.height/2 - counterRadius/2)
+            let center = CGPoint(x: frontSize.width/2 - counterRadius, y: frontSize.height/2 - counterRadius)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
             let x = center.x + layerCenter * cos(angle)
             let y = center.y + layerCenter * sin(angle)
-            let frame = NSRect(x: x, y: y, width: counterRadius, height: counterRadius)
+            let frame = NSRect(x: x, y: y, width: counterRadius * 2, height: counterRadius * 2)
             
             let counter = CounterView(frame: frame)
             counter.index = counterIndex
@@ -475,7 +523,7 @@ class ViewController: NSViewController {
                 self?.showCountersSide()
             }
             counter.wantsLayer = true
-            counter.layer?.cornerRadius = counterRadius/2
+            counter.layer?.cornerRadius = counterRadius
             counter.layer?.masksToBounds = true
             counter.layer?.backgroundColor = counterColorForPresure(presure)
             
