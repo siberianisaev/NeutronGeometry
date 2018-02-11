@@ -71,7 +71,38 @@ class ViewController: NSViewController {
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        //TODO:
+        let timeStamp = String.timeStamp()
+        let geometryPath = FileManager.geometryFilePath(timeStamp)
+        let result = getGeometry()
+        FileManager.writeString(result, path: geometryPath)
+    }
+    
+    fileprivate func getGeometry() -> String {
+        var strings = [String]()
+        var layerCountFields = [layer1CountField, layer2CountField, layer3CountField]
+        var layerRadiusFields = [layer1RadiusField, layer2RadiusField, layer3RadiusField]
+        if layer4Control.state == .on {
+            layerCountFields.append(layer4CountField)
+            layerRadiusFields.append(layer4RadiusField)
+        }
+        // LAYERS INFO
+        for i in 0..<layerCountFields.count {
+            strings.append("LAYER_\(i+1) RADIUS=\(layerRadiusFields[i]!.integerValue) COUNT=\(layerCountFields[i]!.integerValue)")
+        }
+        // COUNTER INFO
+        strings.append("COUNTER_INFO RADIUS_4ATM=\(counterRadius4AtmField.integerValue) RADIUS_7ATM=\(counterRadius7AtmField.integerValue) LENGHT=\(counterLenghtField.integerValue)")
+        // COUNTERS
+        for counter in countersFront {
+            let center = counter.center()
+            strings.append("COUNTER_\(counter.index+1) X=\(center.x) Y=\(center.y) PRESURE=\(counter.presure.rawValue)")
+        }
+        // BARREL
+        strings.append("BARREL SIZE=\(barrelSizeField.integerValue) LENGHT=\(barrelLenghtField.integerValue)")
+        // CHAMBER
+        strings.append("CHAMBER SIZE=\(chamberSizeField.integerValue) THICKNESS=\(chamberThicknessField.integerValue)")
+        // GRID
+        strings.append("GRID STEP=\(gridStepField.integerValue)")
+        return strings.joined(separator: "\n")
     }
     
     @IBAction func loadButton(_ sender: Any) {
@@ -103,11 +134,9 @@ class ViewController: NSViewController {
         print(result)
         // Files
         let timeStamp = String.timeStamp()
-        let mcnpPath = FileManager.mcnpFilePath(timeStamp)
-        FileManager.writeString(result, path: mcnpPath)
-        let screenshot = view.window?.screenshot()
-        let screenshotPath = FileManager.screenshotFilePath(timeStamp)
-        FileManager.writeImage(screenshot, path: screenshotPath)
+        FileManager.writeString(result, path: FileManager.mcnpFilePath(timeStamp))
+        FileManager.writeImage(view.window?.screenshot(), path: FileManager.screenshotFilePath(timeStamp))
+        FileManager.writeString(getGeometry(), path: FileManager.geometryFilePath(timeStamp))
     }
     
     override func viewDidAppear() {
@@ -289,7 +318,7 @@ class ViewController: NSViewController {
             label.alignment = .center
             label.textColor = NSColor.white
             label.font = NSFont.boldSystemFont(ofSize: labelHeight - 4)
-            label.integerValue = counterIndex
+            label.integerValue = counterIndex + 1
             counter.addSubview(label)
             counter.label = label
             

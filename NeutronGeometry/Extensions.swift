@@ -74,8 +74,12 @@ extension FileManager {
         }
     }
     
+    class func geometryFilePath(_ timeStamp: String) -> String? {
+        return desktopFilePathWithName("\(timeStamp).geometry", timeStamp: timeStamp)
+    }
+    
     class func mcnpFilePath(_ timeStamp: String) -> String? {
-        return desktopFilePathWithName("mcnp_\(timeStamp)", timeStamp: timeStamp)
+        return desktopFilePathWithName("\(timeStamp).mcnp", timeStamp: timeStamp)
     }
     
     class func writeString(_ string: String, path: String?) {
