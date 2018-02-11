@@ -258,6 +258,7 @@ class ViewController: NSViewController {
         print("Barrel size: \(barrelSizeField.floatValue/10) cm")
         print("Barrel lenght: \(barrelLenghtField.floatValue/10) cm")
         print("Counter lenght: \(counterLenghtField.floatValue/10) cm")
+        
         // MCNP
         var layers = [[CounterView]]()
         let layerIndexes = countersFront.map { (c: CounterView) -> Int in
@@ -272,6 +273,7 @@ class ViewController: NSViewController {
         print("------- MCNP Input -------")
         let result = MCNPInput.generate(layers)
         print(result)
+        
         // Files
         let timeStamp = String.timeStamp()
         FileManager.writeString(result, path: FileManager.mcnpFilePath(timeStamp))
@@ -282,7 +284,35 @@ class ViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        updateButton(nil)
+        restoreLastGeometryFromDefaults()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: OperationQueue.main) { [weak self] (note: Notification) in
+            self?.storeLastGeometryToDefaults()
+        }
+    }
+    
+    deinit {
+        storeLastGeometryToDefaults()
+    }
+    
+    fileprivate let keyDefaultsLastGeometry = "DefaultsLastGeometry"
+    
+    fileprivate func restoreLastGeometryFromDefaults() {
+        if let geometry = UserDefaults.standard.string(forKey: keyDefaultsLastGeometry) {
+            restoreGeometry(geometry)
+        } else {
+            updateButton(nil)
+        }
+    }
+    
+    fileprivate func storeLastGeometryToDefaults() {
+        let ud = UserDefaults.standard
+        ud.set(getGeometry(), forKey: keyDefaultsLastGeometry)
+        ud.synchronize()
     }
     
     fileprivate func setupProjections() {
