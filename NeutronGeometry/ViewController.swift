@@ -28,18 +28,23 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var layer4RadiusField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
+    @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
     @IBOutlet weak var barrelLenghtField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
+    @IBOutlet weak var saveButton: NSButton!
+    @IBOutlet weak var loadButton: NSButton!
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
     
     fileprivate var countersFront = [CounterView]()
-    fileprivate weak var chamberFrontView: NSView?
-    fileprivate weak var barrelFrontView: NSView?
     fileprivate var countersSide = [NSView]()
-    fileprivate weak var chamberSideView: NSView?
+    
+    fileprivate weak var chamberFrontView: ChamberView?
+    fileprivate weak var chamberSideView: ChamberView?
+    
+    fileprivate weak var barrelFrontView: NSView?
     fileprivate weak var barrelSideView: NSView?
     
     fileprivate var presures = [Int: HeliumPressure]()
@@ -63,6 +68,14 @@ class ViewController: NSViewController {
         showBarrelSide()
         showChamberSide()
         showCountersSide()
+    }
+    
+    @IBAction func saveButton(_ sender: Any) {
+        //TODO:
+    }
+    
+    @IBAction func loadButton(_ sender: Any) {
+        //TODO:
     }
     
     @IBAction func calculateButton(_ sender: Any) {
@@ -108,7 +121,6 @@ class ViewController: NSViewController {
         for view in [frontView, sideView] as [ProjectionView] {
             if view.step != newStep {
                 view.step = newStep
-                view.setNeedsDisplay(view.visibleRect)
             }
         }
     }
@@ -127,7 +139,7 @@ class ViewController: NSViewController {
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
         let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
         barrel.wantsLayer = true
-        barrel.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.4).cgColor
+        barrel.layer?.backgroundColor = NSColor.darkGray.cgColor
         container.addSubview(barrel)
         isFront ? (barrelFrontView = barrel) : (barrelSideView = barrel)
     }
@@ -148,9 +160,7 @@ class ViewController: NSViewController {
         let container = containerFor(projection)
         let containerSize = container.frame.size
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
-        let chamber = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
-        chamber.wantsLayer = true
-        chamber.layer?.backgroundColor = NSColor.brown.withAlphaComponent(0.7).cgColor
+        let chamber = ChamberView(frame: NSRect(x: center.x, y: center.y, width: width, height: height), thickness: CGFloat(chamberThicknessField.floatValue))
         container.addSubview(chamber)
         isFront ? (chamberFrontView = chamber) : (chamberSideView = chamber)
     }

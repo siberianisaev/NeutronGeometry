@@ -10,8 +10,36 @@ import Cocoa
 
 class ProjectionView: NSView {
     
-    var step: Int = 25
-
+    var step: Int = 25 {
+        didSet {
+            if let view = gridView {
+                view.step = step
+                view.setNeedsDisplay(view.visibleRect)
+            }
+        }
+    }
+    fileprivate weak var gridView: GridView?
+    
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        
+        addGrid(step)
+    }
+    
+    fileprivate func addGrid(_ step: Int) {
+        let view = GridView(frame: NSRect(x: 0, y: 0, width: frame.width, height: frame.height), step: step)
+        view.wantsLayer = true
+        view.layer?.zPosition = 100
+        addSubview(view)
+        gridView = view
+    }
+    
+    required init?(coder decoder: NSCoder) {
+        super.init(coder: decoder)
+        
+        addGrid(10)
+    }
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
@@ -19,20 +47,6 @@ class ProjectionView: NSView {
         layer?.borderColor = NSColor.black.cgColor
         layer?.borderWidth = 1
         layer?.backgroundColor = NSColor.white.cgColor
-        
-        NSBezierPath.defaultLineWidth = 1
-        NSColor.cyan.withAlphaComponent(0.25).set()
-        let count = Int(dirtyRect.width / CGFloat(step))
-        for x in 0...count {
-            for y in 0...count {
-                let p1 = NSPoint(x: x * step, y: y * step)
-                let p2 = NSPoint(x: (x+1) * step, y: y * step)
-                let p3 = NSPoint(x: x * step, y: (y+1) * step)
-                NSBezierPath.strokeLine(from: p1, to: p2)
-                NSBezierPath.strokeLine(from: p1, to: p3)
-            }
-        }
-        
     }
     
 }
