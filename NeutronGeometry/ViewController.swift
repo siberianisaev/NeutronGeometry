@@ -315,14 +315,23 @@ class ViewController: NSViewController {
             let center = counter.center()
             print("Counter: \(counter.index), center: (\(center.x), \(center.y)) cm, presure: \(counter.presure.rawValue) atm.")
         }
-        print("Barrel size: \(barrelSizeField.floatValue/10) cm")
-        print("Barrel lenght: \(barrelLenghtField.floatValue/10) cm")
-        print("Counter lenght: \(counterLenghtField.floatValue/10) cm")
+        
+        let chamberSize = chamberSizeField.floatValue/10
+        let chamberThinkness = chamberThicknessField.floatValue/10
+        let barrelSize = barrelSizeField.floatValue/10
+        let barrelLenght = barrelLenghtField.floatValue/10
+        let counterLenght = counterLenghtField.floatValue/10
+        
+        print("Vacuum chamber size: \(chamberSize) cm")
+        print("Vacuum chamber thikness: \(chamberThinkness) cm")
+        print("Barrel size: \(barrelSize) cm")
+        print("Barrel lenght: \(barrelLenght) cm")
+        print("Counter lenght: \(counterLenght) cm")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput.generate(layers)
+        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue)
         print(result)
         
         // Files
