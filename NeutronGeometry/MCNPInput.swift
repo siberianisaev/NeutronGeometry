@@ -15,8 +15,8 @@ class MCNPInput {
 Geometry for \(layers.joined().count) detectors.
 c ==== CELLS =====
 1000 0          5         imp:n=0  $ Space Outside Barrel
-1001 2 -0.0012 -1   -3    imp:n=1  $ Space Inside of Vacuum Chamber
-1002 4 -7.9    -2 1 -3    imp:n=1  $ Wall of Vacuum Chamber
+1001 2 -0.0012 -1   -5    imp:n=1  $ Space Inside of Vacuum Chamber
+1002 4 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
 """
         var id = 10 // TODO: поменять нумерацию ячеек
         var ids = [id]
@@ -31,13 +31,13 @@ c ==== CELLS =====
 \(id+2) 8 -3.930e-3  54 -55 -57      imp:n=1 u=1   $ Upper Complementation to SV
 \(id+3) 5 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=1  $ Wall of Counter
 \(id+4) 0           (-51:56:58)             imp:n=1 u=1   $ Space around Counter
-\(id+5) 0           -59 -3                  imp:n=1 fill=1 TRCL=(\(center.x) \(center.y) 0)
+\(id+5) 0           -59 -5                  imp:n=1 fill=1 TRCL=(\(center.x) \(center.y) 0)
 """
                 id += 6
                 ids.append(id)
             }
         }
-        // Moderator cell negative to outer shell (surface 3), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells
+        // Moderator cell negative to outer shell (surface 5), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells
         let excludedIds = ids.map { (id: Int) -> String in
             return "#\(String(id))"
         }
@@ -57,7 +57,7 @@ c ==== CELLS =====
         }
         result += """
 \n$c ----- Lattice of Detectors (Moderator cell) ------------
-1044 1 -0.92 2 -3
+1044 1 -0.92 2 -5
         \(excludedIdsString)
         imp:n=1
 """
