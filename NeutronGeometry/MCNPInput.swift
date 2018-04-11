@@ -121,13 +121,13 @@ FQ4   f e
             })
             
             var s1Indexes = ""
-            var i = 0
+            var j = 0
             for index in indexes {
-                if i > 11 {
+                if j > 11 {
                     s1Indexes += "\n        "
-                    i = 0
+                    j = 0
                 } else {
-                    i += 1
+                    j += 1
                     if s1Indexes.count != 0 {
                         s1Indexes += " "
                     }
