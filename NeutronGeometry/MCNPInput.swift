@@ -80,11 +80,11 @@ c ***** Detector *************************
 58 cz   1.5
 59 cz   1.52
 """
-        result += modeCard(layers)
+        result += modeCard(layers, lastCounterCellId: id)
         return result
     }
     
-    fileprivate class func modeCard(_ layers: [[CounterView]]) -> String {
+    fileprivate class func modeCard(_ layers: [[CounterView]], lastCounterCellId: Int) -> String {
         var result = """
 \nMODE N
 SDEF  erg=d1 pos=0 0 0 wgt=1.001938 $ Source definition
@@ -108,7 +108,7 @@ M6     6000.60c 5  1001.60c 8  8016.60c 2    $ C5H8O2 (Ro = 1.18)
 M7     2003.60c 1                            $ He-3
 c ----- TODO: !!! Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
 M8    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
-F4:N  10 52i 540 (10 52i 540)
+F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
 FM4   (2.1627e-2 7 103)
 FQ4   f e
 """
