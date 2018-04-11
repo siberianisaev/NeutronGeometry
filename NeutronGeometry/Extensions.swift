@@ -79,7 +79,7 @@ extension FileManager {
     }
     
     class func mcnpFilePath(_ timeStamp: String) -> String? {
-        return desktopFilePathWithName("\(timeStamp).mcnp", timeStamp: timeStamp)
+        return desktopFilePathWithName("\(timeStamp).dat", timeStamp: timeStamp)
     }
     
     class func writeString(_ string: String, path: String?) {

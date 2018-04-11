@@ -24,14 +24,15 @@ c ==== CELLS =====
             for counter in layer {
                 let center = counter.center()
                 counter.mcnpCellId = id
+                let TRCL = String(format: "%.3f %.3f 0", center.x, center.y)
                 result += """
 \nc ---------- Detector \(counter.index + 1) ---------------------------
 \(id) 8 -3.930e-3  53 -54 -57      imp:n=1 u=1   $ Couter's SV
 \(id+1) 8 -3.930e-3  52 -53 -57      imp:n=1 u=1   $ Lower Complementation to SV
 \(id+2) 8 -3.930e-3  54 -55 -57      imp:n=1 u=1   $ Upper Complementation to SV
 \(id+3) 5 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=1  $ Wall of Counter
-\(id+4) 0           (-51:56:58)             imp:n=1 u=1   $ Space around Counter
-\(id+5) 0           -59 -5                  imp:n=1 fill=1 TRCL=(\(center.x) \(center.y) 0)
+\(id+4) 0   (-51:56:58)   imp:n=1 u=1   $ Space around Counter
+\(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
 """
                 id += 6
                 ids.append(id)
@@ -41,10 +42,11 @@ c ==== CELLS =====
         let excludedIds = ids.map { (id: Int) -> String in
             return "#\(String(id))"
         }
+        // AI input lines are limited to 80 columns
         var excludedIdsString = ""
         var i = 0
         for id in excludedIds {
-            if i > 11 { // mcnp has characters limit for line
+            if i > 11 {
                 excludedIdsString += "\n        "
                 i = 0
             } else {
@@ -110,13 +112,30 @@ F4:N  10 52i 540 (10 52i 540)
 FM4   (2.1627e-2 7 103)
 FQ4   f e
 """
+        //AI input lines are limited to 80 columns
         var i = 0
         for layer in layers {
             i += 1
             let indexes = layer.map({ (c: CounterView) -> String in
                 return String(c.mcnpCellId)
-            }).joined(separator: " ")
-            let s1 = "F\(i)4:N  (\(indexes))"
+            })
+            
+            var s1Indexes = ""
+            var i = 0
+            for index in indexes {
+                if i > 11 {
+                    s1Indexes += "\n        "
+                    i = 0
+                } else {
+                    i += 1
+                    if s1Indexes.count != 0 {
+                        s1Indexes += " "
+                    }
+                    s1Indexes += index
+                }
+            }
+            let s1 = "F\(i)4:N (\(s1Indexes))"
+            
             let detectorsCount = layer.count
             // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; '7' - вещество He-3; '103' - номер реакции (n + He-3)
             let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 7 103)   $ \(detectorsCount) Detectors of Layer \(i)"
