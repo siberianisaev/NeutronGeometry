@@ -15,8 +15,8 @@ class MCNPInput {
 Geometry for \(layers.joined().count) detectors.
 c ==== CELLS =====
 1000 0          5         imp:n=0  $ Space Outside Barrel
-1001 2 -0.0012 -1   -5    imp:n=1  $ Space Inside of Vacuum Chamber
-1002 4 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
+1001 0         -1   -5    imp:n=1  $ Space Inside of Vacuum Chamber
+1002 2 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
 """
         var id = 10 // TODO: поменять нумерацию ячеек
         var ids = [id]
@@ -27,10 +27,10 @@ c ==== CELLS =====
                 let TRCL = String(format: "%.3f %.3f 0", center.x, center.y)
                 result += """
 \nc ---------- Detector \(counter.index + 1) ---------------------------
-\(id) 8 -3.930e-3  53 -54 -57      imp:n=1 u=1   $ Couter's SV
-\(id+1) 8 -3.930e-3  52 -53 -57      imp:n=1 u=1   $ Lower Complementation to SV
-\(id+2) 8 -3.930e-3  54 -55 -57      imp:n=1 u=1   $ Upper Complementation to SV
-\(id+3) 5 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=1  $ Wall of Counter
+\(id) 4 -3.930e-3  53 -54 -57      imp:n=1 u=1   $ Couter's SV
+\(id+1) 4 -3.930e-3  52 -53 -57      imp:n=1 u=1   $ Lower Complementation to SV
+\(id+2) 4 -3.930e-3  54 -55 -57      imp:n=1 u=1   $ Upper Complementation to SV
+\(id+3) 3 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=1  $ Wall of Counter
 \(id+4) 0   (-51:56:58)   imp:n=1 u=1   $ Space around Counter
 \(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
 """
@@ -87,27 +87,21 @@ c ***** Detector *************************
     fileprivate class func modeCard(_ layers: [[CounterView]], lastCounterCellId: Int) -> String {
         var result = """
 \nMODE N
-SDEF  erg=d1 pos=0 0 0 wgt=1.001938 $ Source definition
+c ---------------- SOURCE ------------
+SDEF  erg=d1 pos=0 0 0 wgt=1.001938
 SI1   0.01  10 $ 10 MeV
 SP1  -2  1.28866
-c --------------------------------------------------
-M1     6000.60c 1  1001.60c 2      $ Polyethylene
-$ MT1 poly.03t
-M2   7014.60c -0.755  8016.60c -0.232  18000.35c -0.013 $ Air
-c -------------- Borided (3% weight) Polyethylene, Ro=0.94 ----------
-c M3   6000.60c -0.8314  1001.60c -0.1386  5010.60c -0.00594 5011.60c -0.02406
-c -------------- Borided (5% weight) Polyethylene, Ro=0.94 ----------
-M3   6000.60c -0.8143  1001.60c -0.1357  5010.60c -0.00990 5011.60c -0.04010
+c ---------------- MATERIALS ------------
+M1 6000.60c 1 1001.60c 2 $ Polyethylene
 c -------------- Stainless Steel ------------------------------------
-M4    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09
+M2    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09
 c      Cr-nat           Fe-nat           Mn-55            Ni-nat
 29000.50c -0.01
 c      Cu-nat
-M5    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09 $ Fe
-M6     6000.60c 5  1001.60c 8  8016.60c 2    $ C5H8O2 (Ro = 1.18)
-M7     2003.60c 1                            $ He-3
-c ----- TODO: !!! Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
-M8    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
+M3    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09 $ Fe
+c ----- Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
+M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
+c ---------------- TALLY ------------
 F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
 FM4   (2.1627e-2 7 103)
 FQ4   f e
