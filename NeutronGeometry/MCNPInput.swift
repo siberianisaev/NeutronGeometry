@@ -19,12 +19,12 @@ c ==== CELLS =====
 1002 2 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
 """
         var id = 10 // TODO: поменять нумерацию ячеек
-        var ids = [id]
+        var ids = [Int]()
         for layer in layers {
             for counter in layer {
                 let center = counter.center()
                 counter.mcnpCellId = id
-                let TRCL = String(format: "%.3f %.3f 0", center.x, center.y)
+                let TRCL = String(format: "%.1f %.1f 0", center.x, center.y)
                 result += """
 \nc ---------- Detector \(counter.index + 1) ---------------------------
 \(id) 4 -3.930e-3  53 -54 -57      imp:n=1 u=1   $ Couter's SV
@@ -35,7 +35,7 @@ c ==== CELLS =====
 \(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
 """
                 id += 6
-                ids.append(id)
+                ids.append(id-1)
             }
         }
         // Moderator cell negative to outer shell (surface 5), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells
@@ -58,7 +58,7 @@ c ==== CELLS =====
             excludedIdsString += id
         }
         result += """
-\n$c ----- Lattice of Detectors (Moderator cell) ------------
+\nc ----- Lattice of Detectors (Moderator cell) ------------
 1044 1 -0.92 2 -5
         \(excludedIdsString)
         imp:n=1
@@ -96,14 +96,15 @@ M1 6000.60c 1 1001.60c 2 $ Polyethylene
 c -------------- Stainless Steel ------------------------------------
 M2    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09
 c      Cr-nat           Fe-nat           Mn-55            Ni-nat
-29000.50c -0.01
+      29000.50c -0.01
 c      Cu-nat
 M3    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09 $ Fe
 c ----- Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
 M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
+M5     2003.60c 1                            $ He-3
 c ---------------- TALLY ------------
 F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
-FM4   (2.1627e-2 7 103)
+FM4   (2.1627e-2 5 103)
 FQ4   f e
 """
         //AI input lines are limited to 80 columns
@@ -131,13 +132,13 @@ FQ4   f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; '7' - вещество He-3; '103' - номер реакции (n + He-3)
-            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 7 103)   $ \(detectorsCount) Detectors of Layer \(i)"
+            // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; 'M5' - вещество He-3; '103' - номер реакции (n + He-3)
+            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 103)   $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
         result += """
 \nNPS   2000000000
-CTME  90
+CTME  90\n
 """
         return result
     }

@@ -116,7 +116,7 @@ class ViewController: NSViewController {
         showCountersGap()
     }
     
-    @IBAction func saveButton(_ sender: Any) {
+    @IBAction func saveButton(_ sender: Any?) {
         let timeStamp = String.timeStamp()
         let geometryPath = FileManager.geometryFilePath(timeStamp)
         let result = getGeometry()
@@ -309,7 +309,9 @@ class ViewController: NSViewController {
         return layers
     }
     
-    @IBAction func calculateButton(_ sender: Any) {
+    @IBAction func calculateButton(_ sender: Any?) {
+        updateButton(nil)
+        
         print("\nConfiguration results:")
         for counter in countersFront {
             let center = counter.center()
