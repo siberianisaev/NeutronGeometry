@@ -80,7 +80,7 @@ c ***** Detector *************************
 58 cz   1.5
 59 cz   1.52
 """
-        result += modeCard(layers, lastCounterCellId: id)
+        result += modeCard(layers, lastCounterCellId: ids.last!)
         return result
     }
     
@@ -103,9 +103,9 @@ c ----- Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
 M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
 M5     2003.60c 1                            $ He-3
 c ---------------- TALLY ------------
-F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
-FM4   (2.1627e-2 5 103)
-FQ4   f e
+c --- TODO: F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
+c --- TODO: FM4   (2.1627e-2 5 103)
+c --- TODO: FQ4   f e
 """
         //AI input lines are limited to 80 columns
         var i = 0
