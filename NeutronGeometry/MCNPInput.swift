@@ -65,7 +65,7 @@ c ==== CELLS =====
 """
         // TODO: detectors lenghts and radiuses for different atmospheres
         result += """
-\nc ==== Surfaces ====
+\n\nc ==== Surfaces ====
 1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
 2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
 5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
@@ -86,7 +86,7 @@ c ***** Detector *************************
     
     fileprivate class func modeCard(_ layers: [[CounterView]], lastCounterCellId: Int) -> String {
         var result = """
-\nMODE N
+\n\nMODE N
 c ---------------- SOURCE ------------
 SDEF  erg=d1 pos=0 0 0 wgt=1.001938
 SI1   0.01  10 $ 10 MeV
