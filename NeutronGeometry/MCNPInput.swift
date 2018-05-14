@@ -11,14 +11,15 @@ import Foundation
 class MCNPInput {
     
     class func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float) -> String {
+        let totalDetectorsCount = layers.joined().count
         var result = """
-Geometry for \(layers.joined().count) detectors.
+Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
-1000 0          5         imp:n=0  $ Space Outside Barrel
-1001 0         -1   -5    imp:n=1  $ Space Inside of Vacuum Chamber
-1002 2 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
+10000 0          5         imp:n=0  $ Space Outside Barrel
+10001 0         -1   -5    imp:n=1  $ Space Inside of Vacuum Chamber
+10002 2 -7.9    -2 1 -5    imp:n=1  $ Wall of Vacuum Chamber
 """
-        var id = 10 // TODO: поменять нумерацию ячеек
+        var id = 10
         var ids = [Int]()
         for layer in layers {
             for counter in layer {
@@ -34,8 +35,8 @@ c ==== CELLS =====
 \(id+4) 0   (-51:56:58)   imp:n=1 u=1   $ Space around Counter
 \(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
 """
-                id += 6
-                ids.append(id-1)
+                id += 10
+                ids.append(id-5)
             }
         }
         // Moderator cell negative to outer shell (surface 5), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells
@@ -59,7 +60,7 @@ c ==== CELLS =====
         }
         result += """
 \nc ----- Lattice of Detectors (Moderator cell) ------------
-1044 1 -0.92 2 -5
+10003 1 -0.92 2 -5
         \(excludedIdsString)
         imp:n=1
 """
@@ -80,11 +81,12 @@ c ***** Detector *************************
 58 cz   1.5
 59 cz   1.52
 """
-        result += modeCard(layers, lastCounterCellId: ids.last!)
+        // TODO: -5 used to get start of cell
+        result += modeCard(layers, firstCounterCellId: ids.first!-5, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!-5)
         return result
     }
     
-    fileprivate class func modeCard(_ layers: [[CounterView]], lastCounterCellId: Int) -> String {
+    fileprivate class func modeCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         var result = """
 \n\nMODE N
 c ---------------- SOURCE ------------
@@ -103,10 +105,10 @@ c ----- Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
 M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
 M5     2003.60c 1                            $ He-3
 c ---------------- TALLY ------------
-c --- TODO: F4:N  10 52i \(lastCounterCellId) (10 52i \(lastCounterCellId))
-c --- TODO: FM4   (2.1627e-2 5 103)
-c --- TODO: FQ4   f e
-"""
+F4:N  \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
+FM4   (2.1627e-2 5 103)
+FQ4   f e
+"""        
         //AI input lines are limited to 80 columns
         var i = 0
         for layer in layers {
