@@ -125,11 +125,11 @@ FQ4   f e
                     j = 0
                 } else {
                     j += 1
-                    if s1Indexes.count != 0 {
-                        s1Indexes += " "
-                    }
-                    s1Indexes += index
                 }
+                if s1Indexes.count != 0 {
+                    s1Indexes += " "
+                }
+                s1Indexes += index
             }
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
