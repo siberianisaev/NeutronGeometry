@@ -34,7 +34,7 @@ c ==== CELLS =====
 \(id+2) 4 -3.930e-3  54 -55 -57      imp:n=1 u=\(detector)   $ Upper Complementation to SV
 \(id+3) 3 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=\(detector)  $ Wall of Counter
 \(id+4) 0   (-51:56:58)   imp:n=1 u=\(detector)   $ Space around Counter
-\(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
+\(id+5) 0   -59 -5  imp:n=1 fill=\(detector)  TRCL=(\(TRCL))
 """
                 id += 10
                 ids.append(id-5)
