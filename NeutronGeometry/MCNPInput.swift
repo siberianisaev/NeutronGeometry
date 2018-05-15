@@ -26,13 +26,14 @@ c ==== CELLS =====
                 let center = counter.center()
                 counter.mcnpCellId = id
                 let TRCL = String(format: "%.1f %.1f 0", center.x, center.y)
+                let detector = counter.index + 1
                 result += """
-\nc ---------- Detector \(counter.index + 1) ---------------------------
-\(id) 4 -3.930e-3  53 -54 -57      imp:n=1 u=1   $ Couter's SV
-\(id+1) 4 -3.930e-3  52 -53 -57      imp:n=1 u=1   $ Lower Complementation to SV
-\(id+2) 4 -3.930e-3  54 -55 -57      imp:n=1 u=1   $ Upper Complementation to SV
-\(id+3) 3 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=1  $ Wall of Counter
-\(id+4) 0   (-51:56:58)   imp:n=1 u=1   $ Space around Counter
+\nc ---------- Detector \(detector) ---------------------------
+\(id) 4 -3.930e-3  53 -54 -57      imp:n=1 u=\(detector)   $ Couter's SV
+\(id+1) 4 -3.930e-3  52 -53 -57      imp:n=1 u=\(detector)   $ Lower Complementation to SV
+\(id+2) 4 -3.930e-3  54 -55 -57      imp:n=1 u=\(detector)   $ Upper Complementation to SV
+\(id+3) 3 -7.91      51 -56 -58 (-52:55:57) imp:n=1 u=\(detector)  $ Wall of Counter
+\(id+4) 0   (-51:56:58)   imp:n=1 u=\(detector)   $ Space around Counter
 \(id+5) 0   -59 -5  imp:n=1 fill=1  TRCL=(\(TRCL))
 """
                 id += 10
