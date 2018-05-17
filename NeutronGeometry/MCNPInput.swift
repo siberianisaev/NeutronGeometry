@@ -10,6 +10,8 @@ import Foundation
 
 class MCNPInput {
     
+    fileprivate static let npReactionId = 103 // (n,p) reaction
+    
     class func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float) -> String {
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -65,26 +67,42 @@ c ==== CELLS =====
         \(excludedIdsString)
         imp:n=1
 """
-        // TODO: detectors lenghts and radiuses for different atmospheres
+        
         result += """
 \n\nc ==== Surfaces ====
 1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
 2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
 5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
-c ***** Detector *************************
-51 pz  -25
-52 pz  -24.92
-53 pz  -23.5
-54 pz   23.5
-55 pz   24.92
-56 pz   25
-57 cz   1.42
-58 cz   1.5
-59 cz   1.52
+\(counterSurfaces(counterLenght: counterLenght, counterRadius7Atm: counterRadius7Atm, counterRadius4Atm: counterRadius4Atm))
 """
         // TODO: -5 used to get start of cell
         result += modeCard(layers, firstCounterCellId: ids.first!-5, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!-5)
         return result
+    }
+    
+    fileprivate class func counterSurfaces(counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float) -> String {
+        // TODO: surfaces for 4 atm counter
+        let counterWallThikness: Float = 0.08
+        let counterСap: Float = 1.42
+        let counterPZOutside = counterLenght/2
+        let counterPZInside = counterPZOutside - counterWallThikness
+        let counterPZActiveArea = counterPZInside - counterСap
+        let counterCZOutside = counterRadius7Atm/10
+        let counterCZInside = counterCZOutside - counterWallThikness
+        let counterCZOutsideSpace = counterCZOutside + 0.02
+        let s = """
+        c ***** Detector *************************
+        51 pz  -\(counterPZOutside)
+        52 pz  -\(counterPZInside)
+        53 pz  -\(counterPZActiveArea)
+        54 pz   \(counterPZActiveArea)
+        55 pz   \(counterPZInside)
+        56 pz   \(counterPZOutside)
+        57 cz   \(counterCZInside)
+        58 cz   \(counterCZOutside)
+        59 cz   \(counterCZOutsideSpace)
+        """
+        return s
     }
     
     fileprivate class func modeCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
@@ -107,7 +125,7 @@ M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868
 M5     2003.60c 1                            $ He-3
 c ---------------- TALLY ------------
 F4:N  \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
-FM4   (2.1627e-2 5 103)
+FM4   (2.1627e-2 5 \(npReactionId))
 FQ4   f e
 """        
         //AI input lines are limited to 80 columns
@@ -135,8 +153,8 @@ FQ4   f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; 'M5' - вещество He-3; '103' - номер реакции (n + He-3)
-            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 103)   $ \(detectorsCount) Detectors of Layer \(i)"
+            // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; 'M5' - вещество He-3
+            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
         result += """
