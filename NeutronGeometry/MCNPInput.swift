@@ -10,9 +10,15 @@ import Foundation
 
 class MCNPInput {
     
-    fileprivate static let npReactionId = 103 // (n,p) reaction
+    fileprivate let npReactionId = 103 // (n,p) reaction
     
-    class func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float, neutronSource: NeutronSource, maxTime: Int) -> String {
+    fileprivate var counter7Atm: Counter!
+    fileprivate var counter4Atm: Counter!
+    
+    func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counter7Atm: Counter, counter4Atm: Counter, neutronSource: NeutronSource, maxTime: Int) -> String {
+        self.counter7Atm = counter7Atm
+        self.counter4Atm = counter4Atm
+        
         let totalDetectorsCount = layers.joined().count
         //TODO: extract cells card method
         var result = """
@@ -68,7 +74,7 @@ c ==== CELLS =====
         \(excludedIdsString)
         imp:n=1
 """
-        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7Atm, counterRadius4Atm: counterRadius4Atm)
+        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght)
         result += modeCard()
         result += sourceCard(neutronSource)
         result += materialsCard()
@@ -77,42 +83,34 @@ c ==== CELLS =====
         return result
     }
     
-    fileprivate class func surfacesCard(chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float) -> String {
+    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float) -> String {
         return """
         \n\nc ==== Surfaces ====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
         5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
-        \(counterSurfaces(counterLenght: counterLenght, counterRadius7Atm: counterRadius7Atm, counterRadius4Atm: counterRadius4Atm))
+        \(counterSurfaces())
         """
     }
     
-    fileprivate class func counterSurfaces(counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float) -> String {
-        // TODO: surfaces for 4 atm counter
-        let counterWallThikness: Float = 0.08
-        let counterСap: Float = 1.42
-        let counterPZOutside = counterLenght/2
-        let counterPZInside = counterPZOutside - counterWallThikness
-        let counterPZActiveArea = counterPZInside - counterСap
-        let counterCZOutside = counterRadius7Atm/10
-        let counterCZInside = counterCZOutside - counterWallThikness
-        let counterCZOutsideSpace = counterCZOutside + 0.02
+    // TODO: surfaces for 4 atm counter
+    fileprivate func counterSurfaces() -> String {
         let s = """
         c ***** Detector *************************
-        51 pz  -\(counterPZOutside)
-        52 pz  -\(counterPZInside)
-        53 pz  -\(counterPZActiveArea)
-        54 pz   \(counterPZActiveArea)
-        55 pz   \(counterPZInside)
-        56 pz   \(counterPZOutside)
-        57 cz   \(counterCZInside)
-        58 cz   \(counterCZOutside)
-        59 cz   \(counterCZOutsideSpace)
+        51 pz  -\(counter7Atm.pzOutside)
+        52 pz  -\(counter7Atm.pzInside)
+        53 pz  -\(counter7Atm.pzActiveArea)
+        54 pz   \(counter7Atm.pzActiveArea)
+        55 pz   \(counter7Atm.pzInside)
+        56 pz   \(counter7Atm.pzOutside)
+        57 cz   \(counter7Atm.czInside)
+        58 cz   \(counter7Atm.czOutside)
+        59 cz   \(counter7Atm.czOutsideSpace)
         """
         return s
     }
     
-    fileprivate class func sourceCard(_ neutronSource: NeutronSource) -> String {
+    fileprivate func sourceCard(_ neutronSource: NeutronSource) -> String {
         let position = "pos=0 0 0"
         switch neutronSource {
         case .monoLine:
@@ -130,13 +128,13 @@ c ==== CELLS =====
         }
     }
     
-    fileprivate class func modeCard() -> String {
+    fileprivate func modeCard() -> String {
         return """
         \n\nMODE N
         """
     }
     
-    fileprivate class func materialsCard() -> String {
+    fileprivate func materialsCard() -> String {
         return """
         \nc ---------------- MATERIALS ------------
         M1 6000.60c 1 1001.60c 2 $ Polyethylene
@@ -152,11 +150,17 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate class func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
+    fileprivate func stringFrom(number: Float, precision: Int) -> String {
+        let format = "%.\(precision)f"
+        return String(format: format, number)
+    }
+    
+    fileprivate func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
+        let coefficient = counter7Atm.tallyCoefficient()
         var result = """
 \nc ---------------- TALLY ------------
 F4:N  \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
-FM4   (2.1627e-2 5 \(npReactionId))
+FM4   (\(stringFrom(number: coefficient, precision: 8)) 5 \(npReactionId))
 FQ4   f e
 """        
         //AI input lines are limited to 80 columns
@@ -184,13 +188,13 @@ FQ4   f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
+            let s2 = "FM\(i)4   (\(stringFrom(number: coefficient * Float(detectorsCount), precision: 8)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
             result += "\n" + s1 + "\n" + s2
         }
         return result
     }
     
-    fileprivate class func controlCard(maxTime: Int) -> String {
+    fileprivate func controlCard(maxTime: Int) -> String {
         return """
         \nNPS 1000000000
         CTME \(maxTime)\n

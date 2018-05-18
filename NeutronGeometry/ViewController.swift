@@ -367,7 +367,9 @@ class ViewController: NSViewController {
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue, neutronSource: neutronSource, maxTime: maxTimeField.integerValue)
+        let counter7Atm = Counter(lenght: counterLenght, radius: counterRadius7AtmField.floatValue, presure: .high)
+        let counter4Atm = Counter(lenght: counterLenght, radius: counterRadius4AtmField.floatValue, presure: .low)
+        let result = MCNPInput().generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counter7Atm: counter7Atm, counter4Atm: counter4Atm, neutronSource: neutronSource, maxTime: maxTimeField.integerValue)
         print(result)
         
         // Files
