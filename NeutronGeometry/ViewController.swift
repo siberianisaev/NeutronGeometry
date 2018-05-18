@@ -55,6 +55,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
+    @IBOutlet weak var maxTimeField: NSTextField!
     @IBOutlet weak var neutronSourceControl: NSSegmentedControl!
     
     fileprivate var countersFront = [CounterView]()
@@ -165,6 +166,7 @@ class ViewController: NSViewController {
     fileprivate let keyCenterY = "Y"
     fileprivate let keySource = "SOURCE"
     fileprivate let keyValue = "VALUE"
+    fileprivate let keyMaxTime = "MAX_TIME"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -193,6 +195,8 @@ class ViewController: NSViewController {
         strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
         // SOURCE
         strings.append(keySource + " \(keyValue)=\(neutronSourceControl.selectedSegment)")
+        // MAX TIME
+        strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -299,6 +303,10 @@ class ViewController: NSViewController {
         if let values = dict[keySource], let value = preferenceFor(key: keyValue, preferences: values), let _ = NeutronSource(rawValue: value) {
             neutronSourceControl.setSelected(true, forSegment: value)
         }
+        // MAX TIME
+        if let values = dict[keyMaxTime], let time = preferenceFor(key: keyValue, preferences: values) {
+            maxTimeField.integerValue = time
+        }
         
         // UPDATE GEOMETRY
         updateButton(nil)
@@ -359,7 +367,7 @@ class ViewController: NSViewController {
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue, neutronSource: neutronSource)
+        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue, neutronSource: neutronSource, maxTime: maxTimeField.integerValue)
         print(result)
         
         // Files

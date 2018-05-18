@@ -12,7 +12,7 @@ class MCNPInput {
     
     fileprivate static let npReactionId = 103 // (n,p) reaction
     
-    class func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float, neutronSource: NeutronSource) -> String {
+    class func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, counterLenght: Float, counterRadius7Atm: Float, counterRadius4Atm: Float, neutronSource: NeutronSource, maxTime: Int) -> String {
         let totalDetectorsCount = layers.joined().count
         //TODO: extract cells card method
         var result = """
@@ -73,7 +73,7 @@ c ==== CELLS =====
         result += sourceCard(neutronSource)
         result += materialsCard()
         result += tallyCard(layers, firstCounterCellId: ids.first!-5, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!-5) // TODO: -5 used to get start of cell
-        result += controlCard()
+        result += controlCard(maxTime: maxTime)
         return result
     }
     
@@ -184,17 +184,16 @@ FQ4   f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            // 'FM' - поток по объему ячеек; '0.021627' - нормированный множитель, количество ядер He-3 в объеме; 'M5' - вещество He-3
-            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)"
+            let s2 = "FM\(i)4   (\(0.021627 * Double(detectorsCount)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
             result += "\n" + s1 + "\n" + s2
         }
         return result
     }
     
-    fileprivate class func controlCard() -> String {
+    fileprivate class func controlCard(maxTime: Int) -> String {
         return """
-        \nNPS 2000000000
-        CTME 90\n
+        \nNPS 1000000000
+        CTME \(maxTime)\n
         """
     }
     
