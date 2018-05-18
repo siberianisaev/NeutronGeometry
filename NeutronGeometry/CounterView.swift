@@ -41,7 +41,8 @@ class CounterView: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        onChangePresure?()
+        //TODO: 4 atm counters support
+        //onChangePresure?()
     }
     
 }
