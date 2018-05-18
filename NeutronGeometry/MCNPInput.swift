@@ -134,6 +134,7 @@ c ==== CELLS =====
         """
     }
     
+    // TODO: material for 4 atm counter
     fileprivate func materialsCard() -> String {
         return """
         \nc ---------------- MATERIALS ------------
@@ -141,11 +142,11 @@ c ==== CELLS =====
         c -------------- Stainless Steel ------------------------------------
         M2    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09
         c      Cr-nat           Fe-nat           Mn-55            Ni-nat
-        29000.50c -0.01
+              29000.50c -0.01
         c      Cu-nat
         M3    24000.42c -0.19  26000.21c -0.69  25055.50c -0.02  28000.42c -0.09 $ Fe
-        c ----- Gas in Counter (2.7 atm. He-3 + 2 atm. Ar) ---------
-        M4    2003.60c 0.57447  18000.35c 0.42553  $ Material of counters; Ro = 3.929868e-3
+        c ----- Gas in Counter (\(counter7Atm.heliumPresure) atm. He-3 + \(counter7Atm.argonPresure) atm. Ar) ---------
+        M4    2003.60c \(counter7Atm.heliumFraction) 18000.35c \(counter7Atm.argonFraction) $ Material of counters; Ro = 3.929868e-3
         M5     2003.60c 1                            $ He-3
         """
     }
@@ -160,7 +161,7 @@ c ==== CELLS =====
         var result = """
 \nc ---------------- TALLY ------------
 F4:N  \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
-FM4   (\(stringFrom(number: coefficient, precision: 8)) 5 \(npReactionId))
+FM4   (\(stringFrom(number: coefficient, precision: 6)) 5 \(npReactionId))
 FQ4   f e
 """        
         //AI input lines are limited to 80 columns
@@ -188,7 +189,7 @@ FQ4   f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            let s2 = "FM\(i)4   (\(stringFrom(number: coefficient * Float(detectorsCount), precision: 8)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
+            let s2 = "FM\(i)4   (\(stringFrom(number: coefficient * Float(detectorsCount), precision: 6)) 5 \(npReactionId))   $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
             result += "\n" + s1 + "\n" + s2
         }
         return result

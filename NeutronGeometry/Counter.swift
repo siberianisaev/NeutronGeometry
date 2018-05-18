@@ -43,6 +43,26 @@ class Counter {
         return czOutside + 0.02
     }
     
+    let argonPresure: Int = 2
+    
+    var heliumPresure: Int {
+        return presure.rawValue
+    }
+    
+    fileprivate var totalPresure: Float {
+        return Float(argonPresure + heliumPresure)
+    }
+    
+    var heliumFraction: Float {
+        let precision = 100000
+        let fraction = round(Float(heliumPresure)/totalPresure * Float(precision))
+        return fraction/Float(precision)
+    }
+    
+    var argonFraction: Float {
+        return 1 - heliumFraction
+    }
+    
     init(lenght: Float, radius: Float, presure: HeliumPressure) {
         self.lenght = lenght
         self.radius = radius
@@ -60,13 +80,12 @@ class Counter {
     }
     
     func tallyCoefficient() -> Float {
-        let presure = Float(self.presure.rawValue) // atmospheres
+        let presure = Float(heliumPresure) // atmospheres
         let volume = activeAreaVolume() / 1000.0 // liters
         let temperature: Float = 293 // K
         let moleCount = (presure * volume) / (temperature * 0.0821)
         let coefficient = moleCount * 0.60221413 // atoms count (mole * Avogadro) * 10^24
         return coefficient
-//        return presure * coefficient / 10
     }
     
 }
