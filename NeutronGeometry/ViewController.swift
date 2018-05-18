@@ -9,6 +9,19 @@
 import Cocoa
 import AppKit
 
+enum NeutronSource: Int {
+    case monoLine, Maxwell
+    
+    var name: String {
+        switch self {
+        case .monoLine:
+            return "Mono-line"
+        case .Maxwell:
+            return "Maxwell dis."
+        }
+    }
+}
+
 class ViewController: NSViewController {
     
     enum Projection {
@@ -42,6 +55,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
+    @IBOutlet weak var neutronSourceControl: NSSegmentedControl!
     
     fileprivate var countersFront = [CounterView]()
     fileprivate var countersSide = [NSView]()
@@ -56,6 +70,10 @@ class ViewController: NSViewController {
     
     fileprivate func presureForCounterIndex(_ index: Int, tag: Int) -> HeliumPressure {
         return presures[index] ?? .high // TODO: support for 4 atm counters (presures[index] ?? tag == 4 ? .low : .high)
+    }
+    
+    fileprivate var neutronSource: NeutronSource {
+        return NeutronSource(rawValue: neutronSourceControl.selectedSegment) ?? .monoLine
     }
     
     @IBAction func layer4Control(_ sender: Any) {
@@ -145,6 +163,8 @@ class ViewController: NSViewController {
     fileprivate let keyThickness = "THICKNESS"
     fileprivate let keyCenterX = "X"
     fileprivate let keyCenterY = "Y"
+    fileprivate let keySource = "SOURCE"
+    fileprivate let keyValue = "VALUE"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -171,6 +191,8 @@ class ViewController: NSViewController {
         strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
         // GRID
         strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
+        // SOURCE
+        strings.append(keySource + " \(keyValue)=\(neutronSourceControl.selectedSegment)")
         return strings.joined(separator: "\n")
     }
     
@@ -273,6 +295,10 @@ class ViewController: NSViewController {
         if let values = dict[keyGrid], let step = preferenceFor(key: keyStep, preferences: values) {
             gridStepField.integerValue = step
         }
+        // SOURCE
+        if let values = dict[keySource], let value = preferenceFor(key: keyValue, preferences: values), let _ = NeutronSource(rawValue: value) {
+            neutronSourceControl.setSelected(true, forSegment: value)
+        }
         
         // UPDATE GEOMETRY
         updateButton(nil)
@@ -333,7 +359,7 @@ class ViewController: NSViewController {
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue)
+        let result = MCNPInput.generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counterLenght: counterLenght, counterRadius7Atm: counterRadius7AtmField.floatValue, counterRadius4Atm: counterRadius4AtmField.floatValue, neutronSource: neutronSource)
         print(result)
         
         // Files
