@@ -79,12 +79,16 @@ class Counter {
         return base * height
     }
     
+    /**
+     Atoms count get from Mendeleev-Clapeyron equation converted to MCNP format.
+     */
     func tallyCoefficient() -> Float {
-        let presure = Float(heliumPresure) // atmospheres
-        let volume = activeAreaVolume() / 1000.0 // liters
-        let temperature: Float = 293 // K
-        let moleCount = (presure * volume) / (temperature * 0.0821)
-        let coefficient = moleCount * 0.60221413 // atoms count (mole * Avogadro) * 10^24
+        let presure = Float(heliumPresure) * 101325 // Pa
+        let volume = activeAreaVolume() / 1e6 // m^3
+        let temperature: Float = 20 + 273.15 // °K
+        let avogadro: Float = 0.602214085775 // * 1e-24
+        let R: Float = 8.31445984849
+        let coefficient = (presure * volume * avogadro) / (temperature * R) // atoms count * 1e-24
         return coefficient
     }
     
