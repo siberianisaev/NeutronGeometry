@@ -76,8 +76,33 @@ c ==== CELLS =====
         result += sourceCard()
         result += materialsCard()
         result += tallyCard(layers, firstCounterCellId: ids.first!-5, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!-5) // TODO: -5 used to get start of cell
+        result += timeCard()
         result += controlCard(maxTime: maxTime)
         return result
+    }
+    
+    fileprivate func timeCard() -> String {
+        let max = 12800
+        let step = 100
+        var steps = ""
+        var i = 0
+        var j = 0
+        while i <= max {
+            if j > 5 {
+                steps += "\n      "
+                j = 0
+            } else {
+                j += 1
+            }
+            if steps.count != 0 {
+                steps += " "
+            }
+            steps += String(i)
+            i += step
+        }
+        return """
+        \nT0 \(steps)
+        """
     }
     
     fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float) -> String {
