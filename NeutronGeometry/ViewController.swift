@@ -9,19 +9,6 @@
 import Cocoa
 import AppKit
 
-enum NeutronSource: Int {
-    case monoLine, Maxwell
-    
-    var name: String {
-        switch self {
-        case .monoLine:
-            return "Mono-line"
-        case .Maxwell:
-            return "Maxwell dis."
-        }
-    }
-}
-
 class ViewController: NSViewController {
     
     enum Projection {
@@ -30,9 +17,6 @@ class ViewController: NSViewController {
 
     @IBOutlet weak var frontView: ProjectionView!
     @IBOutlet weak var sideView: ProjectionView!
-    @IBOutlet weak var counterRadius4AtmField: NSTextField!
-    @IBOutlet weak var counterRadius7AtmField: NSTextField!
-    @IBOutlet weak var counterLenghtField: NSTextField!
     @IBOutlet weak var layer1CountField: NSTextField!
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
@@ -56,7 +40,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer4Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
-    @IBOutlet weak var neutronSourceControl: NSSegmentedControl!
     
     fileprivate var countersFront = [CounterView]()
     fileprivate var countersSide = [NSView]()
@@ -71,10 +54,6 @@ class ViewController: NSViewController {
     
     fileprivate func presureForCounterIndex(_ index: Int, tag: Int) -> HeliumPressure {
         return presures[index] ?? .high // TODO: support for 4 atm counters (presures[index] ?? tag == 4 ? .low : .high)
-    }
-    
-    fileprivate var neutronSource: NeutronSource {
-        return NeutronSource(rawValue: neutronSourceControl.selectedSegment) ?? .monoLine
     }
     
     @IBAction func layer4Control(_ sender: Any) {
@@ -103,9 +82,8 @@ class ViewController: NSViewController {
                     let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
                     let presure1 = counter1.presure
                     let presure2 = counter2.presure
-                    let radius1 = counterRadiusForPresure(presure1)
-                    let radius2 = counterRadiusForPresure(presure2)
-                    result = lroundf(Float(distance - radius1 - radius2))
+                    let deltaRadius = (Counter(presure: presure1).radius - Counter(presure: presure2).radius) * 10
+                    result = lroundf(Float(distance) - deltaRadius)
                 }
             }
             var textField: NSTextField?
@@ -180,8 +158,6 @@ class ViewController: NSViewController {
         for i in 0..<layerCountFields.count {
             strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue)")
         }
-        // COUNTER INFO
-        strings.append(keyCounterInfo + " \(keyRadiusAtm(4))=\(counterRadius4AtmField.integerValue) \(keyRadiusAtm(7))=\(counterRadius7AtmField.integerValue) \(keyLenght)=\(counterLenghtField.integerValue)")
         // COUNTERS
         for counter in countersFront {
             let center = counter.center()
@@ -193,8 +169,6 @@ class ViewController: NSViewController {
         strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
         // GRID
         strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
-        // SOURCE
-        strings.append(keySource + " \(keyValue)=\(neutronSourceControl.selectedSegment)")
         // MAX TIME
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         return strings.joined(separator: "\n")
@@ -279,12 +253,6 @@ class ViewController: NSViewController {
                 layer4ControlValueChanged()
             }
         }
-        // COUNTER INFO
-        if let values = dict[keyCounterInfo], let radius4Atm = preferenceFor(key: keyRadiusAtm(4), preferences: values), let radius7Atm = preferenceFor(key: keyRadiusAtm(7), preferences: values), let lenght = preferenceFor(key: keyLenght, preferences: values) {
-            counterRadius4AtmField.integerValue = radius4Atm
-            counterRadius7AtmField.integerValue = radius7Atm
-            counterLenghtField.integerValue = lenght
-        }
         // BARREL
         if let values = dict[keyBarrel], let size = preferenceFor(key: keySize, preferences: values), let lenght = preferenceFor(key: keyLenght, preferences: values) {
             barrelSizeField.integerValue = size
@@ -298,10 +266,6 @@ class ViewController: NSViewController {
         // GRID
         if let values = dict[keyGrid], let step = preferenceFor(key: keyStep, preferences: values) {
             gridStepField.integerValue = step
-        }
-        // SOURCE
-        if let values = dict[keySource], let value = preferenceFor(key: keyValue, preferences: values), let _ = NeutronSource(rawValue: value) {
-            neutronSourceControl.setSelected(true, forSegment: value)
         }
         // MAX TIME
         if let values = dict[keyMaxTime], let time = preferenceFor(key: keyValue, preferences: values) {
@@ -356,20 +320,16 @@ class ViewController: NSViewController {
         let chamberThinkness = chamberThicknessField.floatValue/10
         let barrelSize = barrelSizeField.floatValue/10
         let barrelLenght = barrelLenghtField.floatValue/10
-        let counterLenght = counterLenghtField.floatValue/10
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
         print("Barrel size: \(barrelSize) cm")
         print("Barrel lenght: \(barrelLenght) cm")
-        print("Counter lenght: \(counterLenght) cm")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let counter7Atm = Counter(lenght: counterLenght, radius: counterRadius7AtmField.floatValue, presure: .high)
-        let counter4Atm = Counter(lenght: counterLenght, radius: counterRadius4AtmField.floatValue, presure: .low)
-        let result = MCNPInput().generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, counter7Atm: counter7Atm, counter4Atm: counter4Atm, neutronSource: neutronSource, maxTime: maxTimeField.integerValue)
+        let result = MCNPInput().generateWith(layers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue)
         print(result)
         
         // Files
@@ -472,19 +432,20 @@ class ViewController: NSViewController {
     
     fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
         let layerCenter = layerRadiusFrom(raduisField)
-        let width = CGFloat(counterLenghtField.floatValue)
         let presure: HeliumPressure = .high // TODO: support for 4 atm counters (tag == 4 ? .low : .high)
-        let height = counterRadiusForPresure(presure) * 2
+        let counter = Counter(presure: presure)
+        let width = CGFloat(counter.lenght * 10)
+        let height = CGFloat(counter.radius * 10) * 2
         let container = containerFor(.side)
         let containerSize = container.frame.size
         let zArray = [1, -1] as [CGFloat]
         for z in zArray {
             let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 + z * layerCenter - height/2) // +- layerCenter
-            let counter = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
-            counter.wantsLayer = true
-            counter.layer?.backgroundColor = counterColorForPresure(presure)
-            container.addSubview(counter)
-            countersSide.append(counter)
+            let counterView = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+            counterView.wantsLayer = true
+            counterView.layer?.backgroundColor = counterColorForPresure(presure)
+            container.addSubview(counterView)
+            countersSide.append(counterView)
         }
     }
     
@@ -505,11 +466,6 @@ class ViewController: NSViewController {
     
     fileprivate func counterColorForPresure(_ presure: HeliumPressure) -> CGColor {
         return (presure == .high ? NSColor.blue : NSColor.red).cgColor
-    }
-    
-    fileprivate func counterRadiusForPresure(_ presure: HeliumPressure) -> CGFloat {
-        let field = (presure == .high) ? counterRadius7AtmField : counterRadius4AtmField
-        return CGFloat(max(field!.floatValue, 1))
     }
     
     fileprivate func layerRadiusFrom(_ textField: NSTextField) -> CGFloat {
@@ -555,27 +511,28 @@ class ViewController: NSViewController {
         for i in 0...total-1 {
             let counterIndex = countersFront.count
             let presure = presureForCounterIndex(counterIndex, tag: tag)
-            let counterRadius = counterRadiusForPresure(presure)
+            let counter = Counter(presure: presure)
+            let counterRadius = CGFloat(counter.radius * 10)
             let center = CGPoint(x: frontSize.width/2 - counterRadius, y: frontSize.height/2 - counterRadius)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
             let x = center.x + layerCenter * cos(angle)
             let y = center.y + layerCenter * sin(angle)
             let frame = NSRect(x: x, y: y, width: counterRadius * 2, height: counterRadius * 2)
             
-            let counter = CounterView(frame: frame)
-            counter.index = counterIndex
-            counter.layerIndex = tag
-            counter.presure = presure
-            counter.onChangePresure = { [weak self] in
+            let counterView = CounterView(frame: frame)
+            counterView.index = counterIndex
+            counterView.layerIndex = tag
+            counterView.presure = presure
+            counterView.onChangePresure = { [weak self] in
                 self?.presures[counterIndex] = presure == .high ? .low : .high
                  // TODO: optimisation, refresh single counter
                 self?.showCountersFront()
                 self?.showCountersSide()
             }
-            counter.wantsLayer = true
-            counter.layer?.cornerRadius = counterRadius
-            counter.layer?.masksToBounds = true
-            counter.layer?.backgroundColor = counterColorForPresure(presure)
+            counterView.wantsLayer = true
+            counterView.layer?.cornerRadius = counterRadius
+            counterView.layer?.masksToBounds = true
+            counterView.layer?.backgroundColor = counterColorForPresure(presure)
             
             let labelHeight: CGFloat = 14
             let label = NSTextField(frame: NSRect(x: 0, y: frame.height/2 - labelHeight/2, width: frame.width, height: labelHeight))
@@ -587,11 +544,11 @@ class ViewController: NSViewController {
             label.textColor = NSColor.white
             label.font = NSFont.boldSystemFont(ofSize: labelHeight - 4)
             label.integerValue = counterIndex + 1
-            counter.addSubview(label)
-            counter.label = label
+            counterView.addSubview(label)
+            counterView.label = label
             
-            frontView.addSubview(counter)
-            countersFront.append(counter)
+            frontView.addSubview(counterView)
+            countersFront.append(counterView)
         }
     }
 

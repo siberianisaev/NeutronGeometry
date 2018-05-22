@@ -8,10 +8,6 @@
 
 import Cocoa
 
-enum HeliumPressure: Int {
-    case low = 4, high = 7
-}
-
 class CounterView: NSView {
     
     weak var label: NSTextField?
@@ -42,7 +38,7 @@ class CounterView: NSView {
     
     override func mouseDown(with event: NSEvent) {
         //TODO: 4 atm counters support
-        //onChangePresure?()
+        onChangePresure?()
     }
     
 }

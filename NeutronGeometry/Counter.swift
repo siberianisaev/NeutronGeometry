@@ -8,14 +8,53 @@
 
 import Foundation
 
+enum HeliumPressure: Int {
+    case low = 4, high = 7
+    
+    func realValue() -> Float {
+        switch self {
+        case .low:
+            return 4.0
+        default:
+            return 7.0
+        }
+    }
+    
+}
+
 class Counter {
     
-    var lenght: Float = 0
-    var radius: Float = 0
+    var lenght: Float {
+        return 50
+    }
+    
+    var radius: Float {
+        switch presure {
+        case .high:
+            return 1.6
+        default:
+            return 1.5
+        }
+    }
+    
     var presure: HeliumPressure = .high
     
-    fileprivate let wallThikness: Float = 0.08
-    fileprivate let cap: Float = 1.42
+    fileprivate var wallThikness: Float {
+        return 0.05
+    }
+    
+    var density: Float {
+        return 0.000125 * Float(heliumPresure)
+    }
+    
+    fileprivate var capTop: Float {
+        return 3 - wallThikness
+    }
+    
+    fileprivate var capBottom: Float {
+        let cap: Float = presure == .high ? 1.5 : 1.0
+        return cap - wallThikness
+    }
     
     fileprivate var _pzOutside: Float = 0
     
@@ -27,12 +66,16 @@ class Counter {
         return pzOutside - wallThikness
     }
     
-    var pzActiveArea: Float {
-        return pzInside - cap
+    var pzActiveAreaTop: Float {
+        return pzInside - capTop
+    }
+    
+    var pzActiveAreaBottom: Float {
+        return pzInside - capBottom
     }
     
     var czOutside: Float {
-        return radius/10
+        return radius
     }
     
     var czInside: Float {
@@ -43,29 +86,11 @@ class Counter {
         return czOutside + 0.02
     }
     
-    let argonPresure: Int = 2
-    
     var heliumPresure: Int {
         return presure.rawValue
     }
     
-    fileprivate var totalPresure: Float {
-        return Float(argonPresure + heliumPresure)
-    }
-    
-    var heliumFraction: Float {
-        let precision = 100000
-        let fraction = round(Float(heliumPresure)/totalPresure * Float(precision))
-        return fraction/Float(precision)
-    }
-    
-    var argonFraction: Float {
-        return 1 - heliumFraction
-    }
-    
-    init(lenght: Float, radius: Float, presure: HeliumPressure) {
-        self.lenght = lenght
-        self.radius = radius
+    init(presure: HeliumPressure) {
         self.presure = presure
         self._pzOutside = lenght/2
     }
@@ -75,7 +100,7 @@ class Counter {
      */
     func activeAreaVolume() -> Float {
         let base = Float.pi * pow(czInside, 2)
-        let height = pzActiveArea * 2
+        let height = pzActiveAreaTop + pzActiveAreaBottom
         return base * height
     }
     
@@ -83,7 +108,7 @@ class Counter {
      Atoms count get from Mendeleev-Clapeyron equation converted to MCNP format.
      */
     func tallyCoefficient() -> Float {
-        let presure = Float(heliumPresure) * 101325 // Pa
+        let presure = self.presure.realValue() * 101325 // Pa
         let volume = activeAreaVolume() / 1e6 // m^3
         let temperature: Float = 20 + 273.15 // °K
         let avogadro: Float = 0.602214085775 // * 1e-24
