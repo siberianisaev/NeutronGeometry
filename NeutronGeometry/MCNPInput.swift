@@ -83,7 +83,7 @@ c ==== CELLS =====
     
     fileprivate func timeCard() -> String {
         let max = 51200
-        let step = 400
+        let step = 100
         var steps = ""
         var i = 0
         var j = 0

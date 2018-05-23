@@ -12,21 +12,13 @@ import AppKit
 class MCNPTimeOutput
 {
     var times = [String]()
-    var values1 = [String]()
-    var values2 = [String]()
+    var fluxes = [String]()
+    var errors = [String]()
     
-    func addTime(_ time: String, value1: String, value2: String) {
+    func addTime(_ time: String, flux: String, error: String) {
         times.append(time)
-        values1.append(value1)
-        values2.append(value2)
-    }
-    
-    func stringValue() -> String {
-        var result = ""
-        for i in 0...times.count-1 {
-            result += "\(times[i])  \(values1[i])   \(values2[i])\n"
-        }
-        return result
+        fluxes.append(flux)
+        errors.append(error)
     }
     
 }
@@ -45,9 +37,39 @@ class MCNPOutput {
     }
     
     func timesInfo() -> String {
+        let separator = "  "
         var result = ""
-        for i in 0...times.count-1 {
-            result += "Times for layer \(i+1):\n\n\(times[i].stringValue())\n\n"
+        let total = times.count
+        if total > 0 {
+            var headers = [String]()
+            let columns = total * 2 + 1
+            let timeValues = times[0].times
+            let rows = timeValues.count
+            for row in 0...rows-1 {
+                var line = [String]()
+                for column in 0...columns-1 {
+                    if column == 0 {
+                        let time = timeValues[row]
+                        line.append(time)
+                        if row == 0 {
+                            headers.append("Time")
+                        }
+                    } else {
+                        let dataIndex = (column-1) / 2
+                        let data = times[dataIndex]
+                        let isFlux = (column-1) % 2 == 0
+                        let value = isFlux ? data.fluxes[row] : data.errors[row]
+                        line.append(value)
+                        if row == 0 {
+                            headers.append("Layer\(dataIndex+1)_\(isFlux ? "Flux" : "Error")")
+                        }
+                    }
+                }
+                if row == 0 {
+                    result += headers.joined(separator: separator) + "\n"
+                }
+                result += line.joined(separator: separator) + "\n"
+            }
         }
         return result
     }
@@ -92,7 +114,7 @@ class MCNPOutput {
                                 } // A1 B1 A2 B2 ... values
                                 for k in 0...arrayTimes.count-1 {
                                     let m = 2 * k
-                                    timeOutput.addTime(arrayTimes[k], value1: arrayValues[m], value2: arrayValues[m+1])
+                                    timeOutput.addTime(arrayTimes[k], flux: arrayValues[m], error: arrayValues[m+1])
                                 }
                                 
                                 if lines[j+2].contains("1analysis") { // space line OR end line with info
