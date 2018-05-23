@@ -56,6 +56,13 @@ class ViewController: NSViewController {
         return presures[index] ?? .high // TODO: support for 4 atm counters (presures[index] ?? tag == 4 ? .low : .high)
     }
     
+    @IBAction func loadResults(_ sender: Any) {
+        MCNPOutput.openResults { (results: MCNPOutput?) in
+            //
+        }
+    }
+    
+    
     @IBAction func layer4Control(_ sender: Any) {
         layer4ControlValueChanged()
         updateButton(nil)

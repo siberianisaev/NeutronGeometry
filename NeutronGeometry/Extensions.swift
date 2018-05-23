@@ -82,6 +82,10 @@ extension FileManager {
         return desktopFilePathWithName("\(timeStamp).dat", timeStamp: timeStamp)
     }
     
+    class func mcnpTimesOutputFilePath(_ timeStamp: String) -> String? {
+        return desktopFilePathWithName("\(timeStamp).txt", timeStamp: timeStamp)
+    }
+    
     class func writeString(_ string: String, path: String?) {
         if let path = path {
             do {
