@@ -36,8 +36,8 @@ c ==== CELLS =====
                 result += """
 \nc ---------- Detector \(detector) ---------------------------
 \(id) 3 -\(counter7Atm.density) 53 -54 -57 imp:n=1 u=\(detector) $ Couter's SV
-\(id+1) 4 -2.5 52 -53 -57 imp:n=1 u=\(detector) $ Lower Complementation to SV
-\(id+2) 4 -2.5 54 -55 -57 imp:n=1 u=\(detector) $ Upper Complementation to SV
+\(id+1) 3 -\(counter7Atm.density) 52 -53 -57 imp:n=1 u=\(detector) $ Lower Complementation to SV
+\(id+2) 3 -\(counter7Atm.density) 54 -55 -57 imp:n=1 u=\(detector) $ Upper Complementation to SV
 \(id+3) 2 -7.91 51 -56 -58 (-52:55:57) imp:n=1 u=\(detector) $ Wall of Counter
 \(id+4) 0 (-51:56:58) imp:n=1 u=\(detector) $ Space around Counter
 \(id+5) 0 -59 -5 imp:n=1 fill=\(detector) TRCL=(\(TRCL))
@@ -82,8 +82,8 @@ c ==== CELLS =====
     }
     
     fileprivate func timeCard() -> String {
-        let max = 12800
-        let step = 100
+        let max = 51200
+        let step = 400
         var steps = ""
         var i = 0
         var j = 0

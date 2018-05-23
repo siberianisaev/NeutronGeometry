@@ -25,7 +25,7 @@ enum HeliumPressure: Int {
 class Counter {
     
     var lenght: Float {
-        return 50
+        return 48.5
     }
     
     var radius: Float {
@@ -52,8 +52,7 @@ class Counter {
     }
     
     fileprivate var capBottom: Float {
-        let cap: Float = presure == .high ? 1.5 : 1.0
-        return cap - wallThikness
+        return 1 - wallThikness
     }
     
     fileprivate var _pzOutside: Float = 0
