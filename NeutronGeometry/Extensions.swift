@@ -50,13 +50,17 @@ extension FileManager {
         }
     }
     
-    class func desktopFilePathWithName(_ fileName: String, timeStamp: String?) -> String? {
+    class func desktopFolderPathWithName(_ timeStamp: String?) -> NSString? {
         var path = desktopFolder()
         if let timeStamp = timeStamp {
             path = path?.appendingPathComponent(timeStamp) as NSString?
             createIfNeedsDirectoryAtPath(path as String?)
         }
-        return path?.appendingPathComponent(fileName)
+        return path
+    }
+    
+    class func desktopFilePathWithName(_ fileName: String, timeStamp: String?) -> String? {
+        return desktopFolderPathWithName(timeStamp)?.appendingPathComponent(fileName)
     }
     
     class func screenshotFilePath(_ timeStamp: String) -> String? {
@@ -76,6 +80,10 @@ extension FileManager {
     
     class func geometryFilePath(_ timeStamp: String) -> String? {
         return desktopFilePathWithName("\(timeStamp).geometry", timeStamp: timeStamp)
+    }
+    
+    class func mcnpRunFilePath(_ timeStamp: String) -> String? {
+        return desktopFilePathWithName("run.txt", timeStamp: timeStamp)
     }
     
     class func mcnpFilePath(_ timeStamp: String) -> String? {
