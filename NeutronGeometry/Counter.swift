@@ -116,4 +116,42 @@ class Counter {
         return coefficient
     }
     
+    func mcnpCells(startId id: Int, index: Int, TRCL: String) -> String {
+        let start = startSurfaceId
+        let density = self.density
+        return """
+        \nc ---------- Counter \(index) ---------------------------
+        \(id) 3 -\(density) \(start+2) -\(start+3) -\(start+6) imp:n=1 u=\(index) $ Couter's SV
+        \(id+1) 3 -\(density) \(start+1) -\(start+2) -\(start+6) imp:n=1 u=\(index) $ Lower Complementation to SV
+        \(id+2) 3 -\(density) \(start+3) -\(start+4) -\(start+6) imp:n=1 u=\(index) $ Upper Complementation to SV
+        \(id+3) 2 -7.91 \(start) -\(start+5) -\(start+7) (-\(start+1):\(start+4):\(start+6)) imp:n=1 u=\(index) $ Wall of Counter
+        \(id+4) 0 (-\(start):\(start+5):\(start+7)) imp:n=1 u=\(index) $ Space around Counter
+        \(id+5) 0 -\(start+8) -5 imp:n=1 fill=\(index) TRCL=(\(TRCL))
+        """
+    }
+    
+    fileprivate func convertSurfaceId(id: Int) -> Int {
+        return presure == .high ? id : (id + 9)
+    }
+    
+    fileprivate var startSurfaceId: Int {
+        return convertSurfaceId(id: 51)
+    }
+    
+    func mcnpSurfaces() -> String {
+        let start = startSurfaceId
+        return """
+        c ***** Counter \(presure.rawValue) atm. *************************
+        \(start) pz -\(pzOutside)
+        \(start+1) pz -\(pzInside)
+        \(start+2) pz -\(pzActiveAreaBottom)
+        \(start+3) pz \(pzActiveAreaTop)
+        \(start+4) pz \(pzInside)
+        \(start+5) pz \(pzOutside)
+        \(start+6) cz \(czInside)
+        \(start+7) cz \(czOutside)
+        \(start+8) cz \(czOutsideSpace)
+        """
+    }
+    
 }

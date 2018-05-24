@@ -17,7 +17,6 @@ class MCNPInput {
     
     func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int) -> String {
         let totalDetectorsCount = layers.joined().count
-        //TODO: extract cells card method
         var result = """
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
@@ -28,20 +27,13 @@ c ==== CELLS =====
         var id = 10
         var ids = [Int]()
         for layer in layers {
-            for counter in layer {
-                let center = counter.center()
-                counter.mcnpCellId = id
+            for counterView in layer {
+                let center = counterView.center()
+                counterView.mcnpCellId = id
                 let TRCL = String(format: "%.1f %.1f 0", center.x, center.y)
-                let detector = counter.index + 1
-                result += """
-\nc ---------- Detector \(detector) ---------------------------
-\(id) 3 -\(counter7Atm.density) 53 -54 -57 imp:n=1 u=\(detector) $ Couter's SV
-\(id+1) 3 -\(counter7Atm.density) 52 -53 -57 imp:n=1 u=\(detector) $ Lower Complementation to SV
-\(id+2) 3 -\(counter7Atm.density) 54 -55 -57 imp:n=1 u=\(detector) $ Upper Complementation to SV
-\(id+3) 2 -7.91 51 -56 -58 (-52:55:57) imp:n=1 u=\(detector) $ Wall of Counter
-\(id+4) 0 (-51:56:58) imp:n=1 u=\(detector) $ Space around Counter
-\(id+5) 0 -59 -5 imp:n=1 fill=\(detector) TRCL=(\(TRCL))
-"""
+                let index = counterView.index + 1
+                let counter = counterView.presure == .high ? counter7Atm : counter4Atm
+                result += counter.mcnpCells(startId: id, index: index, TRCL: TRCL)
                 id += 10
                 ids.append(id-5)
             }
@@ -111,25 +103,9 @@ c ==== CELLS =====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
         5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
-        \(counterSurfaces())
+        \(counter7Atm.mcnpSurfaces())
+        \(counter4Atm.mcnpSurfaces())
         """
-    }
-    
-    // TODO: surfaces for 4 atm counter
-    fileprivate func counterSurfaces() -> String {
-        let s = """
-        c ***** Detector *************************
-        51 pz  -\(counter7Atm.pzOutside)
-        52 pz  -\(counter7Atm.pzInside)
-        53 pz  -\(counter7Atm.pzActiveAreaBottom)
-        54 pz   \(counter7Atm.pzActiveAreaTop)
-        55 pz   \(counter7Atm.pzInside)
-        56 pz   \(counter7Atm.pzOutside)
-        57 cz   \(counter7Atm.czInside)
-        58 cz   \(counter7Atm.czOutside)
-        59 cz   \(counter7Atm.czOutsideSpace)
-        """
-        return s
     }
     
     /**
@@ -156,7 +132,6 @@ c ==== CELLS =====
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
               29000.50c -0.01 $ Stainless Steel
         M3 2003.60c 1 $ He-3
-        M4 14000.60c 1 8016.60c 2 $ SiO2
         """
     }
     
@@ -165,6 +140,7 @@ c ==== CELLS =====
         return String(format: format, number)
     }
     
+    // TODO: 4 atm counters support!
     fileprivate func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         let coefficient = counter7Atm.tallyCoefficient()
         var result = """

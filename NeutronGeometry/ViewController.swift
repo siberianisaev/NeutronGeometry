@@ -53,7 +53,7 @@ class ViewController: NSViewController {
     fileprivate var presures = [Int: HeliumPressure]()
     
     fileprivate func presureForCounterIndex(_ index: Int, tag: Int) -> HeliumPressure {
-        return presures[index] ?? .high // TODO: support for 4 atm counters (presures[index] ?? tag == 4 ? .low : .high)
+        return presures[index] ?? (tag == 4 ? .low : .high)
     }
     
     @IBAction func loadResults(_ sender: Any) {
@@ -441,7 +441,7 @@ class ViewController: NSViewController {
     
     fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
         let layerCenter = layerRadiusFrom(raduisField)
-        let presure: HeliumPressure = .high // TODO: support for 4 atm counters (tag == 4 ? .low : .high)
+        let presure: HeliumPressure = tag == 4 ? .low : .high
         let counter = Counter(presure: presure)
         let width = CGFloat(counter.lenght * 10)
         let height = CGFloat(counter.radius * 10) * 2
