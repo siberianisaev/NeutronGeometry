@@ -24,6 +24,7 @@ c ==== CELLS =====
 10001 0 -1 -5 imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
+        let counterCellsCount = 5
         var id = 10
         var ids = [Int]()
         for layer in layers {
@@ -34,13 +35,14 @@ c ==== CELLS =====
                 let index = counterView.index + 1
                 let counter = counterView.presure == .high ? counter7Atm : counter4Atm
                 result += counter.mcnpCells(startId: id, index: index, TRCL: TRCL)
-                id += 10
-                ids.append(id-5)
+                ids.append(id)
+                id += counterCellsCount + 1
             }
         }
-        // Moderator cell negative to outer shell (surface 5), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells
+        // Moderator cell negative to outer shell (surface 5), positive to vacuum tube (surface 2) and by excluding all He-3 counters cells (TRCL cell)
         let excludedIds = ids.map { (id: Int) -> String in
-            return "#\(String(id))"
+            let TRCLCellId = String(id + counterCellsCount)
+            return "#\(TRCLCellId)"
         }
         // AI input lines are limited to 80 columns
         var excludedIdsString = ""
@@ -67,7 +69,7 @@ c ==== CELLS =====
         result += modeCard()
         result += sourceCard()
         result += materialsCard()
-        result += tallyCard(layers, firstCounterCellId: ids.first!-5, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!-5) // TODO: -5 used to get start of cell
+        result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
         result += controlCard(maxTime: maxTime)
         return result
