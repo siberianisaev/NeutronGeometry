@@ -25,11 +25,14 @@ class MCNPTimeOutput
 
 class MCNPOutput {
     
+    fileprivate var resultsFilePath: String?
+    
     var times = [MCNPTimeOutput]() {
         didSet {
             let result = timesInfo()
             print(result)
-            if let path = FileManager.mcnpTimesOutputFilePath(String.timeStamp()) {
+            if let resultsFilePath = resultsFilePath {
+                let path = resultsFilePath + "_times.txt"
                 FileManager.writeString(result, path: path)
                 NSWorkspace.shared.openFile(path)
             }
@@ -92,6 +95,7 @@ class MCNPOutput {
         var timesResult = [MCNPTimeOutput]()
         if let URL = URL {
             let path = URL.path
+            output.resultsFilePath = path
             do {
                 let content = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
 //                print(content)
