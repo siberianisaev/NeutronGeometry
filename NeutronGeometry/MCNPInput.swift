@@ -15,7 +15,31 @@ class MCNPInput {
     fileprivate var counter7Atm = Counter(presure: .high)
     fileprivate var counter4Atm = Counter(presure: .low)
     
-    func generateWith(layers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int) -> String {
+    fileprivate func convertViewLayersToMCNP(_ counterViewLayers: [[CounterView]]) -> [[CounterView]] {
+        var mcnpLayers = [[CounterView]]()
+        for viewLayer in counterViewLayers {
+            var atm4 = [CounterView]()
+            var atm7 = [CounterView]()
+            for counterView in viewLayer {
+                switch counterView.presure {
+                case .high:
+                    atm7.append(counterView)
+                case .low:
+                    atm4.append(counterView)
+                }
+            }
+            if atm4.count > 0 {
+                mcnpLayers.append(atm4)
+            }
+            if atm7.count > 0 {
+                mcnpLayers.append(atm7)
+            }
+        }
+        return mcnpLayers
+    }
+    
+    func generateWith(counterViewLayers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int) -> String {
+        let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
 Geometry for \(totalDetectorsCount) detectors.
@@ -137,18 +161,26 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func stringFrom(number: Float, precision: Int) -> String {
-        let format = "%.\(precision)f"
-        return String(format: format, number)
+    fileprivate func overalTallyCoefficient(_ layers: [[CounterView]]) -> Float {
+        let allCounterViews = layers.joined()
+        let atm7 = allCounterViews.filter { (cv: CounterView) -> Bool in
+            return cv.presure == .high
+        }
+        let atm4 = allCounterViews.filter { (cv: CounterView) -> Bool in
+            return cv.presure == .low
+        }
+        let countAtm7 = Float(atm7.count)
+        let countAtm4 = Float(atm4.count)
+        let countTotal = countAtm7 + countAtm4
+        return counter7Atm.tallyCoefficient() * countAtm7/countTotal + counter4Atm.tallyCoefficient() * countAtm4/countTotal
     }
     
-    // TODO: 4 atm counters support!
     fileprivate func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
-        let coefficient = counter7Atm.tallyCoefficient()
+        let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
 \nc ---------------- TALLY ------------
 F4:N \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
-FM4 (\(stringFrom(number: coefficient, precision: 6)) 3 \(npReactionId))
+FM4 (\(overalCoefficient) 3 \(npReactionId))
 FQ4 f e
 """        
         //AI input lines are limited to 80 columns
@@ -176,7 +208,9 @@ FQ4 f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            let s2 = "FM\(i)4 (\(stringFrom(number: coefficient * Float(detectorsCount), precision: 6)) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)" // M5 is He-3
+            let counter = layer.first!.presure == .high ? counter7Atm : counter4Atm
+            let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
+            let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
         return result

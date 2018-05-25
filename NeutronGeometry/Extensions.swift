@@ -31,6 +31,15 @@ extension NSImage {
     
 }
 
+extension Float {
+    
+    func stringWith(precision: Int) -> String {
+        let format = "%.\(precision)f"
+        return String(format: format, self)
+    }
+    
+}
+
 extension FileManager {
     
     class func desktopFolder() -> NSString? {
