@@ -34,7 +34,8 @@ class MCNPOutput {
             if let resultsFilePath = resultsFilePath {
                 let path = resultsFilePath + "_times.txt"
                 FileManager.writeString(result, path: path)
-                NSWorkspace.shared.openFile(path)
+                let folder = (resultsFilePath as NSString).deletingLastPathComponent
+                NSWorkspace.shared.openFile(folder)
             }
         }
     }
