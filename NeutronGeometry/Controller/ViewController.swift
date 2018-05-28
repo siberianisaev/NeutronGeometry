@@ -385,7 +385,7 @@ class ViewController: NSViewController {
         FileManager.writeString(result, path: FileManager.mcnpFilePath(timeStamp))
         FileManager.writeImage(view.window?.screenshot(), path: FileManager.screenshotFilePath(timeStamp))
         FileManager.writeString(getGeometry(), path: FileManager.geometryFilePath(timeStamp))
-        MCNPRun.generateRunInfo(String.timeStamp())
+        MCNPRun.generateRunInfo(timeStamp)
         NSWorkspace.shared.openFile(FileManager.desktopFolderPathWithName(timeStamp)! as String)
     }
     
