@@ -42,7 +42,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
     
-    fileprivate var countersFront = [CounterView]()
+    fileprivate var countersFront = [CounterFrontView]()
     fileprivate var countersSide = [NSView]()
     
     fileprivate weak var chamberFrontView: ChamberView?
@@ -333,18 +333,18 @@ class ViewController: NSViewController {
         }
     }
     
-    fileprivate func counterLayers() -> [[CounterView]] {
-        var layers = [[CounterView]]()
-        let layerIndexes = countersFront.map { (c: CounterView) -> Int in
+    fileprivate func counterLayers() -> [[CounterFrontView]] {
+        var layers = [[CounterFrontView]]()
+        let layerIndexes = countersFront.map { (c: CounterFrontView) -> Int in
             return c.layerIndex
         }
         let indexes = Array(Set(layerIndexes)).sorted { (i1: Int, i2: Int) -> Bool in
             return i1 < i2
         }
         for i in indexes {
-            let layer = countersFront.filter({ (c: CounterView) -> Bool in
+            let layer = countersFront.filter({ (c: CounterFrontView) -> Bool in
                 return c.layerIndex == i
-            }).sorted(by: { (c1: CounterView, c2: CounterView) -> Bool in
+            }).sorted(by: { (c1: CounterFrontView, c2: CounterFrontView) -> Bool in
                 return c1.index < c2.index
             })
             layers.append(layer)
@@ -481,7 +481,7 @@ class ViewController: NSViewController {
     
     fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
         let layerCenter = layerRadiusFrom(raduisField)
-        let type: CounterType = defaultCounterTypeForTag(tag)
+        let type: CounterType = countersForLayerTag(tag).first?.type ?? defaultCounterTypeForTag(tag)
         let counter = Counter(type: type)
         let width = CGFloat(counter.lenght * 10)
         let height = CGFloat(counter.radius * 10) * 2
@@ -490,12 +490,34 @@ class ViewController: NSViewController {
         let zArray = [1, -1] as [CGFloat]
         for z in zArray {
             let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 + z * layerCenter - height/2) // +- layerCenter
-            let counterView = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+            let counterView = CounterSideView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+            counterView.onTap = { [weak self] in
+                let newType = type.toggle()
+                self?.changeType(newType, forLayer: tag)
+            }
             counterView.wantsLayer = true
-            counterView.layer?.backgroundColor = type.color
+            counterView.type = type
+            counterView.showCaps()
             container.addSubview(counterView)
             countersSide.append(counterView)
         }
+    }
+    
+    fileprivate func countersForLayerTag(_ tag: Int) -> [CounterFrontView] {
+        return countersFront.filter { (cv: CounterFrontView) -> Bool in
+            return cv.layerIndex == tag
+        }
+    }
+    
+    fileprivate func changeType(_ newType: CounterType, forLayer tag: Int) {
+        let indexes = countersForLayerTag(tag).map { (cv: CounterFrontView) -> Int in
+            return cv.index
+        }
+        for index in indexes {
+            types[index] = newType
+        }
+        showCountersFront()
+        showCountersSide()
     }
     
     fileprivate func showCountersSide() {
@@ -564,10 +586,9 @@ class ViewController: NSViewController {
             let y = center.y + layerCenter * sin(angle)
             let frame = NSRect(x: x, y: y, width: counterRadius * 2, height: counterRadius * 2)
             
-            let counterView = CounterView(frame: frame)
+            let counterView = CounterFrontView(frame: frame)
             counterView.index = counterIndex
             counterView.layerIndex = tag
-            counterView.type = type
             counterView.onTap = { [weak self] in
                 self?.types[counterIndex] = type.toggle()
                  // TODO: optimisation, refresh single counter
@@ -577,7 +598,7 @@ class ViewController: NSViewController {
             counterView.wantsLayer = true
             counterView.layer?.cornerRadius = counterRadius
             counterView.layer?.masksToBounds = true
-            counterView.layer?.backgroundColor = type.color
+            counterView.type = type
             
             let labelHeight: CGFloat = 14
             let label = NSTextField(frame: NSRect(x: 0, y: frame.height/2 - labelHeight/2, width: frame.width, height: labelHeight))

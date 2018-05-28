@@ -8,14 +8,12 @@
 
 import Cocoa
 
-class CounterView: NSView {
+class CounterFrontView: CounterView {
     
     weak var label: NSTextField?
     var index: Int = 0
     var layerIndex: Int = 0
     var mcnpCellId: Int = 0
-    var type: CounterType = .atm7Old
-    var onTap: (()->())?
     
     /**
      In centimeters.
@@ -34,10 +32,6 @@ class CounterView: NSView {
         super.draw(dirtyRect)
 
         // Drawing code here.
-    }
-    
-    override func mouseDown(with event: NSEvent) {
-        onTap?()
     }
     
 }

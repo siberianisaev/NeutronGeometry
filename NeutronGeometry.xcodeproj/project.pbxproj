@@ -13,10 +13,12 @@
 		5A3C1614200E30C2004E281A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C1613200E30C2004E281A /* ViewController.swift */; };
 		5A3C1616200E30C2004E281A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A3C1615200E30C2004E281A /* Assets.xcassets */; };
 		5A3C1619200E30C2004E281A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A3C1617200E30C2004E281A /* Main.storyboard */; };
-		5A3C1626200E87EE004E281A /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C1625200E87EE004E281A /* CounterView.swift */; };
+		5A3C1626200E87EE004E281A /* CounterFrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C1625200E87EE004E281A /* CounterFrontView.swift */; };
 		5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7DB3612011191D00A0209E /* ProjectionView.swift */; };
 		5AEAB59720AF22E3006EF80E /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEAB59620AF22E3006EF80E /* Counter.swift */; };
 		6518DB7720B69FC4000B5C2A /* MCNPRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6518DB7620B69FC4000B5C2A /* MCNPRun.swift */; };
+		65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396120BC3DFA00F0D64E /* CounterSideView.swift */; };
+		65A2396420BC424F00F0D64E /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396320BC424F00F0D64E /* CounterView.swift */; };
 		65C846412013B49E00E84562 /* MCNPInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C846402013B49E00E84562 /* MCNPInput.swift */; };
 		65DFC592203075B800B55062 /* ChamberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DFC591203075B800B55062 /* ChamberView.swift */; };
 		65DFC5942030784400B55062 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DFC5932030784400B55062 /* GridView.swift */; };
@@ -33,10 +35,12 @@
 		5A3C1618200E30C2004E281A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5A3C161A200E30C2004E281A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A3C161B200E30C2004E281A /* NeutronGeometry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NeutronGeometry.entitlements; sourceTree = "<group>"; };
-		5A3C1625200E87EE004E281A /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
+		5A3C1625200E87EE004E281A /* CounterFrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterFrontView.swift; sourceTree = "<group>"; };
 		5A7DB3612011191D00A0209E /* ProjectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionView.swift; sourceTree = "<group>"; };
 		5AEAB59620AF22E3006EF80E /* Counter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		6518DB7620B69FC4000B5C2A /* MCNPRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPRun.swift; sourceTree = "<group>"; };
+		65A2396120BC3DFA00F0D64E /* CounterSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterSideView.swift; sourceTree = "<group>"; };
+		65A2396320BC424F00F0D64E /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		65C846402013B49E00E84562 /* MCNPInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPInput.swift; sourceTree = "<group>"; };
 		65DFC591203075B800B55062 /* ChamberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChamberView.swift; sourceTree = "<group>"; };
 		65DFC5932030784400B55062 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
@@ -73,24 +77,58 @@
 		5A3C1610200E30C2004E281A /* NeutronGeometry */ = {
 			isa = PBXGroup;
 			children = (
+				65A2396720BC436500F0D64E /* Model */,
+				65A2396520BC42AE00F0D64E /* View */,
+				65A2396820BC436D00F0D64E /* Controller */,
+				65A2396620BC430400F0D64E /* MCNP */,
 				5A3C1611200E30C2004E281A /* AppDelegate.swift */,
-				65DFC59520307B1200B55062 /* GeometryWindow.swift */,
-				5A3C1613200E30C2004E281A /* ViewController.swift */,
-				5A3C1625200E87EE004E281A /* CounterView.swift */,
-				65DFC591203075B800B55062 /* ChamberView.swift */,
-				5A7DB3612011191D00A0209E /* ProjectionView.swift */,
-				65DFC5932030784400B55062 /* GridView.swift */,
-				65C846402013B49E00E84562 /* MCNPInput.swift */,
-				5A245F5920B5B25F004A1951 /* MCNPOutput.swift */,
-				6518DB7620B69FC4000B5C2A /* MCNPRun.swift */,
-				5AEAB59620AF22E3006EF80E /* Counter.swift */,
 				5A20550220177EDD0034EF33 /* Extensions.swift */,
 				5A3C1615200E30C2004E281A /* Assets.xcassets */,
-				5A3C1617200E30C2004E281A /* Main.storyboard */,
 				5A3C161A200E30C2004E281A /* Info.plist */,
 				5A3C161B200E30C2004E281A /* NeutronGeometry.entitlements */,
 			);
 			path = NeutronGeometry;
+			sourceTree = "<group>";
+		};
+		65A2396520BC42AE00F0D64E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5A3C1617200E30C2004E281A /* Main.storyboard */,
+				65DFC59520307B1200B55062 /* GeometryWindow.swift */,
+				65DFC591203075B800B55062 /* ChamberView.swift */,
+				5A7DB3612011191D00A0209E /* ProjectionView.swift */,
+				65DFC5932030784400B55062 /* GridView.swift */,
+				65A2396320BC424F00F0D64E /* CounterView.swift */,
+				5A3C1625200E87EE004E281A /* CounterFrontView.swift */,
+				65A2396120BC3DFA00F0D64E /* CounterSideView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		65A2396620BC430400F0D64E /* MCNP */ = {
+			isa = PBXGroup;
+			children = (
+				65C846402013B49E00E84562 /* MCNPInput.swift */,
+				5A245F5920B5B25F004A1951 /* MCNPOutput.swift */,
+				6518DB7620B69FC4000B5C2A /* MCNPRun.swift */,
+			);
+			path = MCNP;
+			sourceTree = "<group>";
+		};
+		65A2396720BC436500F0D64E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5AEAB59620AF22E3006EF80E /* Counter.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		65A2396820BC436D00F0D64E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5A3C1613200E30C2004E281A /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,13 +205,15 @@
 				5AEAB59720AF22E3006EF80E /* Counter.swift in Sources */,
 				5A245F5A20B5B25F004A1951 /* MCNPOutput.swift in Sources */,
 				5A3C1614200E30C2004E281A /* ViewController.swift in Sources */,
+				65A2396420BC424F00F0D64E /* CounterView.swift in Sources */,
 				5A20550320177EDD0034EF33 /* Extensions.swift in Sources */,
 				65DFC5942030784400B55062 /* GridView.swift in Sources */,
 				5A3C1612200E30C2004E281A /* AppDelegate.swift in Sources */,
-				5A3C1626200E87EE004E281A /* CounterView.swift in Sources */,
+				5A3C1626200E87EE004E281A /* CounterFrontView.swift in Sources */,
 				6518DB7720B69FC4000B5C2A /* MCNPRun.swift in Sources */,
 				65DFC592203075B800B55062 /* ChamberView.swift in Sources */,
 				65C846412013B49E00E84562 /* MCNPInput.swift in Sources */,
+				65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */,
 				5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */,
 				65DFC59620307B1200B55062 /* GeometryWindow.swift in Sources */,
 			);

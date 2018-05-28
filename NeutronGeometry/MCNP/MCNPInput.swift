@@ -27,12 +27,12 @@ class MCNPInput {
         }
     }
     
-    fileprivate func convertViewLayersToMCNP(_ counterViewLayers: [[CounterView]]) -> [[CounterView]] {
-        var mcnpLayers = [[CounterView]]()
+    fileprivate func convertViewLayersToMCNP(_ counterViewLayers: [[CounterFrontView]]) -> [[CounterFrontView]] {
+        var mcnpLayers = [[CounterFrontView]]()
         for viewLayer in counterViewLayers {
-            var atm4 = [CounterView]()
-            var atm7New = [CounterView]()
-            var atm7Old = [CounterView]()
+            var atm4 = [CounterFrontView]()
+            var atm7New = [CounterFrontView]()
+            var atm7Old = [CounterFrontView]()
             for counterView in viewLayer {
                 switch counterView.type {
                 case .atm4:
@@ -56,7 +56,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -180,15 +180,15 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func overalTallyCoefficient(_ layers: [[CounterView]]) -> Float {
+    fileprivate func overalTallyCoefficient(_ layers: [[CounterFrontView]]) -> Float {
         let allCounterViews = layers.joined()
-        let atm4 = allCounterViews.filter { (cv: CounterView) -> Bool in
+        let atm4 = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
             return cv.type == .atm4
         }
-        let atm7Old = allCounterViews.filter { (cv: CounterView) -> Bool in
+        let atm7Old = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
             return cv.type == .atm7Old
         }
-        let atm7New = allCounterViews.filter { (cv: CounterView) -> Bool in
+        let atm7New = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
             return cv.type == .atm7New
         }
         let countAtm4 = Float(atm4.count)
@@ -198,7 +198,7 @@ c ==== CELLS =====
         return counter4Atm.tallyCoefficient() * countAtm4/countTotal + counter7AtmOld.tallyCoefficient() * countAtm7Old/countTotal + counter7AtmNew.tallyCoefficient() * countAtm7New/countTotal
     }
     
-    fileprivate func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
+    fileprivate func tallyCard(_ layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
 \nc ---------------- TALLY ------------
@@ -210,7 +210,7 @@ FQ4 f e
         var i = 0
         for layer in layers {
             i += 1
-            let indexes = layer.map({ (c: CounterView) -> String in
+            let indexes = layer.map({ (c: CounterFrontView) -> String in
                 return String(c.mcnpCellId)
             })
             

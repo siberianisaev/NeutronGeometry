@@ -91,7 +91,7 @@ class Counter {
         return 0.000125 * type.presure()
     }
     
-    fileprivate var capTop: Float {
+    var capTop: Float {
         var value: Float
         switch type {
         case .atm4:
@@ -104,7 +104,7 @@ class Counter {
         return value - wallThikness
     }
     
-    fileprivate var capBottom: Float {
+    var capBottom: Float {
         var value: Float
         switch type {
         case .atm4:
