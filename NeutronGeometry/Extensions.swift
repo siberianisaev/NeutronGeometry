@@ -8,6 +8,23 @@
 
 import Cocoa
 
+protocol CaseCountable {
+    
+    static func countCases() -> Int
+    static var count : Int { get }
+    
+}
+
+extension CaseCountable where Self : RawRepresentable, Self.RawValue == Int {
+    
+    static func countCases() -> Int {
+        var count = 0
+        while let _ = Self(rawValue: count) { count += 1 }
+        return count
+    }
+    
+}
+
 extension NSWindow {
     
     func screenshot() -> NSImage? {

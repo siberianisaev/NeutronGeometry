@@ -134,6 +134,7 @@ class ViewController: NSViewController {
         showCountersSide()
         showCountersGap()
         showSource()
+        storeLastGeometryToDefaults()
     }
     
     fileprivate func showSource() {
@@ -497,7 +498,6 @@ class ViewController: NSViewController {
             }
             counterView.wantsLayer = true
             counterView.type = type
-            counterView.showCaps()
             container.addSubview(counterView)
             countersSide.append(counterView)
         }
@@ -599,19 +599,6 @@ class ViewController: NSViewController {
             counterView.layer?.cornerRadius = counterRadius
             counterView.layer?.masksToBounds = true
             counterView.type = type
-            
-            let labelHeight: CGFloat = 14
-            let label = NSTextField(frame: NSRect(x: 0, y: frame.height/2 - labelHeight/2, width: frame.width, height: labelHeight))
-            label.isBezeled = false
-            label.drawsBackground = false
-            label.isEditable = false
-            label.isSelectable = false
-            label.alignment = .center
-            label.textColor = NSColor.white
-            label.font = NSFont.boldSystemFont(ofSize: labelHeight - 4)
-            label.integerValue = counterIndex + 1
-            counterView.addSubview(label)
-            counterView.label = label
             
             frontView.addSubview(counterView)
             countersFront.append(counterView)

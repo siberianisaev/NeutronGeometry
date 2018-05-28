@@ -10,8 +10,13 @@ import Cocoa
 
 class CounterFrontView: CounterView {
     
-    weak var label: NSTextField?
-    var index: Int = 0
+    var index: Int = 0 {
+        didSet {
+            createLabel()
+            label?.integerValue = index + 1
+        }
+    }
+    
     var layerIndex: Int = 0
     var mcnpCellId: Int = 0
     

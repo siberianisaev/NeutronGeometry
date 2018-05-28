@@ -13,6 +13,15 @@ class CounterSideView: CounterView {
     fileprivate weak var capTop: NSView?
     fileprivate weak var capBottom: NSView?
     
+    override var type: CounterType {
+        didSet {
+            super.type = type
+            createLabel()
+            label?.stringValue = type.name
+            showCaps()
+        }
+    }
+    
     fileprivate func addCap(_ x: CGFloat, width: CGFloat) -> NSView {
         let rect = CGRect(x: x, y: 0, width: width, height: frame.height)
         let view = NSView(frame: rect)

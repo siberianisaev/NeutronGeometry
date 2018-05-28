@@ -12,45 +12,40 @@ class MCNPInput {
     
     fileprivate let npReactionId = 103 // (n,p) reaction
     
-    fileprivate var counter4Atm = Counter(type: .atm4)
-    fileprivate var counter7AtmOld = Counter(type: .atm7Old)
-    fileprivate var counter7AtmNew = Counter(type: .atm7New)
-    
-    fileprivate func counterForType(_ type: CounterType) -> Counter {
-        switch type {
-        case .atm4:
-            return counter4Atm
-        case .atm7Old:
-            return counter7AtmOld
-        case .atm7New:
-            return counter7AtmNew
+    fileprivate var _counters: [CounterType: Counter]?
+    fileprivate var counters: [CounterType: Counter] {
+        set {
+            _counters = newValue
+        }
+        get {
+            if nil == _counters {
+                var dict = [CounterType: Counter]()
+                for i in 0...CounterType.count-1 {
+                    let type = CounterType(rawValue: i)!
+                    let counter = Counter(type: type)
+                    dict[type] = counter
+                }
+                _counters = dict
+            }
+            return _counters!
         }
     }
     
     fileprivate func convertViewLayersToMCNP(_ counterViewLayers: [[CounterFrontView]]) -> [[CounterFrontView]] {
         var mcnpLayers = [[CounterFrontView]]()
         for viewLayer in counterViewLayers {
-            var atm4 = [CounterFrontView]()
-            var atm7New = [CounterFrontView]()
-            var atm7Old = [CounterFrontView]()
+            var dict = [CounterType: [CounterFrontView]]()
             for counterView in viewLayer {
-                switch counterView.type {
-                case .atm4:
-                    atm4.append(counterView)
-                case .atm7Old:
-                    atm7Old.append(counterView)
-                case .atm7New:
-                    atm7New.append(counterView)
-                }
+                let type = counterView.type
+                var array = dict[type] ?? []
+                array.append(counterView)
+                dict[type] = array
             }
-            if atm4.count > 0 {
-                mcnpLayers.append(atm4)
+            let sorted = dict.values.sorted { (a1: [CounterFrontView], a2: [CounterFrontView]) -> Bool in
+                return a1.first!.type.rawValue < a2.first!.type.rawValue
             }
-            if atm7Old.count > 0 {
-                mcnpLayers.append(atm7Old)
-            }
-            if atm7New.count > 0 {
-                mcnpLayers.append(atm7New)
+            for a in sorted {
+                mcnpLayers.append(a)
             }
         }
         return mcnpLayers
@@ -75,7 +70,7 @@ c ==== CELLS =====
                 counterView.mcnpCellId = id
                 let TRCL = String(format: "%.1f %.1f 0", center.x, center.y)
                 let index = counterView.index + 1
-                let counter = counterForType(counterView.type)
+                let counter = counters[counterView.type]!
                 result += counter.mcnpCells(startId: id, index: index, TRCL: TRCL)
                 ids.append(id)
                 id += counterCellsCount + 1
@@ -142,14 +137,17 @@ c ==== CELLS =====
     }
     
     fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float) -> String {
+        let counterSurfaces = counters.values.sorted { (c1: Counter, c2: Counter) -> Bool in // Sorting is important there, see Counter -convertSurfaceId() method implementation
+            return c1.type.rawValue < c2.type.rawValue
+            }.map { (c: Counter) -> String in
+                return c.mcnpSurfaces()
+            }.joined(separator: "\n")
         return """
         \n\nc ==== Surfaces ====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
         5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
-        \(counter4Atm.mcnpSurfaces())
-        \(counter7AtmOld.mcnpSurfaces())
-        \(counter7AtmNew.mcnpSurfaces())
+        \(counterSurfaces)
         """
     }
     
@@ -182,20 +180,15 @@ c ==== CELLS =====
     
     fileprivate func overalTallyCoefficient(_ layers: [[CounterFrontView]]) -> Float {
         let allCounterViews = layers.joined()
-        let atm4 = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
-            return cv.type == .atm4
+        let countTotal = allCounterViews.count
+        var result: Float = 0
+        for (key, value) in counters {
+            let filtered = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
+                return cv.type == key
+            }
+            result += value.tallyCoefficient() * Float(filtered.count)/Float(countTotal)
         }
-        let atm7Old = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
-            return cv.type == .atm7Old
-        }
-        let atm7New = allCounterViews.filter { (cv: CounterFrontView) -> Bool in
-            return cv.type == .atm7New
-        }
-        let countAtm4 = Float(atm4.count)
-        let countAtm7Old = Float(atm7Old.count)
-        let countAtm7New = Float(atm7New.count)
-        let countTotal = countAtm4 + countAtm7Old + countAtm7New
-        return counter4Atm.tallyCoefficient() * countAtm4/countTotal + counter7AtmOld.tallyCoefficient() * countAtm7Old/countTotal + counter7AtmNew.tallyCoefficient() * countAtm7New/countTotal
+        return result
     }
     
     fileprivate func tallyCard(_ layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
@@ -231,7 +224,7 @@ FQ4 f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            let counter = counterForType(layer.first!.type)
+            let counter = counters[layer.first!.type]!
             let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
             let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
