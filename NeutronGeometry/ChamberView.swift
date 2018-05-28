@@ -16,7 +16,7 @@ class ChamberView: NSView {
         super.init(frame: frameRect)
         
         wantsLayer = true
-        layer?.backgroundColor = NSColor.green.withAlphaComponent(0.7).cgColor
+        layer?.backgroundColor = NSColor.yellow.withAlphaComponent(0.7).cgColor
         addInternalView(thickness)
     }
     

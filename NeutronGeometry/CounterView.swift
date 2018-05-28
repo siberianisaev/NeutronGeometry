@@ -14,8 +14,8 @@ class CounterView: NSView {
     var index: Int = 0
     var layerIndex: Int = 0
     var mcnpCellId: Int = 0
-    var presure: HeliumPressure = .high
-    var onChangePresure: (()->())?
+    var type: CounterType = .atm7Old
+    var onTap: (()->())?
     
     /**
      In centimeters.
@@ -37,8 +37,7 @@ class CounterView: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        //TODO: 4 atm counters support
-        onChangePresure?()
+        onTap?()
     }
     
 }

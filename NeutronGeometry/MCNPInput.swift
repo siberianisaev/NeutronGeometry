@@ -12,33 +12,51 @@ class MCNPInput {
     
     fileprivate let npReactionId = 103 // (n,p) reaction
     
-    fileprivate var counter7Atm = Counter(presure: .high)
-    fileprivate var counter4Atm = Counter(presure: .low)
+    fileprivate var counter4Atm = Counter(type: .atm4)
+    fileprivate var counter7AtmOld = Counter(type: .atm7Old)
+    fileprivate var counter7AtmNew = Counter(type: .atm7New)
+    
+    fileprivate func counterForType(_ type: CounterType) -> Counter {
+        switch type {
+        case .atm4:
+            return counter4Atm
+        case .atm7Old:
+            return counter7AtmOld
+        case .atm7New:
+            return counter7AtmNew
+        }
+    }
     
     fileprivate func convertViewLayersToMCNP(_ counterViewLayers: [[CounterView]]) -> [[CounterView]] {
         var mcnpLayers = [[CounterView]]()
         for viewLayer in counterViewLayers {
             var atm4 = [CounterView]()
-            var atm7 = [CounterView]()
+            var atm7New = [CounterView]()
+            var atm7Old = [CounterView]()
             for counterView in viewLayer {
-                switch counterView.presure {
-                case .high:
-                    atm7.append(counterView)
-                case .low:
+                switch counterView.type {
+                case .atm4:
                     atm4.append(counterView)
+                case .atm7Old:
+                    atm7Old.append(counterView)
+                case .atm7New:
+                    atm7New.append(counterView)
                 }
             }
             if atm4.count > 0 {
                 mcnpLayers.append(atm4)
             }
-            if atm7.count > 0 {
-                mcnpLayers.append(atm7)
+            if atm7Old.count > 0 {
+                mcnpLayers.append(atm7Old)
+            }
+            if atm7New.count > 0 {
+                mcnpLayers.append(atm7New)
             }
         }
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int) -> String {
+    func generateWith(counterViewLayers: [[CounterView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -57,7 +75,7 @@ c ==== CELLS =====
                 counterView.mcnpCellId = id
                 let TRCL = String(format: "%.1f %.1f 0", center.x, center.y)
                 let index = counterView.index + 1
-                let counter = counterView.presure == .high ? counter7Atm : counter4Atm
+                let counter = counterForType(counterView.type)
                 result += counter.mcnpCells(startId: id, index: index, TRCL: TRCL)
                 ids.append(id)
                 id += counterCellsCount + 1
@@ -91,7 +109,7 @@ c ==== CELLS =====
 """
         result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght)
         result += modeCard()
-        result += sourceCard()
+        result += sourceCard(sourcePositionZ)
         result += materialsCard()
         result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
@@ -129,18 +147,19 @@ c ==== CELLS =====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
         5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
-        \(counter7Atm.mcnpSurfaces())
         \(counter4Atm.mcnpSurfaces())
+        \(counter7AtmOld.mcnpSurfaces())
+        \(counter7AtmNew.mcnpSurfaces())
         """
     }
     
     /**
      Watt spectrum for 252Cf.
      */
-    fileprivate func sourceCard() -> String {
+    fileprivate func sourceCard(_ positionZ: Float) -> String {
         return """
         \nc ---------------- SOURCE ------------
-        SDEF erg=d1 pos=0 0 0 wgt=1.0
+        SDEF erg=d1 pos=0 0 \(positionZ.stringWith(precision: 1)) wgt=1.0
         SP1 -3 1.025 2.926
         """
     }
@@ -163,16 +182,20 @@ c ==== CELLS =====
     
     fileprivate func overalTallyCoefficient(_ layers: [[CounterView]]) -> Float {
         let allCounterViews = layers.joined()
-        let atm7 = allCounterViews.filter { (cv: CounterView) -> Bool in
-            return cv.presure == .high
-        }
         let atm4 = allCounterViews.filter { (cv: CounterView) -> Bool in
-            return cv.presure == .low
+            return cv.type == .atm4
         }
-        let countAtm7 = Float(atm7.count)
+        let atm7Old = allCounterViews.filter { (cv: CounterView) -> Bool in
+            return cv.type == .atm7Old
+        }
+        let atm7New = allCounterViews.filter { (cv: CounterView) -> Bool in
+            return cv.type == .atm7New
+        }
         let countAtm4 = Float(atm4.count)
-        let countTotal = countAtm7 + countAtm4
-        return counter7Atm.tallyCoefficient() * countAtm7/countTotal + counter4Atm.tallyCoefficient() * countAtm4/countTotal
+        let countAtm7Old = Float(atm7Old.count)
+        let countAtm7New = Float(atm7New.count)
+        let countTotal = countAtm4 + countAtm7Old + countAtm7New
+        return counter4Atm.tallyCoefficient() * countAtm4/countTotal + counter7AtmOld.tallyCoefficient() * countAtm7Old/countTotal + counter7AtmNew.tallyCoefficient() * countAtm7New/countTotal
     }
     
     fileprivate func tallyCard(_ layers: [[CounterView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
@@ -208,7 +231,7 @@ FQ4 f e
             let s1 = "F\(i)4:N (\(s1Indexes))"
             
             let detectorsCount = layer.count
-            let counter = layer.first!.presure == .high ? counter7Atm : counter4Atm
+            let counter = counterForType(layer.first!.type)
             let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
             let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2

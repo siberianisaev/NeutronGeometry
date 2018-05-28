@@ -10,6 +10,17 @@ import Cocoa
 
 class ProjectionView: NSView {
     
+    weak var sourceView: NSImageView!
+    
+    func showSource(_ shift: CGFloat = 0) {
+        sourceView?.removeFromSuperview()
+        let size: CGFloat = 32
+        let imageView = NSImageView(frame: NSRect(x: frame.width/2 - size/2 + shift, y: frame.height/2 - size/2, width: size, height: size))
+        imageView.image = #imageLiteral(resourceName: "source")
+        addSubview(imageView)
+        sourceView = imageView
+    }
+    
     var step: Int = 25 {
         didSet {
             if let view = gridView {

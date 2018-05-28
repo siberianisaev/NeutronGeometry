@@ -33,6 +33,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
     @IBOutlet weak var barrelLenghtField: NSTextField!
+    @IBOutlet weak var sourcePositionField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     @IBOutlet weak var saveButton: NSButton!
     @IBOutlet weak var loadButton: NSButton!
@@ -50,10 +51,24 @@ class ViewController: NSViewController {
     fileprivate weak var barrelFrontView: NSView?
     fileprivate weak var barrelSideView: NSView?
     
-    fileprivate var presures = [Int: HeliumPressure]()
+    fileprivate var types = [Int: CounterType]()
     
-    fileprivate func presureForCounterIndex(_ index: Int, tag: Int) -> HeliumPressure {
-        return presures[index] ?? (tag == 4 ? .low : .high)
+    fileprivate func typeForCounterIndex(_ index: Int, tag: Int) -> CounterType {
+        if let t = types[index] {
+            return t
+        }
+        return defaultCounterTypeForTag(tag)
+    }
+    
+    fileprivate func defaultCounterTypeForTag(_ tag: Int) -> CounterType {
+        switch tag {
+        case 1:
+            return .atm7New
+        case 4:
+            return .atm4
+        default:
+            return .atm7Old
+        }
     }
     
     @IBAction func loadResults(_ sender: Any) {
@@ -87,9 +102,9 @@ class ViewController: NSViewController {
                     let p1 = counter1.center()
                     let p2 = counter2.center()
                     let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
-                    let presure1 = counter1.presure
-                    let presure2 = counter2.presure
-                    let deltaRadius = (Counter(presure: presure1).radius - Counter(presure: presure2).radius) * 10
+                    let type1 = counter1.type
+                    let type2 = counter2.type
+                    let deltaRadius = (Counter(type: type1).radius - Counter(type: type2).radius) * 10
                     result = lroundf(Float(distance) - deltaRadius)
                 }
             }
@@ -118,6 +133,12 @@ class ViewController: NSViewController {
         showChamberSide()
         showCountersSide()
         showCountersGap()
+        showSource()
+    }
+    
+    fileprivate func showSource() {
+        frontView.showSource()
+        sideView.showSource(CGFloat(sourcePositionField.floatValue))
     }
     
     @IBAction func saveButton(_ sender: Any?) {
@@ -145,11 +166,13 @@ class ViewController: NSViewController {
     fileprivate let keyStep = "STEP"
     fileprivate let keyLenght = "LENGHT"
     fileprivate let keySize = "SIZE"
+    fileprivate let keyType = "TYPE"
     fileprivate let keyPresure = "PRESURE"
     fileprivate let keyThickness = "THICKNESS"
     fileprivate let keyCenterX = "X"
     fileprivate let keyCenterY = "Y"
     fileprivate let keySource = "SOURCE"
+    fileprivate let keyZ = "Z"
     fileprivate let keyValue = "VALUE"
     fileprivate let keyMaxTime = "MAX_TIME"
     
@@ -168,7 +191,7 @@ class ViewController: NSViewController {
         // COUNTERS
         for counter in countersFront {
             let center = counter.center()
-            strings.append(keyCounter(counter.index+1) + " \(keyCenterX)=\(center.x) \(keyCenterY)=\(center.y) \(keyPresure)=\(counter.presure.rawValue)")
+            strings.append(keyCounter(counter.index+1) + " \(keyCenterX)=\(center.x) \(keyCenterY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
         }
         // BARREL
         strings.append(keyBarrel + " \(keySize)=\(barrelSizeField.integerValue) \(keyLenght)=\(barrelLenghtField.integerValue)")
@@ -178,6 +201,8 @@ class ViewController: NSViewController {
         strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
         // MAX TIME
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
+        // SOURCE
+        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -278,6 +303,10 @@ class ViewController: NSViewController {
         if let values = dict[keyMaxTime], let time = preferenceFor(key: keyValue, preferences: values) {
             maxTimeField.integerValue = time
         }
+        // SOURCE POSITION
+        if let values = dict[keySource], let z = preferenceFor(key: keyZ, preferences: values) {
+            sourcePositionField.integerValue = z
+        }
         
         // UPDATE GEOMETRY
         updateButton(nil)
@@ -286,8 +315,17 @@ class ViewController: NSViewController {
         // We update only presure there. Counter center point will be automaticly set after geometry re-drawing.
         if countersCount > 0 {
             for i in 0..<countersCount {
-                if let values = dict[keyCounter(i+1)], let p = preferenceFor(key: keyPresure, preferences: values), let presure = HeliumPressure(rawValue: p) {
-                    presures[i] = presure
+                if let values = dict[keyCounter(i+1)], let t = preferenceFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
+                    types[i] = type
+                } else if let values = dict[keyCounter(i+1)], let p = preferenceFor(key: keyPresure, preferences: values) { // Old geometry version support
+                    switch p {
+                    case 4:
+                        types[i] = .atm4
+                    case 7:
+                        types[i] = .atm7Old
+                    default:
+                        break
+                    }
                 }
             }
             showCountersFront()
@@ -320,23 +358,25 @@ class ViewController: NSViewController {
         print("\nConfiguration results:")
         for counter in countersFront {
             let center = counter.center()
-            print("Counter: \(counter.index), center: (\(center.x), \(center.y)) cm, presure: \(counter.presure.rawValue) atm.")
+            print("Counter: \(counter.index), center: (\(center.x), \(center.y)) cm, type: \(counter.type.name)")
         }
         
         let chamberSize = chamberSizeField.floatValue/10
         let chamberThinkness = chamberThicknessField.floatValue/10
         let barrelSize = barrelSizeField.floatValue/10
         let barrelLenght = barrelLenghtField.floatValue/10
+        let sourcePositionZ = sourcePositionField.floatValue/10
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
         print("Barrel size: \(barrelSize) cm")
         print("Barrel lenght: \(barrelLenght) cm")
+        print("Source position Z: \(sourcePositionZ) cm")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ)
         print(result)
         
         // Files
@@ -441,8 +481,8 @@ class ViewController: NSViewController {
     
     fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
         let layerCenter = layerRadiusFrom(raduisField)
-        let presure: HeliumPressure = tag == 4 ? .low : .high
-        let counter = Counter(presure: presure)
+        let type: CounterType = defaultCounterTypeForTag(tag)
+        let counter = Counter(type: type)
         let width = CGFloat(counter.lenght * 10)
         let height = CGFloat(counter.radius * 10) * 2
         let container = containerFor(.side)
@@ -452,7 +492,7 @@ class ViewController: NSViewController {
             let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 + z * layerCenter - height/2) // +- layerCenter
             let counterView = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
             counterView.wantsLayer = true
-            counterView.layer?.backgroundColor = counterColorForPresure(presure)
+            counterView.layer?.backgroundColor = type.color
             container.addSubview(counterView)
             countersSide.append(counterView)
         }
@@ -471,10 +511,6 @@ class ViewController: NSViewController {
         for field in fields {
             showCountersSide(field, tag: 1 + fields.index(of: field)!)
         }
-    }
-    
-    fileprivate func counterColorForPresure(_ presure: HeliumPressure) -> CGColor {
-        return (presure == .high ? NSColor.blue : NSColor.red).cgColor
     }
     
     fileprivate func layerRadiusFrom(_ textField: NSTextField) -> CGFloat {
@@ -519,8 +555,8 @@ class ViewController: NSViewController {
         let frontSize = frontView.frame.size
         for i in 0...total-1 {
             let counterIndex = countersFront.count
-            let presure = presureForCounterIndex(counterIndex, tag: tag)
-            let counter = Counter(presure: presure)
+            let type = typeForCounterIndex(counterIndex, tag: tag)
+            let counter = Counter(type: type)
             let counterRadius = CGFloat(counter.radius * 10)
             let center = CGPoint(x: frontSize.width/2 - counterRadius, y: frontSize.height/2 - counterRadius)
             let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
@@ -531,9 +567,9 @@ class ViewController: NSViewController {
             let counterView = CounterView(frame: frame)
             counterView.index = counterIndex
             counterView.layerIndex = tag
-            counterView.presure = presure
-            counterView.onChangePresure = { [weak self] in
-                self?.presures[counterIndex] = presure == .high ? .low : .high
+            counterView.type = type
+            counterView.onTap = { [weak self] in
+                self?.types[counterIndex] = type.toggle()
                  // TODO: optimisation, refresh single counter
                 self?.showCountersFront()
                 self?.showCountersSide()
@@ -541,7 +577,7 @@ class ViewController: NSViewController {
             counterView.wantsLayer = true
             counterView.layer?.cornerRadius = counterRadius
             counterView.layer?.masksToBounds = true
-            counterView.layer?.backgroundColor = counterColorForPresure(presure)
+            counterView.layer?.backgroundColor = type.color
             
             let labelHeight: CGFloat = 14
             let label = NSTextField(frame: NSRect(x: 0, y: frame.height/2 - labelHeight/2, width: frame.width, height: labelHeight))

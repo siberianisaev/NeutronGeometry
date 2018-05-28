@@ -7,17 +7,54 @@
 //
 
 import Foundation
+import Cocoa
 
-enum HeliumPressure: Int {
-    case low = 4, high = 7
+enum CounterType: Int {
+    case atm4 = 0, atm7Old = 1, atm7New = 2
     
-    func realValue() -> Float {
+    func presure() -> Float {
         switch self {
-        case .low:
+        case .atm4:
             return 4.0
         default:
             return 7.0
         }
+    }
+    
+    var name: String {
+        let prefix: String
+        switch self {
+        case .atm4, .atm7Old:
+            prefix = "Old"
+        case .atm7New:
+            prefix = "New"
+        }
+        return "\(prefix) - \(presure())"
+    }
+    
+    var color: CGColor {
+        var red: CGFloat
+        var green: CGFloat
+        var blue: CGFloat
+        switch self {
+        case .atm4:
+            red = 217
+            green = 110
+            blue = 121
+        case .atm7Old:
+            red = 69
+            green = 136
+            blue = 237
+        case .atm7New:
+            red = 62
+            green = 193
+            blue = 133
+        }
+        return NSColor(calibratedRed: red/255, green: green/255, blue: blue/255, alpha: 1.0).cgColor
+    }
+    
+    func toggle() -> CounterType {
+        return CounterType(rawValue: rawValue + 1) ?? .atm4
     }
     
 }
@@ -25,40 +62,58 @@ enum HeliumPressure: Int {
 class Counter {
     
     var lenght: Float {
-        switch presure {
-        case .high:
-            return 48.5
-        default:
+        switch type {
+        case .atm4:
             return 49.0
+        case .atm7Old:
+            return 48.5
+        case .atm7New:
+            return 50
         }
     }
     
     var radius: Float {
-        switch presure {
-        case .high:
-            return 1.6
-        default:
+        switch type {
+        case .atm4:
             return 1.5
+        default:
+            return 1.6
         }
     }
     
-    var presure: HeliumPressure = .high
+    var type: CounterType = .atm7Old
     
     fileprivate var wallThikness: Float {
         return 0.05
     }
     
     var density: Float {
-        return 0.000125 * Float(heliumPresure)
+        return 0.000125 * type.presure()
     }
     
     fileprivate var capTop: Float {
-        let value: Float = presure == .high ? 3 : 1.5
+        var value: Float
+        switch type {
+        case .atm4:
+            value = 1.5
+        case .atm7Old:
+            value = 3
+        case .atm7New:
+            value = 1.5
+        }
         return value - wallThikness
     }
     
     fileprivate var capBottom: Float {
-        let value: Float = presure == .high ? 1 : 1.5
+        var value: Float
+        switch type {
+        case .atm4:
+            value = 1.5
+        case .atm7Old:
+            value = 1
+        case .atm7New:
+            value = 1.5
+        }
         return value - wallThikness
     }
     
@@ -92,12 +147,8 @@ class Counter {
         return czOutside + 0.02
     }
     
-    var heliumPresure: Int {
-        return presure.rawValue
-    }
-    
-    init(presure: HeliumPressure) {
-        self.presure = presure
+    init(type: CounterType) {
+        self.type = type
         self._pzOutside = lenght/2
     }
     
@@ -114,7 +165,7 @@ class Counter {
      Atoms count get from Mendeleev-Clapeyron equation converted to MCNP format.
      */
     func tallyCoefficient() -> Float {
-        let presure = self.presure.realValue() * 101325 // Pa
+        let presure = type.presure() * 101325 // Pa
         let volume = activeAreaVolume() / 1e6 // m^3
         let temperature: Float = 20 + 273.15 // °K
         let avogadro: Float = 0.602214085775 // * 1e-24
@@ -138,7 +189,7 @@ class Counter {
     }
     
     fileprivate func convertSurfaceId(id: Int) -> Int {
-        return presure == .high ? id : (id + 9)
+        return id + (type.rawValue * 9)
     }
     
     fileprivate var startSurfaceId: Int {
@@ -148,7 +199,7 @@ class Counter {
     func mcnpSurfaces() -> String {
         let start = startSurfaceId
         return """
-        c ***** Counter \(presure.rawValue) atm. *************************
+        c ***** Counter \(type.name) *************************
         \(start) pz -\(pzOutside)
         \(start+1) pz -\(pzInside)
         \(start+2) pz -\(pzActiveAreaBottom)
