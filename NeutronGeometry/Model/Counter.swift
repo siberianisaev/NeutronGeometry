@@ -17,7 +17,7 @@ class Counter {
         case .atm7Old:
             return 48.5
         case .atm7New:
-            return 50
+            return 56
         }
     }
     
@@ -48,7 +48,7 @@ class Counter {
         case .atm7Old:
             value = 3
         case .atm7New:
-            value = 1.5
+            value = 2.2
         }
         return value - wallThikness
     }
@@ -61,7 +61,7 @@ class Counter {
         case .atm7Old:
             value = 1
         case .atm7New:
-            value = 1.5
+            value = 1.8
         }
         return value - wallThikness
     }

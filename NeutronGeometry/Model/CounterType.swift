@@ -26,12 +26,14 @@ enum CounterType: Int, CaseCountable {
     var name: String {
         let prefix: String
         switch self {
-        case .atm4, .atm7Old:
-            prefix = "Old"
+        case .atm4:
+            prefix = "Aspekt"
+        case .atm7Old:
+            prefix = "Flerov Lab"
         case .atm7New:
-            prefix = "New"
+            prefix = "Zaprudnya"
         }
-        return "\(prefix) - \(presure()) atm."
+        return "\(prefix), \(Int(presure())) atm."
     }
     
     var color: CGColor {
