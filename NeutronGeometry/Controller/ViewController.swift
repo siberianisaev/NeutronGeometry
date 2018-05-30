@@ -384,6 +384,7 @@ class ViewController: NSViewController {
         print("Barrel size: \(barrelSize) cm")
         print("Barrel lenght: \(barrelLenght) cm")
         print("Source position Z: \(sourcePositionZ) cm")
+        print("Source type: \(sourceType.name)")
         
         // MCNP
         let layers = counterLayers()
