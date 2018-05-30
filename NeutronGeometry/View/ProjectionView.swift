@@ -8,17 +8,20 @@
 
 import Cocoa
 
+enum Projection {
+    case front, side
+}
+
 class ProjectionView: NSView {
     
-    weak var sourceView: NSImageView!
+    weak var sourceView: SourceView!
+    var projection: Projection?
     
-    func showSource(_ shift: CGFloat = 0) {
+    func showSource(_ type: SourceType, shift: CGFloat = 0, onTap: @escaping (()->())) {
         sourceView?.removeFromSuperview()
-        let size: CGFloat = 32
-        let imageView = NSImageView(frame: NSRect(x: frame.width/2 - size/2 + shift, y: frame.height/2 - size/2, width: size, height: size))
-        imageView.image = #imageLiteral(resourceName: "source")
-        addSubview(imageView)
-        sourceView = imageView
+        let view = SourceView(type: type, shift: shift, containerFrame: frame, projection: projection, onTap: onTap)
+        addSubview(view)
+        sourceView = view
     }
     
     var step: Int = 25 {

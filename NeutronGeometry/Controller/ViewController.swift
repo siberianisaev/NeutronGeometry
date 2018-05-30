@@ -42,6 +42,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
     
+    fileprivate var sourceType: SourceType = .point
+    
     fileprivate var countersFront = [CounterFrontView]()
     fileprivate var countersSide = [NSView]()
     
@@ -138,8 +140,12 @@ class ViewController: NSViewController {
     }
     
     fileprivate func showSource() {
-        frontView.showSource()
-        sideView.showSource(CGFloat(sourcePositionField.floatValue))
+        let onTap = { [weak self] in
+            self?.sourceType = (self?.sourceType.toggle())!
+            self?.showSource()
+        }
+        frontView.showSource(sourceType, onTap: onTap)
+        sideView.showSource(sourceType, shift: CGFloat(sourcePositionField.floatValue), onTap: onTap)
     }
     
     @IBAction func saveButton(_ sender: Any?) {
@@ -203,7 +209,7 @@ class ViewController: NSViewController {
         // MAX TIME
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         // SOURCE
-        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue)")
+        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -305,8 +311,13 @@ class ViewController: NSViewController {
             maxTimeField.integerValue = time
         }
         // SOURCE POSITION
-        if let values = dict[keySource], let z = preferenceFor(key: keyZ, preferences: values) {
-            sourcePositionField.integerValue = z
+        if let values = dict[keySource] {
+            if let z = preferenceFor(key: keyZ, preferences: values) {
+                sourcePositionField.integerValue = z
+            }
+            if let t = preferenceFor(key: keyType, preferences: values), let type = SourceType(rawValue: t) {
+                sourceType = type
+            }
         }
         
         // UPDATE GEOMETRY
@@ -377,7 +388,7 @@ class ViewController: NSViewController {
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType)
         print(result)
         
         // Files
@@ -424,6 +435,8 @@ class ViewController: NSViewController {
     }
     
     fileprivate func setupProjections() {
+        frontView.projection = .front
+        sideView.projection = .side
         let newStep = max(gridStepField.integerValue, 1)
         for view in [frontView, sideView] as [ProjectionView] {
             if view.step != newStep {

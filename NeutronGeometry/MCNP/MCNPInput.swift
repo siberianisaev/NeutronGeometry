@@ -51,7 +51,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -104,7 +104,7 @@ c ==== CELLS =====
 """
         result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght)
         result += modeCard()
-        result += sourceCard(sourcePositionZ)
+        result += sourceType.card(sourcePositionZ)
         result += materialsCard()
         result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
@@ -148,17 +148,6 @@ c ==== CELLS =====
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
         5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
         \(counterSurfaces)
-        """
-    }
-    
-    /**
-     Watt spectrum for 252Cf.
-     */
-    fileprivate func sourceCard(_ positionZ: Float) -> String {
-        return """
-        \nc ---------------- SOURCE ------------
-        SDEF erg=d1 pos=0 0 \(positionZ.stringWith(precision: 1)) wgt=1.0
-        SP1 -3 1.025 2.926
         """
     }
     
