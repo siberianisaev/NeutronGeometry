@@ -3,7 +3,7 @@
 //  NeutronGeometry
 //
 //  Created by Andrey Isaev on 16/01/2018.
-//  Copyright © 2018 Andrey Isaev. All rights reserved.
+//  Copyright © 2018 Flerov Laboratory. All rights reserved.
 //
 
 import Cocoa
@@ -41,8 +41,23 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer4Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
+    @IBOutlet weak var sourceIsotopeButton: NSPopUpButton!
     
     fileprivate var sourceType: SourceType = .point
+    
+    fileprivate var defaultSourceIsotope: SourceIsotope = .Cf252
+    fileprivate var sourceIsotope: SourceIsotope {
+        set {
+            sourceIsotopeButton?.selectItem(at: newValue.rawValue)
+        }
+        get {
+            if let i = sourceIsotopeButton?.indexOfSelectedItem, let si = SourceIsotope(rawValue: i) {
+                return si
+            } else {
+                return defaultSourceIsotope
+            }
+        }
+    }
     
     fileprivate var countersFront = [CounterFrontView]()
     fileprivate var countersSide = [NSView]()
@@ -73,12 +88,20 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func loadResults(_ sender: Any) {
-        MCNPOutput.openResults { (results: MCNPOutput?) in
-            //
+    fileprivate func setupSourceIsotopes() {
+        var isotopes = [String]()
+        for i in 0...SourceIsotope.count-1 {
+            let si = SourceIsotope(rawValue: i)!
+            isotopes.append(si.name)
         }
+        sourceIsotopeButton.removeAllItems()
+        sourceIsotopeButton.addItems(withTitles: isotopes)
     }
     
+    @IBAction func loadResults(_ sender: Any) {
+        MCNPOutput.openResults { (results: MCNPOutput?) in
+        }
+    }
     
     @IBAction func layer4Control(_ sender: Any) {
         layer4ControlValueChanged()
@@ -182,6 +205,7 @@ class ViewController: NSViewController {
     fileprivate let keyZ = "Z"
     fileprivate let keyValue = "VALUE"
     fileprivate let keyMaxTime = "MAX_TIME"
+    fileprivate let keyIsotope = "ISOTOPE"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -209,7 +233,7 @@ class ViewController: NSViewController {
         // MAX TIME
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         // SOURCE
-        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue)")
+        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -318,6 +342,9 @@ class ViewController: NSViewController {
             if let t = preferenceFor(key: keyType, preferences: values), let type = SourceType(rawValue: t) {
                 sourceType = type
             }
+            if let i = preferenceFor(key: keyIsotope, preferences: values), let si = SourceIsotope(rawValue: i) {
+                sourceIsotope = si
+            }
         }
         
         // UPDATE GEOMETRY
@@ -385,11 +412,12 @@ class ViewController: NSViewController {
         print("Barrel lenght: \(barrelLenght) cm")
         print("Source position Z: \(sourcePositionZ) cm")
         print("Source type: \(sourceType.name)")
+        print("Source isotope: \(sourceIsotope.name)")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope)
         print(result)
         
         // Files
@@ -413,6 +441,8 @@ class ViewController: NSViewController {
         NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: OperationQueue.main) { [weak self] (note: Notification) in
             self?.storeLastGeometryToDefaults()
         }
+        
+        setupSourceIsotopes()
     }
     
     deinit {

@@ -3,7 +3,7 @@
 //  NeutronGeometry
 //
 //  Created by Andrey Isaev on 18/05/2018.
-//  Copyright © 2018 Andrey Isaev. All rights reserved.
+//  Copyright © 2018 Flerov Laboratory. All rights reserved.
 //
 
 import Foundation

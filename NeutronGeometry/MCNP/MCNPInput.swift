@@ -3,7 +3,7 @@
 //  NeutronGeometry
 //
 //  Created by Andrey Isaev on 20/01/2018.
-//  Copyright © 2018 Andrey Isaev. All rights reserved.
+//  Copyright © 2018 Flerov Laboratory. All rights reserved.
 //
 
 import Foundation
@@ -51,7 +51,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -104,12 +104,25 @@ c ==== CELLS =====
 """
         result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght)
         result += modeCard()
-        result += sourceType.card(sourcePositionZ)
+        result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
         result += materialsCard()
         result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
         result += controlCard(maxTime: maxTime)
         return result
+    }
+    
+    fileprivate func sourceCard(type: SourceType, isotope: SourceIsotope, sourcePositionZ: Float) -> String {
+        var sdef = ["erg=d1", "pos=0 0 \(sourcePositionZ.stringWith(precision: 1))", "wgt=1.0"]
+        if type == .disk {
+            sdef.append(contentsOf: ["axs=0 0 1", "ext=0.0001", "rad=\(type.radius)"]) // cylinder with 10 cm base and degenerate 1 μm height, placed parallel on z-axis
+        }
+        let sdefString = sdef.joined(separator: " ")
+        return """
+        \nc ---------------- SOURCE ------------
+        SDEF \(sdefString)
+        SP1 -3 \(isotope.coefficientA) \(isotope.coefficientB)
+        """
     }
     
     fileprivate func timeCard() -> String {

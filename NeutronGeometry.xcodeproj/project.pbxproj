@@ -18,6 +18,7 @@
 		5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7DB3612011191D00A0209E /* ProjectionView.swift */; };
 		5A8465FD20BF297200BCC3C0 /* SourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8465FC20BF297200BCC3C0 /* SourceType.swift */; };
 		5A8465FF20BF2DFE00BCC3C0 /* SourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8465FE20BF2DFE00BCC3C0 /* SourceView.swift */; };
+		5A84660120C8191600BCC3C0 /* SourceIsotope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A84660020C8191600BCC3C0 /* SourceIsotope.swift */; };
 		5AEAB59720AF22E3006EF80E /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEAB59620AF22E3006EF80E /* Counter.swift */; };
 		6518DB7720B69FC4000B5C2A /* MCNPRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6518DB7620B69FC4000B5C2A /* MCNPRun.swift */; };
 		65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396120BC3DFA00F0D64E /* CounterSideView.swift */; };
@@ -43,6 +44,7 @@
 		5A7DB3612011191D00A0209E /* ProjectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionView.swift; sourceTree = "<group>"; };
 		5A8465FC20BF297200BCC3C0 /* SourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceType.swift; sourceTree = "<group>"; };
 		5A8465FE20BF2DFE00BCC3C0 /* SourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceView.swift; sourceTree = "<group>"; };
+		5A84660020C8191600BCC3C0 /* SourceIsotope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceIsotope.swift; sourceTree = "<group>"; };
 		5AEAB59620AF22E3006EF80E /* Counter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
 		6518DB7620B69FC4000B5C2A /* MCNPRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPRun.swift; sourceTree = "<group>"; };
 		65A2396120BC3DFA00F0D64E /* CounterSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterSideView.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				5A8465FC20BF297200BCC3C0 /* SourceType.swift */,
+				5A84660020C8191600BCC3C0 /* SourceIsotope.swift */,
 				5A4E7DB620BC9E6700092145 /* CounterType.swift */,
 				5AEAB59620AF22E3006EF80E /* Counter.swift */,
 			);
@@ -168,7 +171,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0930;
-				ORGANIZATIONNAME = "Andrey Isaev";
+				ORGANIZATIONNAME = "Flerov Laboratory";
 				TargetAttributes = {
 					5A3C160D200E30C2004E281A = {
 						CreatedOnToolsVersion = 9.2;
@@ -232,6 +235,7 @@
 				5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */,
 				5A8465FD20BF297200BCC3C0 /* SourceType.swift in Sources */,
 				65DFC59620307B1200B55062 /* GeometryWindow.swift in Sources */,
+				5A84660120C8191600BCC3C0 /* SourceIsotope.swift in Sources */,
 				5A8465FF20BF2DFE00BCC3C0 /* SourceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
