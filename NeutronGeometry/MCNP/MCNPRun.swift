@@ -25,6 +25,7 @@ class MCNPRun {
         commands.append("cd ..")
         commands.append("\n\n\n\nssh -X \(user)")
         commands.append("source /libcern/mcnp/v27/sl5.8-x86_64/setup.sh")
+        commands.append("\n\n\n\nrm *")
         let infoPath = FileManager.mcnpRunFilePath(timeStamp)!
         FileManager.writeString(commands.joined(separator: "\n"), path: infoPath)
     }
