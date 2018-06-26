@@ -29,6 +29,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2CountersGapField: NSTextField!
     @IBOutlet weak var layer3CountersGapField: NSTextField!
     @IBOutlet weak var layer4CountersGapField: NSTextField!
+    @IBOutlet weak var layer1ShiftAngleField: NSTextField!
+    @IBOutlet weak var layer2ShiftAngleField: NSTextField!
+    @IBOutlet weak var layer3ShiftAngleField: NSTextField!
+    @IBOutlet weak var layer4ShiftAngleField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
@@ -206,18 +210,21 @@ class ViewController: NSViewController {
     fileprivate let keyValue = "VALUE"
     fileprivate let keyMaxTime = "MAX_TIME"
     fileprivate let keyIsotope = "ISOTOPE"
+    fileprivate let keyAngle = "ANGLE"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
         var layerCountFields = [layer1CountField, layer2CountField, layer3CountField]
+        var layerAnglesFields = [layer1ShiftAngleField, layer2ShiftAngleField, layer3ShiftAngleField]
         var layerRadiusFields = [layer1RadiusField, layer2RadiusField, layer3RadiusField]
         if layer4Control.state == .on {
             layerCountFields.append(layer4CountField)
+            layerAnglesFields.append(layer4ShiftAngleField)
             layerRadiusFields.append(layer4RadiusField)
         }
         // LAYERS INFO
         for i in 0..<layerCountFields.count {
-            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue)")
+            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.integerValue)")
         }
         // COUNTERS
         for counter in countersFront {
@@ -294,22 +301,28 @@ class ViewController: NSViewController {
                 
                 var countField: NSTextField?
                 var radiusField: NSTextField?
+                var angleField: NSTextField?
                 switch i {
                 case 0:
                     countField = layer1CountField
                     radiusField = layer1RadiusField
+                    angleField = layer1ShiftAngleField
                 case 1:
                     countField = layer2CountField
                     radiusField = layer2RadiusField
+                    angleField = layer2ShiftAngleField
                 case 2:
                     countField = layer3CountField
                     radiusField = layer3RadiusField
+                    angleField = layer3ShiftAngleField
                 default:
                     countField = layer4CountField
                     radiusField = layer4RadiusField
+                    angleField = layer4ShiftAngleField
                 }
                 countField?.integerValue = count
                 radiusField?.integerValue = radius
+                angleField?.integerValue = preferenceFor(key: keyAngle, preferences: values) ?? 0
             }
             if i == 3 {
                 layer4Control.state = values == nil ? .off : .on
@@ -587,6 +600,10 @@ class ViewController: NSViewController {
         return max(textField.integerValue, 2)
     }
     
+    fileprivate func layerShiftAngleFrom(_ textField: NSTextField) -> CGFloat {
+        return CGFloat(textField.floatValue)
+    }
+    
     fileprivate func showCountersFront() {
         for view in countersFront {
             view.removeFromSuperview()
@@ -596,23 +613,23 @@ class ViewController: NSViewController {
         // Layer 1
         let layerCenter1 = layerRadiusFrom(layer1RadiusField)
         let total1 = layerCountFrom(layer1CountField)
-        var paddingAngle: CGFloat = 0 // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
+        var paddingAngle: CGFloat = layerShiftAngleFrom(layer1ShiftAngleField) // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
         addCountersLayerFront(tag: 1, total: total1, paddingAngle: paddingAngle, layerCenter: layerCenter1)
         // Layer 2
         let layerCenter2 = layerRadiusFrom(layer2RadiusField)
         let total2 = layerCountFrom(layer2CountField)
-        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1)) / 2
+        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1))/2 + layerShiftAngleFrom(layer2ShiftAngleField)
         addCountersLayerFront(tag: 2, total: total2, paddingAngle: paddingAngle, layerCenter: layerCenter2)
         // Layer 3
         let layerCenter3 = layerRadiusFrom(layer3RadiusField)
         let total3 = layerCountFrom(layer3CountField)
-        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2)) / 2
+        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2))/2 + layerShiftAngleFrom(layer3ShiftAngleField)
         addCountersLayerFront(tag: 3, total: total3, paddingAngle: paddingAngle, layerCenter: layerCenter3)
         // Layer 4
         if layer4Control.state == .on {
             let layerCenter4 = layerRadiusFrom(layer4RadiusField)
             let total4 = layerCountFrom(layer4CountField)
-            paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3)) / 2
+            paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3))/2 + layerShiftAngleFrom(layer4ShiftAngleField)
             addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, layerCenter: layerCenter4)
         }
     }
