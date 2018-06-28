@@ -33,6 +33,10 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2ShiftAngleField: NSTextField!
     @IBOutlet weak var layer3ShiftAngleField: NSTextField!
     @IBOutlet weak var layer4ShiftAngleField: NSTextField!
+    @IBOutlet weak var layer1EvenAngleField: NSTextField!
+    @IBOutlet weak var layer2EvenAngleField: NSTextField!
+    @IBOutlet weak var layer3EvenAngleField: NSTextField!
+    @IBOutlet weak var layer4EvenAngleField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
@@ -211,20 +215,23 @@ class ViewController: NSViewController {
     fileprivate let keyMaxTime = "MAX_TIME"
     fileprivate let keyIsotope = "ISOTOPE"
     fileprivate let keyAngle = "ANGLE"
+    fileprivate let keyEven = "EVEN_COUNTER_SHIFT_ANGLE"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
         var layerCountFields = [layer1CountField, layer2CountField, layer3CountField]
         var layerAnglesFields = [layer1ShiftAngleField, layer2ShiftAngleField, layer3ShiftAngleField]
+        var layerEvenAngleFields = [layer1EvenAngleField, layer2EvenAngleField, layer3EvenAngleField]
         var layerRadiusFields = [layer1RadiusField, layer2RadiusField, layer3RadiusField]
         if layer4Control.state == .on {
             layerCountFields.append(layer4CountField)
             layerAnglesFields.append(layer4ShiftAngleField)
+            layerEvenAngleFields.append(layer4EvenAngleField)
             layerRadiusFields.append(layer4RadiusField)
         }
         // LAYERS INFO
         for i in 0..<layerCountFields.count {
-            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.integerValue)")
+            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.integerValue) \(keyEven)=\(layerEvenAngleFields[i]!.stringValue)")
         }
         // COUNTERS
         for counter in countersFront {
@@ -278,15 +285,23 @@ class ViewController: NSViewController {
             dict[tuple.0] = tuple.1
         }
         
-        func preferenceFor(key: String, preferences: [String]) -> Int? {
+        func preferenceStringFor(key: String, preferences: [String]) -> String? {
             let prefix = key + "="
             let preference = preferences.filter { (s: String) -> Bool in
                 return s.hasPrefix(prefix)
-            }.first
+                }.first
             if let preference = preference, let range = preference.range(of: prefix) {
                 let end = preference.index(preference.endIndex, offsetBy: 0)
                 let result = String(preference[range.upperBound..<end])
-                return Int(result)
+                return result
+            } else {
+                return nil
+            }
+        }
+        
+        func preferenceIntFor(key: String, preferences: [String]) -> Int? {
+            if let s = preferenceStringFor(key: key, preferences: preferences) {
+                return Int(s)
             } else {
                 return nil
             }
@@ -296,33 +311,39 @@ class ViewController: NSViewController {
         var countersCount = 0
         for i in 0...3 {
             let values = dict[keyLayer(i+1)]
-            if let values = values, let count = preferenceFor(key: keyCount, preferences: values), let radius = preferenceFor(key: keyRadius, preferences: values) {
+            if let values = values, let count = preferenceIntFor(key: keyCount, preferences: values), let radius = preferenceIntFor(key: keyRadius, preferences: values) {
                 countersCount += count
                 
                 var countField: NSTextField?
                 var radiusField: NSTextField?
                 var angleField: NSTextField?
+                var evenAngleField: NSTextField?
                 switch i {
                 case 0:
                     countField = layer1CountField
                     radiusField = layer1RadiusField
                     angleField = layer1ShiftAngleField
+                    evenAngleField = layer1EvenAngleField
                 case 1:
                     countField = layer2CountField
                     radiusField = layer2RadiusField
                     angleField = layer2ShiftAngleField
+                    evenAngleField = layer2EvenAngleField
                 case 2:
                     countField = layer3CountField
                     radiusField = layer3RadiusField
                     angleField = layer3ShiftAngleField
+                    evenAngleField = layer3EvenAngleField
                 default:
                     countField = layer4CountField
                     radiusField = layer4RadiusField
                     angleField = layer4ShiftAngleField
+                    evenAngleField = layer4EvenAngleField
                 }
                 countField?.integerValue = count
                 radiusField?.integerValue = radius
-                angleField?.integerValue = preferenceFor(key: keyAngle, preferences: values) ?? 0
+                angleField?.integerValue = preferenceIntFor(key: keyAngle, preferences: values) ?? 0
+                evenAngleField?.stringValue = preferenceStringFor(key: keyEven, preferences: values) ?? "0"
             }
             if i == 3 {
                 layer4Control.state = values == nil ? .off : .on
@@ -330,32 +351,32 @@ class ViewController: NSViewController {
             }
         }
         // BARREL
-        if let values = dict[keyBarrel], let size = preferenceFor(key: keySize, preferences: values), let lenght = preferenceFor(key: keyLenght, preferences: values) {
+        if let values = dict[keyBarrel], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
             barrelSizeField.integerValue = size
             barrelLenghtField.integerValue = lenght
         }
         // CHAMBER
-        if let values = dict[keyChamber], let size = preferenceFor(key: keySize, preferences: values), let thickness = preferenceFor(key: keyThickness, preferences: values) {
+        if let values = dict[keyChamber], let size = preferenceIntFor(key: keySize, preferences: values), let thickness = preferenceIntFor(key: keyThickness, preferences: values) {
             chamberSizeField.integerValue = size
             chamberThicknessField.integerValue = thickness
         }
         // GRID
-        if let values = dict[keyGrid], let step = preferenceFor(key: keyStep, preferences: values) {
+        if let values = dict[keyGrid], let step = preferenceIntFor(key: keyStep, preferences: values) {
             gridStepField.integerValue = step
         }
         // MAX TIME
-        if let values = dict[keyMaxTime], let time = preferenceFor(key: keyValue, preferences: values) {
+        if let values = dict[keyMaxTime], let time = preferenceIntFor(key: keyValue, preferences: values) {
             maxTimeField.integerValue = time
         }
         // SOURCE POSITION
         if let values = dict[keySource] {
-            if let z = preferenceFor(key: keyZ, preferences: values) {
+            if let z = preferenceIntFor(key: keyZ, preferences: values) {
                 sourcePositionField.integerValue = z
             }
-            if let t = preferenceFor(key: keyType, preferences: values), let type = SourceType(rawValue: t) {
+            if let t = preferenceIntFor(key: keyType, preferences: values), let type = SourceType(rawValue: t) {
                 sourceType = type
             }
-            if let i = preferenceFor(key: keyIsotope, preferences: values), let si = SourceIsotope(rawValue: i) {
+            if let i = preferenceIntFor(key: keyIsotope, preferences: values), let si = SourceIsotope(rawValue: i) {
                 sourceIsotope = si
             }
         }
@@ -367,9 +388,9 @@ class ViewController: NSViewController {
         // We update only presure there. Counter center point will be automaticly set after geometry re-drawing.
         if countersCount > 0 {
             for i in 0..<countersCount {
-                if let values = dict[keyCounter(i+1)], let t = preferenceFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
+                if let values = dict[keyCounter(i+1)], let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
                     types[i] = type
-                } else if let values = dict[keyCounter(i+1)], let p = preferenceFor(key: keyPresure, preferences: values) { // Old geometry version support
+                } else if let values = dict[keyCounter(i+1)], let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
                     switch p {
                     case 4:
                         types[i] = .atm4
@@ -604,6 +625,10 @@ class ViewController: NSViewController {
         return CGFloat(textField.floatValue)
     }
     
+    fileprivate func layerEvenAngleFrom(_ textField: NSTextField) -> CGFloat {
+        return CGFloat(textField.floatValue)
+    }
+    
     fileprivate func showCountersFront() {
         for view in countersFront {
             view.removeFromSuperview()
@@ -614,27 +639,27 @@ class ViewController: NSViewController {
         let layerCenter1 = layerRadiusFrom(layer1RadiusField)
         let total1 = layerCountFrom(layer1CountField)
         var paddingAngle: CGFloat = layerShiftAngleFrom(layer1ShiftAngleField) // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
-        addCountersLayerFront(tag: 1, total: total1, paddingAngle: paddingAngle, layerCenter: layerCenter1)
+        addCountersLayerFront(tag: 1, total: total1, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer1EvenAngleField), layerCenter: layerCenter1)
         // Layer 2
         let layerCenter2 = layerRadiusFrom(layer2RadiusField)
         let total2 = layerCountFrom(layer2CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1))/2 + layerShiftAngleFrom(layer2ShiftAngleField)
-        addCountersLayerFront(tag: 2, total: total2, paddingAngle: paddingAngle, layerCenter: layerCenter2)
+        addCountersLayerFront(tag: 2, total: total2, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer2EvenAngleField), layerCenter: layerCenter2)
         // Layer 3
         let layerCenter3 = layerRadiusFrom(layer3RadiusField)
         let total3 = layerCountFrom(layer3CountField)
         paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2))/2 + layerShiftAngleFrom(layer3ShiftAngleField)
-        addCountersLayerFront(tag: 3, total: total3, paddingAngle: paddingAngle, layerCenter: layerCenter3)
+        addCountersLayerFront(tag: 3, total: total3, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer3EvenAngleField), layerCenter: layerCenter3)
         // Layer 4
         if layer4Control.state == .on {
             let layerCenter4 = layerRadiusFrom(layer4RadiusField)
             let total4 = layerCountFrom(layer4CountField)
             paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3))/2 + layerShiftAngleFrom(layer4ShiftAngleField)
-            addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, layerCenter: layerCenter4)
+            addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer4EvenAngleField), layerCenter: layerCenter4)
         }
     }
     
-    fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, layerCenter: CGFloat) {
+    fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, evenAngle: CGFloat, layerCenter: CGFloat) {
         let frontSize = frontView.frame.size
         for i in 0...total-1 {
             let counterIndex = countersFront.count
@@ -642,7 +667,10 @@ class ViewController: NSViewController {
             let counter = Counter(type: type)
             let counterRadius = CGFloat(counter.radius * 10)
             let center = CGPoint(x: frontSize.width/2 - counterRadius, y: frontSize.height/2 - counterRadius)
-            let angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
+            var angle = (CGFloat.pi * 2 * CGFloat(i)/CGFloat(total)) + paddingAngle // Угл центра счетчика относительно оси OX
+            if (i + 1) % 2 == 0 {
+                angle -= evenAngle
+            }
             let x = center.x + layerCenter * cos(angle)
             let y = center.y + layerCenter * sin(angle)
             let frame = NSRect(x: x, y: y, width: counterRadius * 2, height: counterRadius * 2)
