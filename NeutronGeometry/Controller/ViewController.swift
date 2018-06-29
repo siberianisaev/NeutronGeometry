@@ -21,22 +21,27 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer2CountField: NSTextField!
     @IBOutlet weak var layer3CountField: NSTextField!
     @IBOutlet weak var layer4CountField: NSTextField!
+    @IBOutlet weak var layer5CountField: NSTextField!
     @IBOutlet weak var layer1RadiusField: NSTextField!
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
     @IBOutlet weak var layer4RadiusField: NSTextField!
+    @IBOutlet weak var layer5RadiusField: NSTextField!
     @IBOutlet weak var layer1CountersGapField: NSTextField!
     @IBOutlet weak var layer2CountersGapField: NSTextField!
     @IBOutlet weak var layer3CountersGapField: NSTextField!
     @IBOutlet weak var layer4CountersGapField: NSTextField!
+    @IBOutlet weak var layer5CountersGapField: NSTextField!
     @IBOutlet weak var layer1ShiftAngleField: NSTextField!
     @IBOutlet weak var layer2ShiftAngleField: NSTextField!
     @IBOutlet weak var layer3ShiftAngleField: NSTextField!
     @IBOutlet weak var layer4ShiftAngleField: NSTextField!
+    @IBOutlet weak var layer5ShiftAngleField: NSTextField!
     @IBOutlet weak var layer1EvenAngleField: NSTextField!
     @IBOutlet weak var layer2EvenAngleField: NSTextField!
     @IBOutlet weak var layer3EvenAngleField: NSTextField!
     @IBOutlet weak var layer4EvenAngleField: NSTextField!
+    @IBOutlet weak var layer5EvenAngleField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var barrelSizeField: NSTextField!
@@ -47,6 +52,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var loadButton: NSButton!
     @IBOutlet weak var calculateButton: NSButton!
     @IBOutlet weak var layer4Control: NSButton!
+    @IBOutlet weak var layer5Control: NSButton!
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
     @IBOutlet weak var sourceIsotopeButton: NSPopUpButton!
@@ -89,7 +95,7 @@ class ViewController: NSViewController {
         switch tag {
         case 1:
             return .atm7New
-        case 4:
+        case 4, 5:
             return .atm4
         default:
             return .atm7Old
@@ -116,16 +122,30 @@ class ViewController: NSViewController {
         updateButton(nil)
     }
     
+    @IBAction func layer5Control(_ sender: Any) {
+        layer5ControlValueChanged()
+        updateButton(nil)
+    }
+    
     fileprivate func layer4ControlValueChanged() {
         let isOn = layer4Control.state == .on
         layer4RadiusField.isEnabled = isOn
         layer4CountField.isEnabled = isOn
         layer4CountersGapField.isHidden = !isOn
+        layer5ControlValueChanged()
+    }
+    
+    fileprivate func layer5ControlValueChanged() {
+        let isOn = layer5Control.state == .on && layer4Control.state == .on
+        layer5Control.state = isOn ? .on : .off
+        layer5RadiusField.isEnabled = isOn
+        layer5CountField.isEnabled = isOn
+        layer5CountersGapField.isHidden = !isOn
     }
     
     fileprivate func showCountersGap() {
         let layers = counterLayers()
-        for i in 0...3 {
+        for i in 0...4 {
             var result: Int = 0
             if i < layers.count {
                 let layer =  layers[i]
@@ -149,8 +169,10 @@ class ViewController: NSViewController {
                 textField = layer2CountersGapField
             case 2:
                 textField = layer3CountersGapField
-            default:
+            case 3:
                 textField = layer4CountersGapField
+            default:
+                textField = layer5CountersGapField
             }
             textField?.integerValue = result
             textField?.textColor = result > 0 ? NSColor.darkGray : NSColor.red
@@ -228,6 +250,12 @@ class ViewController: NSViewController {
             layerAnglesFields.append(layer4ShiftAngleField)
             layerEvenAngleFields.append(layer4EvenAngleField)
             layerRadiusFields.append(layer4RadiusField)
+            if layer5Control.state == .on {
+                layerCountFields.append(layer5CountField)
+                layerAnglesFields.append(layer5ShiftAngleField)
+                layerEvenAngleFields.append(layer5EvenAngleField)
+                layerRadiusFields.append(layer5RadiusField)
+            }
         }
         // LAYERS INFO
         for i in 0..<layerCountFields.count {
@@ -309,7 +337,7 @@ class ViewController: NSViewController {
         
         // LAYERS INFO
         var countersCount = 0
-        for i in 0...3 {
+        for i in 0...4 {
             let values = dict[keyLayer(i+1)]
             if let values = values, let count = preferenceIntFor(key: keyCount, preferences: values), let radius = preferenceIntFor(key: keyRadius, preferences: values) {
                 countersCount += count
@@ -334,11 +362,16 @@ class ViewController: NSViewController {
                     radiusField = layer3RadiusField
                     angleField = layer3ShiftAngleField
                     evenAngleField = layer3EvenAngleField
-                default:
+                case 3:
                     countField = layer4CountField
                     radiusField = layer4RadiusField
                     angleField = layer4ShiftAngleField
                     evenAngleField = layer4EvenAngleField
+                default:
+                    countField = layer5CountField
+                    radiusField = layer5RadiusField
+                    angleField = layer5ShiftAngleField
+                    evenAngleField = layer5EvenAngleField
                 }
                 countField?.integerValue = count
                 radiusField?.integerValue = radius
@@ -348,6 +381,10 @@ class ViewController: NSViewController {
             if i == 3 {
                 layer4Control.state = values == nil ? .off : .on
                 layer4ControlValueChanged()
+            }
+            if i == 4 {
+                layer5Control.state = values == nil ? .off : .on
+                layer5ControlValueChanged()
             }
         }
         // BARREL
@@ -656,6 +693,13 @@ class ViewController: NSViewController {
             let total4 = layerCountFrom(layer4CountField)
             paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3))/2 + layerShiftAngleFrom(layer4ShiftAngleField)
             addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer4EvenAngleField), layerCenter: layerCenter4)
+            // Layer 5
+            if layer5Control.state == .on {
+                let layerCenter5 = layerRadiusFrom(layer5RadiusField)
+                let total5 = layerCountFrom(layer5CountField)
+                paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total4))/2 + layerShiftAngleFrom(layer5ShiftAngleField)
+                addCountersLayerFront(tag: 5, total: total5, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer5EvenAngleField), layerCenter: layerCenter5)
+            }
         }
     }
     

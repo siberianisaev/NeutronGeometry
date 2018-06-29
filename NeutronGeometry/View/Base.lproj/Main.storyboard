@@ -967,7 +967,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11V-0u-PEH">
-                                                    <rect key="frame" x="164" y="672" width="94" height="22"/>
+                                                    <rect key="frame" x="164" y="652" width="94" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="140" drawsBackground="YES" id="zEv-hV-Igw">
                                                         <font key="font" metaFont="system"/>
@@ -976,7 +976,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v7C-8L-Jqw">
-                                                    <rect key="frame" x="162" y="698" width="98" height="17"/>
+                                                    <rect key="frame" x="162" y="678" width="98" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Chamber size" id="DvH-2d-hfB">
                                                         <font key="font" metaFont="system"/>
@@ -985,7 +985,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zcb-Vi-IV6">
-                                                    <rect key="frame" x="164" y="621" width="94" height="22"/>
+                                                    <rect key="frame" x="164" y="601" width="94" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="10" drawsBackground="YES" id="YQS-3N-YY8">
                                                         <font key="font" metaFont="system"/>
@@ -994,7 +994,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y0r-2c-V53">
-                                                    <rect key="frame" x="130" y="647" width="130" height="17"/>
+                                                    <rect key="frame" x="130" y="627" width="130" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Chamber thickness" id="GmM-qP-yxQ">
                                                         <font key="font" metaFont="system"/>
@@ -1003,7 +1003,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uy9-YX-mXb">
-                                                    <rect key="frame" x="20" y="672" width="94" height="22"/>
+                                                    <rect key="frame" x="20" y="652" width="94" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="750" drawsBackground="YES" id="bVT-ol-qGa">
                                                         <font key="font" metaFont="system"/>
@@ -1012,7 +1012,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JSv-Xv-wSt">
-                                                    <rect key="frame" x="18" y="698" width="98" height="17"/>
+                                                    <rect key="frame" x="18" y="678" width="98" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Barrel size" id="a2u-5d-Drm">
                                                         <font key="font" metaFont="system"/>
@@ -1021,7 +1021,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EfO-RT-URn">
-                                                    <rect key="frame" x="20" y="621" width="94" height="22"/>
+                                                    <rect key="frame" x="20" y="601" width="94" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="600" drawsBackground="YES" id="2sR-MJ-1bO">
                                                         <font key="font" metaFont="system"/>
@@ -1030,7 +1030,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lwK-ef-ub9">
-                                                    <rect key="frame" x="18" y="647" width="98" height="17"/>
+                                                    <rect key="frame" x="18" y="627" width="98" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Barrel lenght" id="OnK-Vb-dha">
                                                         <font key="font" metaFont="system"/>
@@ -1207,6 +1207,62 @@
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IeJ-JJ-UXU">
+                                                    <rect key="frame" x="138" y="727" width="37" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="0" drawsBackground="YES" id="yWI-yC-5RB">
+                                                        <font key="font" metaFont="systemLight" size="12"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="agt-x6-5n1">
+                                                    <rect key="frame" x="54" y="727" width="37" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="50" drawsBackground="YES" id="sbA-GO-Ca8">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xkw-k2-OLA">
+                                                    <rect key="frame" x="96" y="727" width="37" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="400" drawsBackground="YES" id="pXa-DS-MWp">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="96r-G2-daQ">
+                                                    <rect key="frame" x="179" y="727" width="37" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="0" drawsBackground="YES" id="6h0-6c-97y">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bBd-vY-kIS">
+                                                    <rect key="frame" x="17" y="729" width="40" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="5" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="D7g-BU-pgd">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="layer5Control:" target="XfG-lQ-9wD" id="jWY-k9-oTd"/>
+                                                    </connections>
+                                                </button>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="04L-vN-A3j">
+                                                    <rect key="frame" x="222" y="727" width="37" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="0" drawsBackground="YES" id="mQH-1K-zEq">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
                                         </customView>
                                     </subviews>
@@ -1252,6 +1308,12 @@
                         <outlet property="layer4EvenAngleField" destination="fni-Fh-1f3" id="TTH-Zy-5qB"/>
                         <outlet property="layer4RadiusField" destination="f2t-OJ-IY7" id="kAt-M4-gmq"/>
                         <outlet property="layer4ShiftAngleField" destination="x9Z-0H-XTb" id="mYa-S3-2iX"/>
+                        <outlet property="layer5Control" destination="bBd-vY-kIS" id="yDA-wn-CXm"/>
+                        <outlet property="layer5CountField" destination="agt-x6-5n1" id="2iF-iN-liu"/>
+                        <outlet property="layer5CountersGapField" destination="IeJ-JJ-UXU" id="d2q-TZ-dW4"/>
+                        <outlet property="layer5EvenAngleField" destination="04L-vN-A3j" id="dJE-t3-7dS"/>
+                        <outlet property="layer5RadiusField" destination="Xkw-k2-OLA" id="Stz-Pz-a6E"/>
+                        <outlet property="layer5ShiftAngleField" destination="96r-G2-daQ" id="YMm-cA-0yS"/>
                         <outlet property="loadButton" destination="3oB-nl-KBI" id="um1-dD-WTE"/>
                         <outlet property="maxTimeField" destination="Jjc-lY-kG1" id="0Y9-XK-G9u"/>
                         <outlet property="saveButton" destination="Wlh-2k-Gar" id="bcg-ej-zai"/>
