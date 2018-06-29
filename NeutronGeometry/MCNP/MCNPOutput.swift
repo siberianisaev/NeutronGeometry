@@ -155,13 +155,17 @@ class MCNPOutput {
                         timesResult.append(timeOutput)
                     }
                     
-                    if line.starts(with: "1tally fluctuation charts") { // Tally start
+                    let chartPrefix = "1tally fluctuation charts"
+                    if line.starts(with: chartPrefix) { // Tally start
                         var tallyLines = [String]()
                         var j = i+2
                         while j < lines.count {
                             let l = lines[j]
                             j += 1
                             if l.contains("***") { // Tally end
+                                tallyLines = tallyLines.filter { (s: String) -> Bool in // 'chartPrefix' sometimes appears between tally tables
+                                    return !s.starts(with: chartPrefix)
+                                }
                                 output.handleTally(tallyLines)
                                 break
                             } else {
