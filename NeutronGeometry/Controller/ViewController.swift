@@ -22,6 +22,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer3CountField: NSTextField!
     @IBOutlet weak var layer4CountField: NSTextField!
     @IBOutlet weak var layer5CountField: NSTextField!
+    @IBOutlet weak var countersCountField: NSTextField!
     @IBOutlet weak var layer1RadiusField: NSTextField!
     @IBOutlet weak var layer2RadiusField: NSTextField!
     @IBOutlet weak var layer3RadiusField: NSTextField!
@@ -704,6 +705,8 @@ class ViewController: NSViewController {
                 addCountersLayerFront(tag: 5, total: total5, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer5EvenAngleField), layerCenter: layerCenter5)
             }
         }
+        
+        countersCountField.integerValue = countersFront.count
     }
     
     fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, evenAngle: CGFloat, layerCenter: CGFloat) {
