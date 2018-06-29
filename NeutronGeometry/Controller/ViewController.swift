@@ -644,6 +644,9 @@ class ViewController: NSViewController {
         var fields = [layer1RadiusField, layer2RadiusField, layer3RadiusField] as [NSTextField]
         if layer4Control.state == .on {
             fields.append(layer4RadiusField)
+            if layer5Control.state == .on {
+                fields.append(layer5RadiusField)
+            }
         }
         for field in fields {
             showCountersSide(field, tag: 1 + fields.index(of: field)!)
