@@ -123,31 +123,36 @@ class MCNPOutput {
                 while i < lines.count {
                     let line = lines[i]
                     if line.starts(with: " cell (") { // Times
-                        let next = lines[i+1]
-                        if next.starts(with: " multiplier bin:") {
-                            let timeOutput = MCNPTimeOutput()
-                            var j = i+2
-                            while j < lines.count {
-                                let arrayTimes = lines[j].replacingOccurrences(of: "time:", with: "").components(separatedBy: CharacterSet.whitespaces).filter { (s: String) -> Bool in
-                                    return !s.isEmpty
-                                } // time headers
-                                let arrayValues = lines[j+1].components(separatedBy: CharacterSet.whitespaces).filter { (s: String) -> Bool in
-                                    return !s.isEmpty
-                                } // A1 B1 A2 B2 ... values
-                                for k in 0...arrayTimes.count-1 {
-                                    let m = 2 * k
-                                    timeOutput.addTime(arrayTimes[k], flux: arrayValues[m], error: arrayValues[m+1])
-                                }
-                                
-                                if lines[j+2].contains("1analysis") { // space line OR end line with info
-                                    break
-                                }
-                                
-                                j += 3
+                        var next = lines[i+1]
+                        while !next.starts(with: " multiplier bin:") {
+                            i += 1
+                            next = lines[i+1]
+                            if i >= lines.count {
+                                break
                             }
-                            i = j
-                            timesResult.append(timeOutput)
                         }
+                        let timeOutput = MCNPTimeOutput()
+                        var j = i+2
+                        while j < lines.count {
+                            let arrayTimes = lines[j].replacingOccurrences(of: "time:", with: "").components(separatedBy: CharacterSet.whitespaces).filter { (s: String) -> Bool in
+                                return !s.isEmpty
+                            } // time headers
+                            let arrayValues = lines[j+1].components(separatedBy: CharacterSet.whitespaces).filter { (s: String) -> Bool in
+                                return !s.isEmpty
+                            } // A1 B1 A2 B2 ... values
+                            for k in 0...arrayTimes.count-1 {
+                                let m = 2 * k
+                                timeOutput.addTime(arrayTimes[k], flux: arrayValues[m], error: arrayValues[m+1])
+                            }
+                            
+                            if lines[j+2].contains("1analysis") { // space line OR end line with info
+                                break
+                            }
+                            
+                            j += 3
+                        }
+                        i = j
+                        timesResult.append(timeOutput)
                     }
                     
                     if line.starts(with: "1tally fluctuation charts") { // Tally start
