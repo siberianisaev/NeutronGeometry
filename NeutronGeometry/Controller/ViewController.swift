@@ -164,9 +164,11 @@ class ViewController: NSViewController {
         layer6CountersGapField.isHidden = !isOn
     }
     
+    fileprivate let maxLayersCount: Int = 6
+    
     fileprivate func showCountersGap() {
         let layers = counterLayers()
-        for i in 0...5 {
+        for i in 0...maxLayersCount-1 {
             var result: Int = 0
             if i < layers.count {
                 let layer =  layers[i]
@@ -194,8 +196,10 @@ class ViewController: NSViewController {
                 textField = layer4CountersGapField
             case 4:
                 textField = layer5CountersGapField
-            default:
+            case 5:
                 textField = layer6CountersGapField
+            default:
+                break
             }
             textField?.integerValue = result
             textField?.textColor = result > 0 ? NSColor.darkGray : NSColor.red
@@ -366,7 +370,7 @@ class ViewController: NSViewController {
         
         // LAYERS INFO
         var countersCount = 0
-        for i in 0...4 {
+        for i in 0...maxLayersCount-1 {
             let values = dict[keyLayer(i+1)]
             if let values = values, let count = preferenceIntFor(key: keyCount, preferences: values), let radius = preferenceIntFor(key: keyRadius, preferences: values) {
                 countersCount += count
@@ -401,11 +405,13 @@ class ViewController: NSViewController {
                     radiusField = layer5RadiusField
                     angleField = layer5ShiftAngleField
                     evenAngleField = layer5EvenAngleField
-                default:
+                case 5:
                     countField = layer6CountField
                     radiusField = layer6RadiusField
                     angleField = layer6ShiftAngleField
                     evenAngleField = layer6EvenAngleField
+                default:
+                    break
                 }
                 countField?.integerValue = count
                 radiusField?.integerValue = radius
