@@ -292,7 +292,7 @@ class ViewController: NSViewController {
         }
         // LAYERS INFO
         for i in 0..<layerCountFields.count {
-            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.integerValue) \(keyEven)=\(layerEvenAngleFields[i]!.stringValue)")
+            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.stringValue) \(keyEven)=\(layerEvenAngleFields[i]!.stringValue)")
         }
         // COUNTERS
         for counter in countersFront {
@@ -415,7 +415,7 @@ class ViewController: NSViewController {
                 }
                 countField?.integerValue = count
                 radiusField?.integerValue = radius
-                angleField?.integerValue = preferenceIntFor(key: keyAngle, preferences: values) ?? 0
+                angleField?.stringValue = preferenceStringFor(key: keyAngle, preferences: values) ?? "0"
                 evenAngleField?.stringValue = preferenceStringFor(key: keyEven, preferences: values) ?? "0"
             }
             if i == 3 {
