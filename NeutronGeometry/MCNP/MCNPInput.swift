@@ -51,13 +51,13 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shild: Shild) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
-10000 0 5 imp:n=0 $ Space Outside Barrel
+10000 0 5 imp:n=0 $ Space Outside Moderator
 10001 0 -1 -5 imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
@@ -102,7 +102,7 @@ c ==== CELLS =====
         \(excludedIdsString)
         imp:n=1
 """
-        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, barrelSize: barrelSize, barrelLenght: barrelLenght)
+        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
         result += materialsCard()
@@ -149,7 +149,7 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, barrelSize: Float, barrelLenght: Float) -> String {
+    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float) -> String {
         let counterSurfaces = counters.values.sorted { (c1: Counter, c2: Counter) -> Bool in // Sorting is important there, see Counter -convertSurfaceId() method implementation
             return c1.type.rawValue < c2.type.rawValue
             }.map { (c: Counter) -> String in
@@ -157,9 +157,9 @@ c ==== CELLS =====
             }.joined(separator: "\n")
         return """
         \n\nc ==== Surfaces ====
-        1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-barrelLenght/2) \(barrelLenght/2) $ Internal Surface of Vacuum Chamber
-        2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-barrelLenght/2) \(barrelLenght/2) $ External Surface of Vacuum Chamber
-        5 RPP \(-barrelSize/2) \(barrelSize/2) \(-barrelSize/2) \(barrelSize/2) \(-barrelLenght/2) \(barrelLenght/2) $ Border of Geometry (Barrel Size)
+        1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ Internal Surface of Vacuum Chamber
+        2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Vacuum Chamber
+        5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ Border of Geometry (Moderator Size)
         \(counterSurfaces)
         """
     }

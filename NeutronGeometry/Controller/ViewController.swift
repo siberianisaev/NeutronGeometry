@@ -48,10 +48,13 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer4EvenAngleField: NSTextField!
     @IBOutlet weak var layer5EvenAngleField: NSTextField!
     @IBOutlet weak var layer6EvenAngleField: NSTextField!
+    @IBOutlet weak var shildThicknessX: NSTextField!
+    @IBOutlet weak var shildThicknessY: NSTextField!
+    @IBOutlet weak var shildBoronPercent: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
-    @IBOutlet weak var barrelSizeField: NSTextField!
-    @IBOutlet weak var barrelLenghtField: NSTextField!
+    @IBOutlet weak var moderatorSizeField: NSTextField!
+    @IBOutlet weak var moderatorLenghtField: NSTextField!
     @IBOutlet weak var sourcePositionField: NSTextField!
     @IBOutlet weak var updateButton: NSButton!
     @IBOutlet weak var saveButton: NSButton!
@@ -83,11 +86,14 @@ class ViewController: NSViewController {
     fileprivate var countersFront = [CounterFrontView]()
     fileprivate var countersSide = [NSView]()
     
+    fileprivate weak var moderatorFrontView: NSView?
+    fileprivate weak var moderatorSideView: NSView?
+    
+    fileprivate weak var shildFrontView: NSView?
+    fileprivate weak var shildSideView: NSView?
+    
     fileprivate weak var chamberFrontView: ChamberView?
     fileprivate weak var chamberSideView: ChamberView?
-    
-    fileprivate weak var barrelFrontView: NSView?
-    fileprivate weak var barrelSideView: NSView?
     
     fileprivate var types = [Int: CounterType]()
     
@@ -208,10 +214,12 @@ class ViewController: NSViewController {
     
     @IBAction func updateButton(_ sender: Any?) {
         setupProjections()
-        showBarrelFront()
+        showShild(.front)
+        showModerator(.front)
         showChamberFront()
         showCountersFront()
-        showBarrelSide()
+        showShild(.side)
+        showModerator(.side)
         showChamberSide()
         showCountersSide()
         showCountersGap()
@@ -247,7 +255,7 @@ class ViewController: NSViewController {
         return "COUNTER_\(value)"
     }
     fileprivate let keyCount = "COUNT"
-    fileprivate let keyBarrel = "BARREL"
+    fileprivate let keyModerator = "BARREL"
     fileprivate let keyChamber = "CHAMBER"
     fileprivate let keyGrid = "GRID"
     fileprivate let keyStep = "STEP"
@@ -256,8 +264,8 @@ class ViewController: NSViewController {
     fileprivate let keyType = "TYPE"
     fileprivate let keyPresure = "PRESURE"
     fileprivate let keyThickness = "THICKNESS"
-    fileprivate let keyCenterX = "X"
-    fileprivate let keyCenterY = "Y"
+    fileprivate let keyX = "X"
+    fileprivate let keyY = "Y"
     fileprivate let keySource = "SOURCE"
     fileprivate let keyZ = "Z"
     fileprivate let keyValue = "VALUE"
@@ -265,6 +273,8 @@ class ViewController: NSViewController {
     fileprivate let keyIsotope = "ISOTOPE"
     fileprivate let keyAngle = "ANGLE"
     fileprivate let keyEven = "EVEN_COUNTER_SHIFT_ANGLE"
+    fileprivate let keyPercent = "PERCENT"
+    fileprivate let keyShild = "SHILD"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -297,10 +307,10 @@ class ViewController: NSViewController {
         // COUNTERS
         for counter in countersFront {
             let center = counter.center()
-            strings.append(keyCounter(counter.index+1) + " \(keyCenterX)=\(center.x) \(keyCenterY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
+            strings.append(keyCounter(counter.index+1) + " \(keyX)=\(center.x) \(keyY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
         }
-        // BARREL
-        strings.append(keyBarrel + " \(keySize)=\(barrelSizeField.integerValue) \(keyLenght)=\(barrelLenghtField.integerValue)")
+        // MODERATOR
+        strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
         // CHAMBER
         strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
         // GRID
@@ -309,6 +319,8 @@ class ViewController: NSViewController {
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         // SOURCE
         strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
+        // SHILD
+        strings.append(keyShild + " \(keyThickness)\(keyX)=\(shildThicknessX.integerValue) \(keyThickness)\(keyY)=\(shildThicknessY.integerValue) \(keyPercent)=\(shildBoronPercent.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -431,10 +443,10 @@ class ViewController: NSViewController {
                 layer6ControlValueChanged()
             }
         }
-        // BARREL
-        if let values = dict[keyBarrel], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
-            barrelSizeField.integerValue = size
-            barrelLenghtField.integerValue = lenght
+        // MODERATOR
+        if let values = dict[keyModerator], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
+            moderatorSizeField.integerValue = size
+            moderatorLenghtField.integerValue = lenght
         }
         // CHAMBER
         if let values = dict[keyChamber], let size = preferenceIntFor(key: keySize, preferences: values), let thickness = preferenceIntFor(key: keyThickness, preferences: values) {
@@ -460,6 +472,12 @@ class ViewController: NSViewController {
             if let i = preferenceIntFor(key: keyIsotope, preferences: values), let si = SourceIsotope(rawValue: i) {
                 sourceIsotope = si
             }
+        }
+        // SHILD
+        if let values = dict[keyShild], let x = preferenceIntFor(key: keyThickness + keyX, preferences: values), let y = preferenceIntFor(key: keyThickness + keyY, preferences: values), let p = preferenceIntFor(key: keyPercent, preferences: values) {
+            shildThicknessX.integerValue = x
+            shildThicknessY.integerValue = y
+            shildBoronPercent.integerValue = p
         }
         
         // UPDATE GEOMETRY
@@ -517,22 +535,24 @@ class ViewController: NSViewController {
         
         let chamberSize = chamberSizeField.floatValue/10
         let chamberThinkness = chamberThicknessField.floatValue/10
-        let barrelSize = barrelSizeField.floatValue/10
-        let barrelLenght = barrelLenghtField.floatValue/10
+        let moderatorSize = moderatorSizeField.floatValue/10
+        let moderatorLenght = moderatorLenghtField.floatValue/10
         let sourcePositionZ = sourcePositionField.floatValue/10
+        let shild = Shild(thiknessX: shildThicknessX.floatValue/10, thiknessY: shildThicknessY.floatValue/10, boronPercent: shildBoronPercent.floatValue)
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
-        print("Barrel size: \(barrelSize) cm")
-        print("Barrel lenght: \(barrelLenght) cm")
+        print("Moderator size: \(moderatorSize) cm")
+        print("Moderator lenght: \(moderatorLenght) cm")
         print("Source position Z: \(sourcePositionZ) cm")
         print("Source type: \(sourceType.name)")
         print("Source isotope: \(sourceIsotope.name)")
+        print("Shild: \(shild)")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), barrelSize: barrelSize, barrelLenght: barrelLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shild: shild)
         print(result)
         
         // Files
@@ -595,33 +615,44 @@ class ViewController: NSViewController {
         return projection == .front ? frontView : sideView
     }
     
-    fileprivate func showBarrel(_ projection: Projection) {
+    fileprivate func shildWidth(_ projection: Projection) -> CGFloat {
+        return CGFloat((projection == .front ? moderatorSizeField : moderatorLenghtField)!.floatValue + 2 * shildThicknessX.floatValue)
+    }
+    
+    fileprivate func showShild(_ projection: Projection) {
         let isFront = projection == .front
-        (isFront ? barrelFrontView : barrelSideView)?.removeFromSuperview()
-        let width = CGFloat((isFront ? barrelSizeField : barrelLenghtField)!.floatValue)
-        let height = CGFloat(barrelSizeField.floatValue)
+        (isFront ? shildFrontView : shildSideView)?.removeFromSuperview()
+        let width = shildWidth(projection)
+        let height = CGFloat(moderatorSizeField.floatValue + 2 * shildThicknessY.floatValue)
         let container = containerFor(projection)
         let containerSize = container.frame.size
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
-        let barrel = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
-        barrel.wantsLayer = true
-        barrel.layer?.backgroundColor = NSColor.darkGray.cgColor
-        container.addSubview(barrel)
-        isFront ? (barrelFrontView = barrel) : (barrelSideView = barrel)
+        let shild = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+        shild.wantsLayer = true
+        shild.layer?.backgroundColor = NSColor(calibratedRed: 0, green: 0, blue: 63.0/255.0, alpha: 1.0).cgColor
+        container.addSubview(shild)
+        isFront ? (shildFrontView = shild) : (shildSideView = shild)
     }
     
-    fileprivate func showBarrelSide() {
-        showBarrel(.side)
-    }
-    
-    fileprivate func showBarrelFront() {
-        showBarrel(.front)
+    fileprivate func showModerator(_ projection: Projection) {
+        let isFront = projection == .front
+        (isFront ? moderatorFrontView : moderatorSideView)?.removeFromSuperview()
+        let width = CGFloat((isFront ? moderatorSizeField : moderatorLenghtField)!.floatValue)
+        let height = CGFloat(moderatorSizeField.floatValue)
+        let container = containerFor(projection)
+        let containerSize = container.frame.size
+        let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
+        let moderator = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+        moderator.wantsLayer = true
+        moderator.layer?.backgroundColor = NSColor.darkGray.cgColor
+        container.addSubview(moderator)
+        isFront ? (moderatorFrontView = moderator) : (moderatorSideView = moderator)
     }
     
     fileprivate func showChamber(_ projection: Projection) {
         let isFront = projection == .front
         (isFront ? chamberFrontView : chamberSideView)?.removeFromSuperview()
-        let width = isFront ? CGFloat(chamberSizeField.floatValue) : CGFloat(barrelLenghtField.floatValue)
+        let width = isFront ? CGFloat(chamberSizeField.floatValue) : shildWidth(projection)
         let height = CGFloat(chamberSizeField.floatValue)
         let container = containerFor(projection)
         let containerSize = container.frame.size
