@@ -1099,7 +1099,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="158"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                                 <collectionViewFlowLayout key="collectionViewLayout" id="7eT-gv-rxv">
-                                                                    <size key="itemSize" width="255" height="40"/>
+                                                                    <size key="itemSize" width="255" height="30"/>
                                                                 </collectionViewFlowLayout>
                                                                 <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </collectionView>
@@ -1111,7 +1111,7 @@
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1mw-Zn-DIu">
-                                                        <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                                        <rect key="frame" x="-14" y="1" width="15" height="0.0"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>

@@ -30,7 +30,7 @@ class CountersLayerViewItem: NSCollectionViewItem {
         super.viewDidLoad()
         
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.yellow.cgColor
+        view.layer?.backgroundColor = NSColor.clear.cgColor
     }
     
 }

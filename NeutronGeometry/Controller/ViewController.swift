@@ -49,10 +49,7 @@ class ViewController: NSViewController {
                 dataSource.removeLast()
             }
         } else {
-            let layer = CountersLayer()
-            layer.tag = value - 1
-            // TODO: !!!
-            
+            let layer = CountersLayer(tag: value)
             dataSource.append(layer)
         }
         layersCountField.integerValue = value
@@ -120,35 +117,34 @@ class ViewController: NSViewController {
         }
     }
     
-    fileprivate var countersGap = [Int: Float]()
+    fileprivate var countersGap = [Float]() {
+        didSet {
+            layersCollectionView?.reloadData()
+        }
+    }
     
     fileprivate func calculateCountersGap() {
         countersGap.removeAll()
         let layers = counterLayers()
-//        for i in 0...layersCountField.integerValue-1 {
-//            var result: Float = 0
-//            if i < layers.count {
-//                let layer =  layers[i]
-//                if layer.count > 1 {
-//                    let counter1 = layer[0]
-//                    let counter2 = layer[1]
-//                    let p1 = counter1.center()
-//                    let p2 = counter2.center()
-//                    let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
-//                    let type1 = counter1.type
-//                    let type2 = counter2.type
-//                    let deltaRadius = (Counter(type: type1).radius - Counter(type: type2).radius) * 10
-//                    result = roundf(Float(distance) - deltaRadius)
-//                }
-//            }
-//            countersGap[i] = result
-//        }
+        for layer in layers {
+            var result: Float = 0
+            if layer.count > 1 {
+                let counter1 = layer[0]
+                let counter2 = layer[1]
+                let p1 = counter1.center()
+                let p2 = counter2.center()
+                let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
+                let type1 = counter1.type
+                let type2 = counter2.type
+                let deltaRadius = (Counter(type: type1).radius - Counter(type: type2).radius) * 10
+                result = roundf(Float(distance) - deltaRadius)
+            }
+            countersGap.append(result)
+        }
     }
     
     @IBAction func updateButton(_ sender: Any?) {
-        // TODO:
         layersCollectionView.reloadData()
-        
         setupProjections()
         showShield(.front)
         showModerator(.front)
@@ -158,12 +154,11 @@ class ViewController: NSViewController {
         showModerator(.side)
         showChamberSide()
         showCountersSide()
-        calculateCountersGap()
         showSource()
+        countersCountField.integerValue = dataSource.map({ (cl: CountersLayer) -> Int in
+            return cl.count
+        }).reduce(0, +)
         storeLastGeometryToDefaults()
-        
-        // TODO:
-        layersCollectionView.reloadData()
     }
     
     fileprivate func showSource() {
@@ -217,49 +212,28 @@ class ViewController: NSViewController {
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
-//        var layerCountFields = [layer1CountField, layer2CountField, layer3CountField]
-//        var layerAnglesFields = [layer1ShiftAngleField, layer2ShiftAngleField, layer3ShiftAngleField]
-//        var layerEvenAngleFields = [layer1EvenAngleField, layer2EvenAngleField, layer3EvenAngleField]
-//        var layerRadiusFields = [layer1RadiusField, layer2RadiusField, layer3RadiusField]
-//        if layer4Control.state == .on {
-//            layerCountFields.append(layer4CountField)
-//            layerAnglesFields.append(layer4ShiftAngleField)
-//            layerEvenAngleFields.append(layer4EvenAngleField)
-//            layerRadiusFields.append(layer4RadiusField)
-//            if layer5Control.state == .on {
-//                layerCountFields.append(layer5CountField)
-//                layerAnglesFields.append(layer5ShiftAngleField)
-//                layerEvenAngleFields.append(layer5EvenAngleField)
-//                layerRadiusFields.append(layer5RadiusField)
-//                if layer6Control.state == .on {
-//                    layerCountFields.append(layer6CountField)
-//                    layerAnglesFields.append(layer6ShiftAngleField)
-//                    layerEvenAngleFields.append(layer6EvenAngleField)
-//                    layerRadiusFields.append(layer6RadiusField)
-//                }
-//            }
-//        }
-//        // LAYERS INFO
-//        for i in 0..<layerCountFields.count {
-//            strings.append(keyLayer(i+1) + " \(keyRadius)=\(layerRadiusFields[i]!.integerValue) \(keyCount)=\(layerCountFields[i]!.integerValue) \(keyAngle)=\(layerAnglesFields[i]!.stringValue) \(keyEven)=\(layerEvenAngleFields[i]!.stringValue)")
-//        }
-//        // COUNTERS
-//        for counter in countersFront {
-//            let center = counter.center()
-//            strings.append(keyCounter(counter.index+1) + " \(keyX)=\(center.x) \(keyY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
-//        }
-//        // MODERATOR
-//        strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
-//        // CHAMBER
-//        strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
-//        // GRID
-//        strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
-//        // MAX TIME
-//        strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
-//        // SOURCE
-//        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
-//        // SHILD
-//        strings.append(keyShield + " \(keyThickness)\(keyX)=\(shieldThicknessX.integerValue) \(keyThickness)\(keyY)=\(shieldThicknessY.integerValue) \(keyPercent)=\(shieldBoronPercent.integerValue)")
+        // LAYERS INFO
+        for cl in dataSource {
+            let tag = cl.tag
+            strings.append(keyLayer(tag) + " \(keyRadius)=\(cl.radius) \(keyCount)=\(cl.count) \(keyAngle)=\(cl.shiftAngle) \(keyEven)=\(cl.evenAngle)")
+        }
+        // COUNTERS
+        for counter in countersFront {
+            let center = counter.center()
+            strings.append(keyCounter(counter.index+1) + " \(keyX)=\(center.x) \(keyY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
+        }
+        // MODERATOR
+        strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
+        // CHAMBER
+        strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
+        // GRID
+        strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
+        // MAX TIME
+        strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
+        // SOURCE
+        strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
+        // SHILD
+        strings.append(keyShield + " \(keyThickness)\(keyX)=\(shieldThicknessX.integerValue) \(keyThickness)\(keyY)=\(shieldThicknessY.integerValue) \(keyPercent)=\(shieldBoronPercent.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -515,6 +489,8 @@ class ViewController: NSViewController {
         layersCollectionView.register(CountersLayerViewItem.nib, forItemWithIdentifier: CountersLayerViewItem.identifier)
         layersCollectionView.delegate = self
         layersCollectionView.dataSource = self
+        layersCollectionView.wantsLayer = true
+        layersCollectionView.layer?.backgroundColor = NSColor.clear.cgColor
         
         NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: OperationQueue.main) { [weak self] (note: Notification) in
             self?.storeLastGeometryToDefaults()
@@ -613,8 +589,9 @@ class ViewController: NSViewController {
         showChamber(.front)
     }
     
-    fileprivate func showCountersSide(_ raduisField: NSTextField, tag: Int) {
-        let layerCenter = layerRadiusFrom(raduisField)
+    fileprivate func showCountersSide(_ countersLayer: CountersLayer) {
+        let layerCenter = CGFloat(countersLayer.radius)
+        let tag = countersLayer.tag
         let type: CounterType = countersForLayerTag(tag).first?.type ?? defaultCounterTypeForTag(tag)
         let counter = Counter(type: type)
         let width = CGFloat(counter.lenght * 10)
@@ -659,19 +636,9 @@ class ViewController: NSViewController {
         }
         countersSide.removeAll()
         
-//        var fields = [layer1RadiusField, layer2RadiusField, layer3RadiusField] as [NSTextField]
-//        if layer4Control.state == .on {
-//            fields.append(layer4RadiusField)
-//            if layer5Control.state == .on {
-//                fields.append(layer5RadiusField)
-//                if layer6Control.state == .on {
-//                    fields.append(layer6RadiusField)
-//                }
-//            }
-//        }
-//        for field in fields {
-//            showCountersSide(field, tag: 1 + fields.index(of: field)!)
-//        }
+        for cl in dataSource {
+            showCountersSide(cl)
+        }
     }
     
     fileprivate func layerRadiusFrom(_ textField: NSTextField) -> CGFloat {
@@ -696,45 +663,19 @@ class ViewController: NSViewController {
         }
         countersFront.removeAll()
         
+        var paddingAngle: CGFloat = 0
+        var total: Int?
+        for cl in dataSource {
+            let layerCenter = CGFloat(cl.radius)
+            paddingAngle += CGFloat(cl.shiftAngle) // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
+            if let total = total { // start do this from second layer
+                paddingAngle += (CGFloat.pi * 2/CGFloat(total))/2
+            }
+            total = cl.count
+            addCountersLayerFront(tag: cl.tag, total: total!, paddingAngle: paddingAngle, evenAngle: CGFloat(cl.evenAngle), layerCenter: layerCenter)
+        }
         
-//        // Layer 1
-//        let layerCenter1 = layerRadiusFrom(layer1RadiusField)
-//        let total1 = layerCountFrom(layer1CountField)
-//        var paddingAngle: CGFloat = layerShiftAngleFrom(layer1ShiftAngleField) // Смещение угла относительно предыдущего ряда счетчиков (нужно по-максимуму закрыть промежутки между счетчиками чтобы увеличить эффективность)
-//        addCountersLayerFront(tag: 1, total: total1, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer1EvenAngleField), layerCenter: layerCenter1)
-//        // Layer 2
-//        let layerCenter2 = layerRadiusFrom(layer2RadiusField)
-//        let total2 = layerCountFrom(layer2CountField)
-//        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total1))/2 + layerShiftAngleFrom(layer2ShiftAngleField)
-//        addCountersLayerFront(tag: 2, total: total2, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer2EvenAngleField), layerCenter: layerCenter2)
-//        // Layer 3
-//        let layerCenter3 = layerRadiusFrom(layer3RadiusField)
-//        let total3 = layerCountFrom(layer3CountField)
-//        paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total2))/2 + layerShiftAngleFrom(layer3ShiftAngleField)
-//        addCountersLayerFront(tag: 3, total: total3, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer3EvenAngleField), layerCenter: layerCenter3)
-//        // Layer 4
-//        if layer4Control.state == .on {
-//            let layerCenter4 = layerRadiusFrom(layer4RadiusField)
-//            let total4 = layerCountFrom(layer4CountField)
-//            paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total3))/2 + layerShiftAngleFrom(layer4ShiftAngleField)
-//            addCountersLayerFront(tag: 4, total: total4, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer4EvenAngleField), layerCenter: layerCenter4)
-//            // Layer 5
-//            if layer5Control.state == .on {
-//                let layerCenter5 = layerRadiusFrom(layer5RadiusField)
-//                let total5 = layerCountFrom(layer5CountField)
-//                paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total4))/2 + layerShiftAngleFrom(layer5ShiftAngleField)
-//                addCountersLayerFront(tag: 5, total: total5, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer5EvenAngleField), layerCenter: layerCenter5)
-//                // Layer 6
-//                if layer6Control.state == .on {
-//                    let layerCenter6 = layerRadiusFrom(layer6RadiusField)
-//                    let total6 = layerCountFrom(layer6CountField)
-//                    paddingAngle += (CGFloat.pi * 2 * CGFloat(1)/CGFloat(total5))/2 + layerShiftAngleFrom(layer6ShiftAngleField)
-//                    addCountersLayerFront(tag: 6, total: total6, paddingAngle: paddingAngle, evenAngle: layerEvenAngleFrom(layer6EvenAngleField), layerCenter: layerCenter6)
-//                }
-//            }
-//        }
-        
-        countersCountField.integerValue = countersFront.count
+        calculateCountersGap()
     }
     
     fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, evenAngle: CGFloat, layerCenter: CGFloat) {
@@ -780,6 +721,32 @@ class ViewController: NSViewController {
 
 }
 
+extension ViewController: NSTextFieldDelegate {
+    
+    override func controlTextDidChange(_ note: Notification) {
+        if let tf = note.object as? NSTextField {
+            let row = tf.tag - 1
+            if row >= 0, row < dataSource.count {
+                let layer = dataSource[row]
+                let item = layersCollectionView.item(at: IndexPath(item: row, section: 0)) as! CountersLayerViewItem
+                switch tf {
+                case item.countField:
+                    layer.count = tf.integerValue
+                case item.radiusField:
+                    layer.radius = tf.floatValue
+                case item.shiftAngleField:
+                    layer.shiftAngle = tf.floatValue
+                case item.evenAngleField:
+                    layer.evenAngle = tf.floatValue
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+}
+
 extension ViewController: NSCollectionViewDataSource, NSCollectionViewDelegate, NSCollectionViewDelegateFlowLayout {
     
     public func numberOfSections(in collectionView: NSCollectionView) -> Int {
@@ -787,16 +754,26 @@ extension ViewController: NSCollectionViewDataSource, NSCollectionViewDelegate, 
     }
     
     public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        return layersCountField.integerValue
+        return dataSource.count
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: CountersLayerViewItem.identifier, for: indexPath) as! CountersLayerViewItem
         let row = indexPath.item
         let layer = dataSource[row]
-        item.nameField.integerValue = layer.tag + 1
+        item.nameField.integerValue = layer.tag
+        item.countField.integerValue = layer.count
+        // TODO: temporary was made integer
+        item.radiusField.integerValue = Int(layer.radius)
+        item.shiftAngleField.stringValue = String(layer.shiftAngle)
+        item.evenAngleField.stringValue = String(layer.evenAngle)
+        for tf in [item.countField, item.radiusField, item.shiftAngleField, item.evenAngleField] {
+            tf?.tag = layer.tag
+            tf?.delegate = self
+        }
         // TODO: get gap from layer
-        let gap = countersGap[layer.tag] ?? 0
+        let gaps = countersGap
+        let gap = row < gaps.count ? countersGap[row] : 0
         item.gapField.floatValue = gap
         item.gapField.textColor = gap > 0 ? NSColor.darkGray : NSColor.red
         return item
