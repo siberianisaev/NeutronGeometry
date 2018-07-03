@@ -93,12 +93,12 @@ class ViewController: NSViewController {
     
     fileprivate func defaultCounterTypeForTag(_ tag: Int) -> CounterType {
         switch tag {
-        case 1:
+        case 1, 2:
             return .atm7New
-        case 4, 5, 6:
-            return .atm4
-        default:
+        case 3...5:
             return .atm7Old
+        default:
+            return .atm4
         }
     }
     
@@ -359,24 +359,24 @@ class ViewController: NSViewController {
             
         // COUNTERS
         // We update only presure there. Counter center point will be automaticly set after geometry re-drawing.
-//        if countersCount > 0 {
-//            for i in 0..<countersCount {
-//                if let values = dict[keyCounter(i+1)], let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
-//                    types[i] = type
-//                } else if let values = dict[keyCounter(i+1)], let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
-//                    switch p {
-//                    case 4:
-//                        types[i] = .atm4
-//                    case 7:
-//                        types[i] = .atm7Old
-//                    default:
-//                        break
-//                    }
-//                }
-//            }
-//            showCountersFront()
-//            showCountersSide()
-//        }
+        if countersCount > 0 {
+            for i in 0..<countersCount {
+                if let values = dict[keyCounter(i+1)], let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
+                    types[i] = type
+                } else if let values = dict[keyCounter(i+1)], let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
+                    switch p {
+                    case 4:
+                        types[i] = .atm4
+                    case 7:
+                        types[i] = .atm7Old
+                    default:
+                        break
+                    }
+                }
+            }
+            showCountersFront()
+            showCountersSide()
+        }
     }
     
     fileprivate func counterLayers() -> [[CounterFrontView]] {
@@ -724,7 +724,6 @@ extension ViewController: NSCollectionViewDataSource, NSCollectionViewDelegate, 
         let layer = dataSource[row]
         item.nameField.integerValue = layer.tag
         item.countField.integerValue = layer.count
-        // TODO: temporary was made integer
         item.radiusField.integerValue = Int(layer.radius)
         item.shiftAngleField.stringValue = String(layer.shiftAngle)
         item.evenAngleField.stringValue = String(layer.evenAngle)
