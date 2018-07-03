@@ -109,7 +109,7 @@ c ==== CELLS =====
         result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
-        result += materialsCard()
+        result += materialsCard(shield: shield)
         result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
         result += controlCard(maxTime: maxTime)
@@ -177,16 +177,14 @@ c ==== CELLS =====
         """
     }
     
-    // TODO: use boron percent from Shield. Also modify Ro in Shield cell!
-    fileprivate func materialsCard() -> String {
+    fileprivate func materialsCard(shield: Shield) -> String {
         return """
         \nc ---------------- MATERIALS ------------
         M1 6000.60c 1 1001.60c 2 $ Polyethylene
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
-              29000.50c -0.01 $ Stainless Steel
+           29000.50c -0.01 $ Stainless Steel
         M3 2003.60c 1 $ He-3
-        c Borided (5% weight) Polyethylene, Ro=0.94
-        M4 6000.60c -0.8143 1001.60c -0.1357 5010.60c -0.00990 5011.60c -0.04010
+        \(shield.materialCard(index: 4))
         """
     }
     
