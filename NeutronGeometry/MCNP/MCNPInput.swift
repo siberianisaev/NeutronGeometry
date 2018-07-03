@@ -163,8 +163,8 @@ c ==== CELLS =====
         let shieldX = (moderatorLenght + shield.thiknessX)/2
         return """
         \n\nc ==== Surfaces ====
-        1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ Internal Surface of Vacuum Chamber
-        2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Vacuum Chamber
+        1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-shieldX) \(shieldX) $ Internal Surface of Vacuum Chamber
+        2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-shieldX) \(shieldX) $ External Surface of Vacuum Chamber
         5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Moderator
         6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of Geometry (Shield Size)
         \(counterSurfaces)
