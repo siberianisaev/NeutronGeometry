@@ -57,7 +57,7 @@ class MCNPInput {
         var result = """
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
-10000 0 5 imp:n=0 $ Space Outside Moderator
+10000 0 6 imp:n=0 $ Space Outside Shield
 10001 0 -1 -5 imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
@@ -97,12 +97,16 @@ c ==== CELLS =====
             excludedIdsString += id
         }
         result += """
-\nc ----- Lattice of Detectors (Moderator cell) ------------
+\nc ----- Moderator ------------
 10003 1 -0.92 2 -5
         \(excludedIdsString)
         imp:n=1
 """
-        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght)
+        result += """
+\nc ----- Shield ------------
+10004 4 -0.94 5 -6 imp:n=1
+"""
+        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
         result += materialsCard()
@@ -149,17 +153,20 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float) -> String {
+    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, shield: Shield) -> String {
         let counterSurfaces = counters.values.sorted { (c1: Counter, c2: Counter) -> Bool in // Sorting is important there, see Counter -convertSurfaceId() method implementation
             return c1.type.rawValue < c2.type.rawValue
             }.map { (c: Counter) -> String in
                 return c.mcnpSurfaces()
             }.joined(separator: "\n")
+        let shieldY = (moderatorSize + shield.thiknessY)/2
+        let shieldX = (moderatorLenght + shield.thiknessX)/2
         return """
         \n\nc ==== Surfaces ====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Vacuum Chamber
-        5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ Border of Geometry (Moderator Size)
+        5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Moderator
+        6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of Geometry (Shield Size)
         \(counterSurfaces)
         """
     }
@@ -170,6 +177,7 @@ c ==== CELLS =====
         """
     }
     
+    // TODO: use boron percent from Shield. Also modify Ro in Shield cell!
     fileprivate func materialsCard() -> String {
         return """
         \nc ---------------- MATERIALS ------------
@@ -177,6 +185,8 @@ c ==== CELLS =====
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
               29000.50c -0.01 $ Stainless Steel
         M3 2003.60c 1 $ He-3
+        c Borided (5% weight) Polyethylene, Ro=0.94
+        M4 6000.60c -0.8143 1001.60c -0.1357 5010.60c -0.00990 5011.60c -0.04010
         """
     }
     
