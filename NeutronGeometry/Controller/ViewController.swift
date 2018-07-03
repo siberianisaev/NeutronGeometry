@@ -48,9 +48,9 @@ class ViewController: NSViewController {
     @IBOutlet weak var layer4EvenAngleField: NSTextField!
     @IBOutlet weak var layer5EvenAngleField: NSTextField!
     @IBOutlet weak var layer6EvenAngleField: NSTextField!
-    @IBOutlet weak var shildThicknessX: NSTextField!
-    @IBOutlet weak var shildThicknessY: NSTextField!
-    @IBOutlet weak var shildBoronPercent: NSTextField!
+    @IBOutlet weak var shieldThicknessX: NSTextField!
+    @IBOutlet weak var shieldThicknessY: NSTextField!
+    @IBOutlet weak var shieldBoronPercent: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var moderatorSizeField: NSTextField!
@@ -89,8 +89,8 @@ class ViewController: NSViewController {
     fileprivate weak var moderatorFrontView: NSView?
     fileprivate weak var moderatorSideView: NSView?
     
-    fileprivate weak var shildFrontView: NSView?
-    fileprivate weak var shildSideView: NSView?
+    fileprivate weak var shieldFrontView: NSView?
+    fileprivate weak var shieldSideView: NSView?
     
     fileprivate weak var chamberFrontView: ChamberView?
     fileprivate weak var chamberSideView: ChamberView?
@@ -214,11 +214,11 @@ class ViewController: NSViewController {
     
     @IBAction func updateButton(_ sender: Any?) {
         setupProjections()
-        showShild(.front)
+        showShield(.front)
         showModerator(.front)
         showChamberFront()
         showCountersFront()
-        showShild(.side)
+        showShield(.side)
         showModerator(.side)
         showChamberSide()
         showCountersSide()
@@ -274,7 +274,7 @@ class ViewController: NSViewController {
     fileprivate let keyAngle = "ANGLE"
     fileprivate let keyEven = "EVEN_COUNTER_SHIFT_ANGLE"
     fileprivate let keyPercent = "PERCENT"
-    fileprivate let keyShild = "SHILD"
+    fileprivate let keyShield = "SHILD"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -320,7 +320,7 @@ class ViewController: NSViewController {
         // SOURCE
         strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
         // SHILD
-        strings.append(keyShild + " \(keyThickness)\(keyX)=\(shildThicknessX.integerValue) \(keyThickness)\(keyY)=\(shildThicknessY.integerValue) \(keyPercent)=\(shildBoronPercent.integerValue)")
+        strings.append(keyShield + " \(keyThickness)\(keyX)=\(shieldThicknessX.integerValue) \(keyThickness)\(keyY)=\(shieldThicknessY.integerValue) \(keyPercent)=\(shieldBoronPercent.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -474,10 +474,10 @@ class ViewController: NSViewController {
             }
         }
         // SHILD
-        if let values = dict[keyShild], let x = preferenceIntFor(key: keyThickness + keyX, preferences: values), let y = preferenceIntFor(key: keyThickness + keyY, preferences: values), let p = preferenceIntFor(key: keyPercent, preferences: values) {
-            shildThicknessX.integerValue = x
-            shildThicknessY.integerValue = y
-            shildBoronPercent.integerValue = p
+        if let values = dict[keyShield], let x = preferenceIntFor(key: keyThickness + keyX, preferences: values), let y = preferenceIntFor(key: keyThickness + keyY, preferences: values), let p = preferenceIntFor(key: keyPercent, preferences: values) {
+            shieldThicknessX.integerValue = x
+            shieldThicknessY.integerValue = y
+            shieldBoronPercent.integerValue = p
         }
         
         // UPDATE GEOMETRY
@@ -538,7 +538,7 @@ class ViewController: NSViewController {
         let moderatorSize = moderatorSizeField.floatValue/10
         let moderatorLenght = moderatorLenghtField.floatValue/10
         let sourcePositionZ = sourcePositionField.floatValue/10
-        let shild = Shild(thiknessX: shildThicknessX.floatValue/10, thiknessY: shildThicknessY.floatValue/10, boronPercent: shildBoronPercent.floatValue)
+        let shield = Shield(thiknessX: shieldThicknessX.floatValue/10, thiknessY: shieldThicknessY.floatValue/10, boronPercent: shieldBoronPercent.floatValue)
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
@@ -547,12 +547,12 @@ class ViewController: NSViewController {
         print("Source position Z: \(sourcePositionZ) cm")
         print("Source type: \(sourceType.name)")
         print("Source isotope: \(sourceIsotope.name)")
-        print("Shild: \(shild)")
+        print("Shield: \(shield)")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shild: shild)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield)
         print(result)
         
         // Files
@@ -615,23 +615,23 @@ class ViewController: NSViewController {
         return projection == .front ? frontView : sideView
     }
     
-    fileprivate func shildWidth(_ projection: Projection) -> CGFloat {
-        return CGFloat((projection == .front ? moderatorSizeField : moderatorLenghtField)!.floatValue + 2 * shildThicknessX.floatValue)
+    fileprivate func shieldWidth(_ projection: Projection) -> CGFloat {
+        return CGFloat((projection == .front ? moderatorSizeField : moderatorLenghtField)!.floatValue + 2 * shieldThicknessX.floatValue)
     }
     
-    fileprivate func showShild(_ projection: Projection) {
+    fileprivate func showShield(_ projection: Projection) {
         let isFront = projection == .front
-        (isFront ? shildFrontView : shildSideView)?.removeFromSuperview()
-        let width = shildWidth(projection)
-        let height = CGFloat(moderatorSizeField.floatValue + 2 * shildThicknessY.floatValue)
+        (isFront ? shieldFrontView : shieldSideView)?.removeFromSuperview()
+        let width = shieldWidth(projection)
+        let height = CGFloat(moderatorSizeField.floatValue + 2 * shieldThicknessY.floatValue)
         let container = containerFor(projection)
         let containerSize = container.frame.size
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
-        let shild = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
-        shild.wantsLayer = true
-        shild.layer?.backgroundColor = NSColor(calibratedRed: 0, green: 0, blue: 63.0/255.0, alpha: 1.0).cgColor
-        container.addSubview(shild)
-        isFront ? (shildFrontView = shild) : (shildSideView = shild)
+        let shield = NSView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
+        shield.wantsLayer = true
+        shield.layer?.backgroundColor = NSColor(calibratedRed: 0, green: 0, blue: 63.0/255.0, alpha: 1.0).cgColor
+        container.addSubview(shield)
+        isFront ? (shieldFrontView = shield) : (shieldSideView = shield)
     }
     
     fileprivate func showModerator(_ projection: Projection) {
@@ -652,7 +652,7 @@ class ViewController: NSViewController {
     fileprivate func showChamber(_ projection: Projection) {
         let isFront = projection == .front
         (isFront ? chamberFrontView : chamberSideView)?.removeFromSuperview()
-        let width = isFront ? CGFloat(chamberSizeField.floatValue) : shildWidth(projection)
+        let width = isFront ? CGFloat(chamberSizeField.floatValue) : shieldWidth(projection)
         let height = CGFloat(chamberSizeField.floatValue)
         let container = containerFor(projection)
         let containerSize = container.frame.size

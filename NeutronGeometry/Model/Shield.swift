@@ -1,5 +1,5 @@
 //
-//  Shild.swift
+//  Shield.swift
 //  NeutronGeometry
 //
 //  Created by Andrey Isaev on 03/07/2018.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Shild {
+class Shield {
     
     var thiknessX: Float = 0
     var thiknessY: Float = 0

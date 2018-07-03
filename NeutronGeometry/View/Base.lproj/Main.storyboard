@@ -1059,7 +1059,7 @@
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9m9-Yf-afB">
                                                     <rect key="frame" x="21" y="438" width="98" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Shild" id="E6f-lw-0Gy">
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Shield" id="E6f-lw-0Gy">
                                                         <font key="font" metaFont="system" size="16"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1488,9 +1488,9 @@
                         <outlet property="moderatorLenghtField" destination="EfO-RT-URn" id="79X-b1-vw3"/>
                         <outlet property="moderatorSizeField" destination="Uy9-YX-mXb" id="PM2-td-bMt"/>
                         <outlet property="saveButton" destination="Wlh-2k-Gar" id="bcg-ej-zai"/>
-                        <outlet property="shildBoronPercent" destination="tqH-TM-5Qq" id="lVe-l7-hBn"/>
-                        <outlet property="shildThicknessX" destination="hzU-Zc-hGk" id="Vzw-0I-bKm"/>
-                        <outlet property="shildThicknessY" destination="N5z-Zf-fDt" id="lFD-S7-VdL"/>
+                        <outlet property="shieldBoronPercent" destination="tqH-TM-5Qq" id="lVe-l7-hBn"/>
+                        <outlet property="shieldThicknessX" destination="hzU-Zc-hGk" id="Vzw-0I-bKm"/>
+                        <outlet property="shieldThicknessY" destination="N5z-Zf-fDt" id="lFD-S7-VdL"/>
                         <outlet property="sideView" destination="nl5-fF-Iqp" id="uzF-3K-TvW"/>
                         <outlet property="sourceIsotopeButton" destination="nho-vc-10B" id="EUn-SR-HPv"/>
                         <outlet property="sourcePositionField" destination="RA7-T3-re5" id="rhD-1n-Ty0"/>
