@@ -20,8 +20,8 @@ class CountersLayer {
     
     init(tag: Int, count: Int? = nil, radius: Float? = nil, shiftAngle: Float? = nil, evenAngle: Float? = nil) {
         self.tag = tag
-        self.count = count ?? tag * 5
-        self.radius = radius ?? Float(tag * 30) + 100
+        self.count = count ?? (tag * 2) + 10
+        self.radius = radius ?? Float(tag * 30) + 90
         self.shiftAngle = shiftAngle ?? 0
         self.evenAngle = evenAngle ?? 0
     }
