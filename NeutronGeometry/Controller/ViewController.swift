@@ -293,69 +293,30 @@ class ViewController: NSViewController {
             }
         }
         
+        func preferenceFloatFor(key: String, preferences: [String]) -> Float? {
+            if let s = preferenceStringFor(key: key, preferences: preferences) {
+                return Float(s)
+            } else {
+                return nil
+            }
+        }
+        
         // LAYERS INFO
-//        var countersCount = 0
-//        for i in 0...layersCountField.integerValue-1 {
-//            let values = dict[keyLayer(i+1)]
-//            if let values = values, let count = preferenceIntFor(key: keyCount, preferences: values), let radius = preferenceIntFor(key: keyRadius, preferences: values) {
-//                countersCount += count
-//
-//                var countField: NSTextField?
-//                var radiusField: NSTextField?
-//                var angleField: NSTextField?
-//                var evenAngleField: NSTextField?
-//                switch i {
-//                case 0:
-//                    countField = layer1CountField
-//                    radiusField = layer1RadiusField
-//                    angleField = layer1ShiftAngleField
-//                    evenAngleField = layer1EvenAngleField
-//                case 1:
-//                    countField = layer2CountField
-//                    radiusField = layer2RadiusField
-//                    angleField = layer2ShiftAngleField
-//                    evenAngleField = layer2EvenAngleField
-//                case 2:
-//                    countField = layer3CountField
-//                    radiusField = layer3RadiusField
-//                    angleField = layer3ShiftAngleField
-//                    evenAngleField = layer3EvenAngleField
-//                case 3:
-//                    countField = layer4CountField
-//                    radiusField = layer4RadiusField
-//                    angleField = layer4ShiftAngleField
-//                    evenAngleField = layer4EvenAngleField
-//                case 4:
-//                    countField = layer5CountField
-//                    radiusField = layer5RadiusField
-//                    angleField = layer5ShiftAngleField
-//                    evenAngleField = layer5EvenAngleField
-//                case 5:
-//                    countField = layer6CountField
-//                    radiusField = layer6RadiusField
-//                    angleField = layer6ShiftAngleField
-//                    evenAngleField = layer6EvenAngleField
-//                default:
-//                    break
-//                }
-//                countField?.integerValue = count
-//                radiusField?.integerValue = radius
-//                angleField?.stringValue = preferenceStringFor(key: keyAngle, preferences: values) ?? "0"
-//                evenAngleField?.stringValue = preferenceStringFor(key: keyEven, preferences: values) ?? "0"
-//            }
-//            if i == 3 {
-//                layer4Control.state = values == nil ? .off : .on
-//                layer4ControlValueChanged()
-//            }
-//            if i == 4 {
-//                layer5Control.state = values == nil ? .off : .on
-//                layer5ControlValueChanged()
-//            }
-//            if i == 5 {
-//                layer6Control.state = values == nil ? .off : .on
-//                layer6ControlValueChanged()
-//            }
-//        }
+        dataSource.removeAll()
+        var countersCount = 0
+        var tag = 1
+        while tag > 0 {
+            if let values = dict[keyLayer(tag)], let count = preferenceIntFor(key: keyCount, preferences: values), let radius = preferenceFloatFor(key: keyRadius, preferences: values) {
+                countersCount += count
+                let shiftAngle = preferenceFloatFor(key: keyAngle, preferences: values) ?? 0
+                let evenAngle = preferenceFloatFor(key: keyEven, preferences: values) ?? 0
+                let layer = CountersLayer(tag: tag, count: count, radius: radius, shiftAngle: shiftAngle, evenAngle: evenAngle)
+                dataSource.append(layer)
+                tag += 1
+            } else {
+                break
+            }
+        }
         // MODERATOR
         if let values = dict[keyModerator], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
             moderatorSizeField.integerValue = size
