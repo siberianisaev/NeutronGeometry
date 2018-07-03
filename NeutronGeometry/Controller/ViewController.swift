@@ -312,6 +312,8 @@ class ViewController: NSViewController {
                 let evenAngle = preferenceFloatFor(key: keyEven, preferences: values) ?? 0
                 let layer = CountersLayer(tag: tag, count: count, radius: radius, shiftAngle: shiftAngle, evenAngle: evenAngle)
                 dataSource.append(layer)
+                layersCountStepper.integerValue = tag
+                layersCountField.integerValue = tag
                 tag += 1
             } else {
                 break
