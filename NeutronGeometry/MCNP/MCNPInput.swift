@@ -182,7 +182,7 @@ c ==== CELLS =====
         \nc ---------------- MATERIALS ------------
         M1 6000.60c 1 1001.60c 2 $ Polyethylene
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
-           29000.50c -0.01 $ Stainless Steel
+              29000.50c -0.01 $ Stainless Steel
         M3 2003.60c 1 $ He-3
         \(shield.materialCard(index: 4))
         """
