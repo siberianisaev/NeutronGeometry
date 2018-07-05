@@ -203,6 +203,7 @@ class ViewController: NSViewController {
     fileprivate let keyThickness = "THICKNESS"
     fileprivate let keyX = "X"
     fileprivate let keyY = "Y"
+    fileprivate let keyManual = "MANUAL"
     fileprivate let keySource = "SOURCE"
     fileprivate let keyZ = "Z"
     fileprivate let keyValue = "VALUE"
@@ -223,7 +224,7 @@ class ViewController: NSViewController {
         // COUNTERS
         for counter in countersFront {
             let center = counter.center()
-            strings.append(keyCounter(counter.index+1) + " \(keyX)=\(center.x) \(keyY)=\(center.y) \(keyType)=\(counter.type.rawValue)")
+            strings.append(keyCounter(counter.index+1) + " \(keyX)=\(center.x) \(keyY)=\(center.y) \(keyType)=\(counter.type.rawValue) \(keyManual)=\(counter.manuallySetCenter)")
         }
         // MODERATOR
         strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
@@ -359,29 +360,34 @@ class ViewController: NSViewController {
             shieldBoronPercent.integerValue = p
         }
         
-        // UPDATE GEOMETRY
-        updateButton(nil)
-            
         // COUNTERS
-        // We update only presure there. Counter center point will be automaticly set after geometry re-drawing.
-        if countersCount > 0 {
-            for i in 0..<countersCount {
-                if let values = dict[keyCounter(i+1)], let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
-                    types[i] = type
-                } else if let values = dict[keyCounter(i+1)], let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
-                    switch p {
-                    case 4:
-                        types[i] = .aspekt
-                    case 7:
-                        types[i] = .flerov
-                    default:
-                        break
-                    }
+        var i = 1
+        while let values = dict[keyCounter(i)] {
+            let counterIndex = i - 1
+            i += 1
+            // Presure
+            if let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
+                types[counterIndex] = type
+            } else if let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
+                switch p {
+                case 4:
+                    types[counterIndex] = .aspekt
+                case 7:
+                    types[counterIndex] = .flerov
+                default:
+                    break
                 }
             }
-            showCountersFront()
-            showCountersSide()
+            // Manually set positions
+            var p: CGPoint? = nil
+            if let sManual = preferenceStringFor(key: keyManual, preferences: values), let manual = Bool(sManual), manual == true, let x = preferenceFloatFor(key: keyX, preferences: values), let y = preferenceFloatFor(key: keyY, preferences: values) {
+                p = CGPoint(x: CGFloat(x), y: CGFloat(y))
+            }
+            counterManuallySetCenters[counterIndex] = p
         }
+        
+        // UPDATE GEOMETRY
+        updateButton(nil)
     }
     
     fileprivate func counterLayers() -> [[CounterFrontView]] {
@@ -643,7 +649,7 @@ class ViewController: NSViewController {
         calculateCountersGap()
     }
     
-    fileprivate var counterFrontCustomPositions = [Int: CGPoint]()
+    fileprivate var counterManuallySetCenters = [Int: CGPoint]()
     
     fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, evenAngle: CGFloat, layerCenter: CGFloat) {
         let frontSize = frontView.frame.size
@@ -657,24 +663,18 @@ class ViewController: NSViewController {
             if (i + 1) % 2 == 0 {
                 angle -= evenAngle
             }
-            let original = CGPoint(x: center.x + layerCenter * cos(angle), y: center.y + layerCenter * sin(angle))
-            let custom = counterFrontCustomPositions[counterIndex]
-            let position = custom ?? original
+            let position = CGPoint(x: center.x + layerCenter * cos(angle), y: center.y + layerCenter * sin(angle))
             let frame = NSRect(x: position.x, y: position.y, width: counterRadius * 2, height: counterRadius * 2)
-            
             let counterView = CounterFrontView(frame: frame)
-            counterView.originalPosition = original
-            counterView.customPosition = custom
             counterView.index = counterIndex
             counterView.layerIndex = tag
-            
             counterView.onTypeChanged = { [weak self] (newType: CounterType) in
                 self?.types[counterIndex] = newType
                 self?.showCountersFront()
                 self?.showCountersSide()
             }
-            counterView.onPositionChanged = { [weak self] (newPosition: CGPoint?) in
-                self?.counterFrontCustomPositions[counterIndex] = newPosition
+            counterView.onCenterChanged = { [weak self] (manual: Bool) in
+                self?.counterManuallySetCenters[counterIndex] = manual ? counterView.center() : nil
             }
             counterView.wantsLayer = true
             counterView.layer?.cornerRadius = counterRadius
@@ -682,6 +682,7 @@ class ViewController: NSViewController {
             counterView.type = type
             
             frontView.addSubview(counterView)
+            counterView.updateCenter(counterManuallySetCenters[counterIndex])
             countersFront.append(counterView)
         }
     }

@@ -10,35 +10,25 @@ import Cocoa
 
 class CounterFrontView: CounterView {
     
-    var onPositionChanged: ((CGPoint?)->())?
-    var originalPosition: CGPoint?
-    var customPosition: CGPoint? {
+    var onCenterChanged: ((Bool)->())?
+    var manuallySetCenter: Bool = false {
         didSet {
             drawBorder()
         }
     }
     
     fileprivate func drawBorder() {
-        var color: NSColor
-        var width: CGFloat
-        if let o = originalPosition, let c = customPosition, __CGPointEqualToPoint(o, c) == false {
-            color = NSColor.white
-            width = 2
-        } else {
-            color = NSColor.clear
-            width = 0
-        }
-        layer?.borderColor = color.cgColor
-        layer?.borderWidth = width
+        layer?.borderColor = (manuallySetCenter ? NSColor.white : NSColor.clear).cgColor
+        layer?.borderWidth = manuallySetCenter ? 2 : 0
     }
     
     fileprivate var lastDragLocation: NSPoint?
     
     override func mouseDown(with event: NSEvent) {
         if event.clickCount > 1 {
-            if let _ = customPosition { // restore position
-                customPosition = nil
-                onPositionChanged?(nil)
+            if manuallySetCenter { // restore center
+                manuallySetCenter = false
+                onCenterChanged?(manuallySetCenter)
             }
             type = type.toggle()
             onTypeChanged?(type)
@@ -52,11 +42,10 @@ class CounterFrontView: CounterView {
             var frame = self.frame
             frame.origin.x += -last.x + new.x
             frame.origin.y += -last.y + new.y
-            let p = frame.origin
-            customPosition = p
-            lastDragLocation = new
             self.frame = frame
-            onPositionChanged?(p)
+            lastDragLocation = new
+            manuallySetCenter = true
+            onCenterChanged?(manuallySetCenter)
         }
     }
     
@@ -81,6 +70,23 @@ class CounterFrontView: CounterView {
         let x = (origin.x + size.height/2 - center.x)/10
         let y = (origin.y + size.height/2 - center.y)/10
         return CGPoint(x: x, y: y)
+    }
+    
+    /**
+     In centimeters.
+     */
+    func updateCenter(_ point: CGPoint?) {
+        if let point = point {
+            let frontSize = superview!.frame.size
+            let center = CGPoint(x: frontSize.width/2, y: frontSize.height/2)
+            var frame = self.frame
+            let size = frame.size
+            let x = (point.x * 10 - size.height/2 + center.x)
+            let y = (point.y * 10 - size.height/2 + center.y)
+            frame.origin = CGPoint(x: x, y: y)
+            self.frame = frame
+        }
+        manuallySetCenter = point != nil
     }
 
     override func draw(_ dirtyRect: NSRect) {
