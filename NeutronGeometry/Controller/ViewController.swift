@@ -126,7 +126,7 @@ class ViewController: NSViewController {
     }
     
     fileprivate func calculateCountersGap() {
-        countersGap.removeAll()
+        var array = [Float]()
         let layers = counterLayers()
         for layer in layers {
             var result: Float = 0
@@ -138,11 +138,12 @@ class ViewController: NSViewController {
                 let distance = hypot(p1.x - p2.x, p1.y - p2.y) * 10
                 let type1 = counter1.type
                 let type2 = counter2.type
-                let deltaRadius = (Counter(type: type1).radius - Counter(type: type2).radius) * 10
-                result = roundf(Float(distance) - deltaRadius)
+                let radiusSumm = (Counter(type: type1).radius + Counter(type: type2).radius) * 10
+                result = roundf(Float(distance) - radiusSumm)
             }
-            countersGap.append(result)
+            array.append(result)
         }
+        countersGap = array
     }
     
     @IBAction func updateButton(_ sender: Any?) {
