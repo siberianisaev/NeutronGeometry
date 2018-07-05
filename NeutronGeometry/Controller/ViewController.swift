@@ -568,8 +568,7 @@ class ViewController: NSViewController {
         for z in zArray {
             let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 + z * layerCenter - height/2) // +- layerCenter
             let counterView = CounterSideView(frame: NSRect(x: center.x, y: center.y, width: width, height: height))
-            counterView.onTap = { [weak self] in
-                let newType = type.toggle()
+            counterView.onTypeChanged = { [weak self] (newType: CounterType) in
                 self?.changeType(newType, forLayer: tag)
             }
             counterView.wantsLayer = true
@@ -644,6 +643,8 @@ class ViewController: NSViewController {
         calculateCountersGap()
     }
     
+    fileprivate var counterFrontCustomPositions = [Int: CGPoint]()
+    
     fileprivate func addCountersLayerFront(tag: Int, total: Int, paddingAngle: CGFloat, evenAngle: CGFloat, layerCenter: CGFloat) {
         let frontSize = frontView.frame.size
         for i in 0...total-1 {
@@ -656,18 +657,24 @@ class ViewController: NSViewController {
             if (i + 1) % 2 == 0 {
                 angle -= evenAngle
             }
-            let x = center.x + layerCenter * cos(angle)
-            let y = center.y + layerCenter * sin(angle)
-            let frame = NSRect(x: x, y: y, width: counterRadius * 2, height: counterRadius * 2)
+            let original = CGPoint(x: center.x + layerCenter * cos(angle), y: center.y + layerCenter * sin(angle))
+            let custom = counterFrontCustomPositions[counterIndex]
+            let position = custom ?? original
+            let frame = NSRect(x: position.x, y: position.y, width: counterRadius * 2, height: counterRadius * 2)
             
             let counterView = CounterFrontView(frame: frame)
+            counterView.originalPosition = original
+            counterView.customPosition = custom
             counterView.index = counterIndex
             counterView.layerIndex = tag
-            counterView.onTap = { [weak self] in
-                self?.types[counterIndex] = type.toggle()
-                 // TODO: optimisation, refresh single counter
+            
+            counterView.onTypeChanged = { [weak self] (newType: CounterType) in
+                self?.types[counterIndex] = newType
                 self?.showCountersFront()
                 self?.showCountersSide()
+            }
+            counterView.onPositionChanged = { [weak self] (newPosition: CGPoint?) in
+                self?.counterFrontCustomPositions[counterIndex] = newPosition
             }
             counterView.wantsLayer = true
             counterView.layer?.cornerRadius = counterRadius

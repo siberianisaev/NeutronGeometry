@@ -34,10 +34,10 @@ class CounterView: NSView {
         }
     }
     
-    var onTap: (()->())?
+    var onTypeChanged: ((CounterType)->())?
     
-    override func mouseDown(with event: NSEvent) {
-        onTap?()
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        return true
     }
 
     override func draw(_ dirtyRect: NSRect) {

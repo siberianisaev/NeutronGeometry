@@ -22,6 +22,13 @@ class CounterSideView: CounterView {
         }
     }
     
+    override func mouseDown(with event: NSEvent) {
+        if event.clickCount > 1 {
+            type = type.toggle()
+            onTypeChanged?(type)
+        }
+    }
+    
     fileprivate func addCap(_ x: CGFloat, width: CGFloat) -> NSView {
         let rect = CGRect(x: x, y: 0, width: width, height: frame.height)
         let view = NSView(frame: rect)
