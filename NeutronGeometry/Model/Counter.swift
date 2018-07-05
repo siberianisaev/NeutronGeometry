@@ -12,25 +12,25 @@ class Counter {
     
     var lenght: Float {
         switch type {
-        case .atm4:
+        case .aspekt:
             return 49.0
-        case .atm7Old:
+        case .flerov:
             return 48.5
-        case .atm7New:
+        case .zaprudnya, .mayak:
             return 56
         }
     }
     
     var radius: Float {
         switch type {
-        case .atm4:
+        case .aspekt, .mayak:
             return 1.5
         default:
             return 1.6
         }
     }
     
-    var type: CounterType = .atm7Old
+    var type: CounterType = .flerov
     
     fileprivate var wallThikness: Float {
         return 0.05
@@ -43,12 +43,14 @@ class Counter {
     var capTop: Float {
         var value: Float
         switch type {
-        case .atm4:
+        case .aspekt:
             value = 1.5
-        case .atm7Old:
+        case .flerov:
             value = 3
-        case .atm7New:
+        case .zaprudnya:
             value = 2.2
+        case .mayak:
+            value = 2.0
         }
         return value - wallThikness
     }
@@ -56,12 +58,14 @@ class Counter {
     var capBottom: Float {
         var value: Float
         switch type {
-        case .atm4:
+        case .aspekt:
             value = 1.5
-        case .atm7Old:
+        case .flerov:
             value = 1
-        case .atm7New:
+        case .zaprudnya:
             value = 1.8
+        case .mayak:
+            value = 2.0
         }
         return value - wallThikness
     }

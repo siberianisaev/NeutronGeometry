@@ -94,11 +94,13 @@ class ViewController: NSViewController {
     fileprivate func defaultCounterTypeForTag(_ tag: Int) -> CounterType {
         switch tag {
         case 1, 2:
-            return .atm7New
-        case 3...5:
-            return .atm7Old
+            return .zaprudnya
+        case 3, 4:
+            return .mayak
+        case 5, 6:
+            return .flerov
         default:
-            return .atm4
+            return .aspekt
         }
     }
     
@@ -368,9 +370,9 @@ class ViewController: NSViewController {
                 } else if let values = dict[keyCounter(i+1)], let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
                     switch p {
                     case 4:
-                        types[i] = .atm4
+                        types[i] = .aspekt
                     case 7:
-                        types[i] = .atm7Old
+                        types[i] = .flerov
                     default:
                         break
                     }

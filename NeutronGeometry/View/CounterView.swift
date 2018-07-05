@@ -28,7 +28,7 @@ class CounterView: NSView {
         }
     }
     
-    var type: CounterType = .atm7Old {
+    var type: CounterType = .flerov {
         didSet {
             layer?.backgroundColor = type.color
         }
