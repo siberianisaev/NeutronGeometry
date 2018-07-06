@@ -192,14 +192,13 @@ class ViewController: NSViewController {
         return "COUNTER_\(value)"
     }
     fileprivate let keyCount = "COUNT"
-    fileprivate let keyModerator = "BARREL"
+    fileprivate let keyModerator = "MODERATOR"
     fileprivate let keyChamber = "CHAMBER"
     fileprivate let keyGrid = "GRID"
     fileprivate let keyStep = "STEP"
     fileprivate let keyLenght = "LENGHT"
     fileprivate let keySize = "SIZE"
     fileprivate let keyType = "TYPE"
-    fileprivate let keyPresure = "PRESURE"
     fileprivate let keyThickness = "THICKNESS"
     fileprivate let keyX = "X"
     fileprivate let keyY = "Y"
@@ -212,7 +211,7 @@ class ViewController: NSViewController {
     fileprivate let keyAngle = "ANGLE"
     fileprivate let keyEven = "EVEN_COUNTER_SHIFT_ANGLE"
     fileprivate let keyPercent = "PERCENT"
-    fileprivate let keyShield = "SHILD"
+    fileprivate let keyShield = "SHIELD"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -236,7 +235,7 @@ class ViewController: NSViewController {
         strings.append(keyMaxTime + " \(keyValue)=\(maxTimeField.integerValue)")
         // SOURCE
         strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
-        // SHILD
+        // SHIELD
         strings.append(keyShield + " \(keyThickness)\(keyX)=\(shieldThicknessX.integerValue) \(keyThickness)\(keyY)=\(shieldThicknessY.integerValue) \(keyPercent)=\(shieldBoronPercent.integerValue)")
         return strings.joined(separator: "\n")
     }
@@ -324,7 +323,7 @@ class ViewController: NSViewController {
             }
         }
         // MODERATOR
-        if let values = dict[keyModerator], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
+        if let values = dict[keyModerator] ?? dict["BARREL"], let size = preferenceIntFor(key: keySize, preferences: values), let lenght = preferenceIntFor(key: keyLenght, preferences: values) {
             moderatorSizeField.integerValue = size
             moderatorLenghtField.integerValue = lenght
         }
@@ -353,8 +352,8 @@ class ViewController: NSViewController {
                 sourceIsotope = si
             }
         }
-        // SHILD
-        if let values = dict[keyShield], let x = preferenceIntFor(key: keyThickness + keyX, preferences: values), let y = preferenceIntFor(key: keyThickness + keyY, preferences: values), let p = preferenceIntFor(key: keyPercent, preferences: values) {
+        // SHIELD
+        if let values = dict[keyShield] ?? dict["SHILD"], let x = preferenceIntFor(key: keyThickness + keyX, preferences: values), let y = preferenceIntFor(key: keyThickness + keyY, preferences: values), let p = preferenceIntFor(key: keyPercent, preferences: values) {
             shieldThicknessX.integerValue = x
             shieldThicknessY.integerValue = y
             shieldBoronPercent.integerValue = p
@@ -368,7 +367,7 @@ class ViewController: NSViewController {
             // Presure
             if let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
                 types[counterIndex] = type
-            } else if let p = preferenceIntFor(key: keyPresure, preferences: values) { // Old geometry version support
+            } else if let p = preferenceIntFor(key: "PRESURE", preferences: values) { // Old geometry version support
                 switch p {
                 case 4:
                     types[counterIndex] = .aspekt
@@ -507,7 +506,9 @@ class ViewController: NSViewController {
     }
     
     fileprivate func shieldWidth(_ projection: Projection) -> CGFloat {
-        return CGFloat((projection == .front ? moderatorSizeField : moderatorLenghtField)!.floatValue + 2 * shieldThicknessX.floatValue)
+        let moderator = (projection == .front ? moderatorSizeField : moderatorLenghtField)!.floatValue
+        let thikness = projection == .front ? shieldThicknessY.floatValue : shieldThicknessX.floatValue
+        return CGFloat(moderator + 2 * thikness)
     }
     
     fileprivate func showShield(_ projection: Projection) {
