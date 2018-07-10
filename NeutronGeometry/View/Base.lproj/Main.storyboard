@@ -1141,6 +1141,17 @@
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PdD-FA-aT7">
+                                                    <rect key="frame" x="109" y="652" width="13" height="13"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="only" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ENo-hP-EtB">
+                                                        <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="countersInfoButton:" target="XfG-lQ-9wD" id="JhE-qw-Fth"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </customView>
                                     </subviews>
@@ -1162,6 +1173,7 @@
                         <outlet property="chamberSizeField" destination="11V-0u-PEH" id="MWZ-Rn-T3Z"/>
                         <outlet property="chamberThicknessField" destination="Zcb-Vi-IV6" id="Jz6-zk-zJo"/>
                         <outlet property="countersCountField" destination="lNb-BX-yoN" id="Jbb-8u-Wkj"/>
+                        <outlet property="countersInfoButton" destination="PdD-FA-aT7" id="A9M-j0-0zT"/>
                         <outlet property="frontView" destination="di2-2n-rdn" id="4n8-jb-SjR"/>
                         <outlet property="gridStepField" destination="fBw-bs-7g8" id="fOg-uf-LIs"/>
                         <outlet property="layersCollectionView" destination="d1m-jI-krC" id="wKL-9F-QJ2"/>

@@ -36,10 +36,33 @@ class ViewController: NSViewController {
     @IBOutlet weak var gridStepField: NSTextField!
     @IBOutlet weak var maxTimeField: NSTextField!
     @IBOutlet weak var sourceIsotopeButton: NSPopUpButton!
+    @IBOutlet weak var countersInfoButton: NSButton!
     
     fileprivate var sourceType: SourceType = .point
     
     fileprivate var dataSource = [CountersLayer]()
+    
+    @IBAction func countersInfoButton(_ sender: Any) {
+        countersInfoButton.state = .on
+        
+        var dict = [CounterType: Int]()
+        for cv in countersFront {
+            let key = cv.type
+            dict[key] = (dict[key] ?? 0) + 1
+        }
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.informativeText = "Counters summary"
+        var texts = [String]()
+        for (key, value) in dict {
+            texts.append("\(key.name) - \(value)")
+        }
+        alert.messageText = texts.joined(separator: "\n")
+        
+        alert.beginSheetModal(for: view.window!) { [weak self] (response: NSApplication.ModalResponse) in
+            self?.countersInfoButton?.state = .off
+        }
+    }
     
     @IBAction func layersCountChanged(_ sender: Any) {
         let value = (sender as! NSStepper).integerValue
