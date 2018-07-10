@@ -16,6 +16,7 @@ class ProjectionView: NSView {
     
     weak var sourceView: SourceView!
     var projection: Projection?
+    weak var linesView: LinesView?
     
     func showSource(_ type: SourceType, shift: CGFloat = 0, onTap: @escaping (()->())) {
         sourceView?.removeFromSuperview()
@@ -54,9 +55,18 @@ class ProjectionView: NSView {
         addGrid(10)
     }
     
+    func drawLines(_ points: [NSPoint]) {
+        linesView?.removeFromSuperview()
+        let view = LinesView(frame: bounds)
+        view.wantsLayer = true
+        view.layer?.backgroundColor = NSColor.clear.cgColor
+        addSubview(view)
+        linesView = view
+        linesView?.points = points
+    }
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
         wantsLayer = true
         layer?.borderColor = NSColor.black.cgColor
         layer?.borderWidth = 1

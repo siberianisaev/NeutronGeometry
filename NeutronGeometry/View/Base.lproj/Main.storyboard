@@ -1152,6 +1152,14 @@
                                                         <action selector="countersInfoButton:" target="XfG-lQ-9wD" id="JhE-qw-Fth"/>
                                                     </connections>
                                                 </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xcg-16-3Vk">
+                                                    <rect key="frame" x="270" y="56" width="107" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="Counter Lines" bezelStyle="regularSquare" imagePosition="left" inset="2" id="CNL-Xp-zFL">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
                                             </subviews>
                                         </customView>
                                     </subviews>
@@ -1172,6 +1180,7 @@
                         <outlet property="calculateButton" destination="dvq-vQ-57s" id="Yh6-kj-8kh"/>
                         <outlet property="chamberSizeField" destination="11V-0u-PEH" id="MWZ-Rn-T3Z"/>
                         <outlet property="chamberThicknessField" destination="Zcb-Vi-IV6" id="Jz6-zk-zJo"/>
+                        <outlet property="counterLines" destination="Xcg-16-3Vk" id="SKX-KQ-RTH"/>
                         <outlet property="countersCountField" destination="lNb-BX-yoN" id="Jbb-8u-Wkj"/>
                         <outlet property="countersInfoButton" destination="PdD-FA-aT7" id="A9M-j0-0zT"/>
                         <outlet property="frontView" destination="di2-2n-rdn" id="4n8-jb-SjR"/>

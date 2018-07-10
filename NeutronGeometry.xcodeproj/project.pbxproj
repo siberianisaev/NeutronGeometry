@@ -28,6 +28,7 @@
 		65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396120BC3DFA00F0D64E /* CounterSideView.swift */; };
 		65A2396420BC424F00F0D64E /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396320BC424F00F0D64E /* CounterView.swift */; };
 		65C846412013B49E00E84562 /* MCNPInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C846402013B49E00E84562 /* MCNPInput.swift */; };
+		65DE4BF120F4D968002C4434 /* LinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DE4BF020F4D968002C4434 /* LinesView.swift */; };
 		65DFC592203075B800B55062 /* ChamberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DFC591203075B800B55062 /* ChamberView.swift */; };
 		65DFC5942030784400B55062 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DFC5932030784400B55062 /* GridView.swift */; };
 		65DFC59620307B1200B55062 /* GeometryWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DFC59520307B1200B55062 /* GeometryWindow.swift */; };
@@ -58,6 +59,7 @@
 		65A2396120BC3DFA00F0D64E /* CounterSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterSideView.swift; sourceTree = "<group>"; };
 		65A2396320BC424F00F0D64E /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		65C846402013B49E00E84562 /* MCNPInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPInput.swift; sourceTree = "<group>"; };
+		65DE4BF020F4D968002C4434 /* LinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinesView.swift; sourceTree = "<group>"; };
 		65DFC591203075B800B55062 /* ChamberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChamberView.swift; sourceTree = "<group>"; };
 		65DFC5932030784400B55062 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		65DFC59520307B1200B55062 /* GeometryWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryWindow.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				65DFC59520307B1200B55062 /* GeometryWindow.swift */,
 				65DFC591203075B800B55062 /* ChamberView.swift */,
 				5A7DB3612011191D00A0209E /* ProjectionView.swift */,
+				65DE4BF020F4D968002C4434 /* LinesView.swift */,
 				65DFC5932030784400B55062 /* GridView.swift */,
 				65A2396320BC424F00F0D64E /* CounterView.swift */,
 				5A8465FE20BF2DFE00BCC3C0 /* SourceView.swift */,
@@ -242,6 +245,7 @@
 				65DFC5942030784400B55062 /* GridView.swift in Sources */,
 				5A3C1612200E30C2004E281A /* AppDelegate.swift in Sources */,
 				5A3C1626200E87EE004E281A /* CounterFrontView.swift in Sources */,
+				65DE4BF120F4D968002C4434 /* LinesView.swift in Sources */,
 				5A4E7DB720BC9E6700092145 /* CounterType.swift in Sources */,
 				6518DB7720B69FC4000B5C2A /* MCNPRun.swift in Sources */,
 				65DFC592203075B800B55062 /* ChamberView.swift in Sources */,

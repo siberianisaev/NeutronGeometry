@@ -37,6 +37,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var maxTimeField: NSTextField!
     @IBOutlet weak var sourceIsotopeButton: NSPopUpButton!
     @IBOutlet weak var countersInfoButton: NSButton!
+    @IBOutlet weak var counterLines: NSButton!
     
     fileprivate var sourceType: SourceType = .point
     
@@ -671,6 +672,23 @@ class ViewController: NSViewController {
         }
         
         calculateCountersGap()
+        drawCounterLines()
+    }
+    
+    fileprivate func drawCounterLines() {
+        var points: [NSPoint]
+        if counterLines.state == .on {
+            let manual = countersFront.filter { (cv: CounterFrontView) -> Bool in
+                return cv.manuallySetCenter == true
+            }
+            points = manual.map { (cv: CounterFrontView) -> NSPoint in
+                let f = cv.frame
+                return NSMakePoint(f.origin.x + f.width/2, f.origin.y + f.height/2)
+            }
+        } else {
+            points = []
+        }
+        frontView.drawLines(points)
     }
     
     fileprivate var counterManuallySetCenters = [Int: CGPoint]()
