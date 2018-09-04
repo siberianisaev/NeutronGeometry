@@ -518,9 +518,7 @@ class ViewController: NSViewController {
         sideView.projection = .side
         let newStep = max(gridStepField.integerValue, 1)
         for view in [frontView, sideView] as [ProjectionView] {
-            if view.step != newStep {
-                view.step = newStep
-            }
+            view.step = newStep
         }
     }
     
