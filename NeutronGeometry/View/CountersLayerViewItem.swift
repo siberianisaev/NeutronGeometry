@@ -22,7 +22,7 @@ class CountersLayerViewItem: NSCollectionViewItem {
     }
     
     class var nib: NSNib {
-        let n = NSNib(nibNamed: NSNib.Name(rawValue: identifier.rawValue), bundle: nil)!
+        let n = NSNib(nibNamed: identifier.rawValue, bundle: nil)!
         return n
     }
 

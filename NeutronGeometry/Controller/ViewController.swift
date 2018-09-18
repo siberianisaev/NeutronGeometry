@@ -719,8 +719,8 @@ class ViewController: NSViewController {
 
 extension ViewController: NSTextFieldDelegate {
     
-    override func controlTextDidChange(_ note: Notification) {
-        if let tf = note.object as? NSTextField {
+    func controlTextDidChange(_ obj: Notification) {
+        if let tf = obj.object as? NSTextField {
             let row = tf.tag - 1
             if row >= 0, row < dataSource.count {
                 let layer = dataSource[row]
