@@ -142,6 +142,18 @@ class ViewController: NSViewController {
         }
     }
     
+    @IBAction func printCounters() {
+        print("Counter X Y")
+        for counter in countersFront {
+            let center = counter.center()
+            let x = round(center.x*10)
+            let y = round(center.y*10)
+//            if x >= 0 && y >= 0 {
+                print("\(counter.index+1) \(Int(x)) \(Int(y))")
+//            }
+        }
+    }
+    
     fileprivate var countersGap = [Float]() {
         didSet {
             layersCollectionView?.reloadData()
