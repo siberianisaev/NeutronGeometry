@@ -142,7 +142,7 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func printCounters() {
+    @IBAction func printCounters(_ sender: Any) {
         print("Counter X Y")
         for counter in countersFront {
             let center = counter.center()
