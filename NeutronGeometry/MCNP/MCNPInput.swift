@@ -51,7 +51,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """

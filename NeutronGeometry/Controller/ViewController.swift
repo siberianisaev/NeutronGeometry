@@ -24,6 +24,16 @@ class ViewController: NSViewController {
     @IBOutlet weak var shieldThicknessX: NSTextField!
     @IBOutlet weak var shieldThicknessY: NSTextField!
     @IBOutlet weak var shieldBoronPercent: NSTextField!
+    @IBOutlet weak var scintillatorButton: NSButton!
+    @IBInspectable var useScintillator: Bool = false {
+        didSet {
+            setupScintillatorView()
+        }
+    }
+    @IBOutlet weak var scintillatorView: NSView!
+    @IBOutlet weak var scintillatorSizeField: NSTextField!
+    @IBOutlet weak var scintillatorThicknessField: NSTextField!
+    @IBOutlet weak var scintillatorPositionField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
     @IBOutlet weak var moderatorSizeField: NSTextField!
@@ -105,6 +115,9 @@ class ViewController: NSViewController {
     fileprivate weak var chamberFrontView: ChamberView?
     fileprivate weak var chamberSideView: ChamberView?
     
+    fileprivate weak var scintillatorFrontView: ScintillatorView?
+    fileprivate weak var scintillatorSideView: ScintillatorView?
+    
     fileprivate var types = [Int: CounterType]()
     
     fileprivate func typeForCounterIndex(_ index: Int, tag: Int) -> CounterType {
@@ -125,6 +138,13 @@ class ViewController: NSViewController {
         default:
             return .aspekt
         }
+    }
+    
+    fileprivate func setupScintillatorView() {
+        scintillatorButton?.state = useScintillator ? .on : .off
+        let hide = !useScintillator
+        scintillatorView?.isHidden = hide
+        updateButton(nil)
     }
     
     fileprivate func setupSourceIsotopes() {
@@ -187,10 +207,16 @@ class ViewController: NSViewController {
         showShield(.front)
         showModerator(.front)
         showChamberFront()
+        if useScintillator {
+            showScintillatorFront()
+        }
         showCountersFront()
         showShield(.side)
         showModerator(.side)
         showChamberSide()
+        if useScintillator {
+            showScintillatorSide()
+        }
         showCountersSide()
         showSource()
         countersCountField.integerValue = dataSource.map({ (cl: CountersLayer) -> Int in
@@ -229,6 +255,7 @@ class ViewController: NSViewController {
     fileprivate let keyCount = "COUNT"
     fileprivate let keyModerator = "MODERATOR"
     fileprivate let keyChamber = "CHAMBER"
+    fileprivate let keyScintillator = "SCINTILLATOR"
     fileprivate let keyGrid = "GRID"
     fileprivate let keyStep = "STEP"
     fileprivate let keyLenght = "LENGHT"
@@ -264,6 +291,10 @@ class ViewController: NSViewController {
         strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
         // CHAMBER
         strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
+        // SCINTILLATOR
+        if useScintillator {
+            strings.append(keyScintillator + " \(keySize)=\(scintillatorSizeField.integerValue) \(keyThickness)=\(scintillatorThicknessField.integerValue) \(keyZ)=\(scintillatorPositionField.integerValue)")
+        }
         // GRID
         strings.append(keyGrid + " \(keyStep)=\(gridStepField.integerValue)")
         // MAX TIME
@@ -367,6 +398,14 @@ class ViewController: NSViewController {
             chamberSizeField.integerValue = size
             chamberThicknessField.integerValue = thickness
         }
+        // SCINTILLATOR
+        let scintillator = dict[keyScintillator]
+        if let values = scintillator, let size = preferenceIntFor(key: keySize, preferences: values), let thickness = preferenceIntFor(key: keyThickness, preferences: values), let position = preferenceIntFor(key: keyZ, preferences: values) {
+            scintillatorSizeField.integerValue = size
+            scintillatorThicknessField.integerValue = thickness
+            scintillatorPositionField.integerValue = position
+        }
+        useScintillator = scintillator != nil
         // GRID
         if let values = dict[keyGrid], let step = preferenceIntFor(key: keyStep, preferences: values) {
             gridStepField.integerValue = step
@@ -458,6 +497,7 @@ class ViewController: NSViewController {
         let moderatorLenght = moderatorLenghtField.floatValue/10
         let sourcePositionZ = sourcePositionField.floatValue/10
         let shield = Shield(thiknessX: shieldThicknessX.floatValue/10, thiknessY: shieldThicknessY.floatValue/10, boronPercent: shieldBoronPercent.floatValue)
+        let scintillator = Scintillator(size: scintillatorSizeField.floatValue/10, thikness: scintillatorThicknessField.floatValue/10, positionZ: scintillatorPositionZ()/10)
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
@@ -467,11 +507,12 @@ class ViewController: NSViewController {
         print("Source type: \(sourceType.name)")
         print("Source isotope: \(sourceIsotope.name)")
         print("Shield: \(shield)")
+        print("Scintillator: \(scintillator)")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield, scintillator: scintillator)
         print(result)
         
         // Files
@@ -593,6 +634,33 @@ class ViewController: NSViewController {
     
     fileprivate func showChamberFront() {
         showChamber(.front)
+    }
+    
+    fileprivate func scintillatorPositionZ() -> Float {
+        return scintillatorThicknessField.floatValue/2 - scintillatorPositionField.floatValue
+    }
+    
+    fileprivate func showScintillator(_ projection: Projection) {
+        let isFront = projection == .front
+        (isFront ? scintillatorFrontView : scintillatorSideView)?.removeFromSuperview()
+        let width = isFront ? CGFloat(scintillatorSizeField.floatValue) : CGFloat(scintillatorThicknessField.floatValue)
+        let height = CGFloat(scintillatorSizeField.floatValue)
+        let container = containerFor(projection)
+        let containerSize = container.frame.size
+        let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
+        let shift = isFront ? 0 : CGFloat(scintillatorPositionZ())
+        let scintillator = ScintillatorView(frame: NSRect(x: center.x - shift, y: center.y, width: width, height: height))
+        container.addSubview(scintillator)
+        container.isHidden = !useScintillator
+        isFront ? (scintillatorFrontView = scintillator) : (scintillatorSideView = scintillator)
+    }
+    
+    fileprivate func showScintillatorSide() {
+        showScintillator(.side)
+    }
+    
+    fileprivate func showScintillatorFront() {
+        showScintillator(.front)
     }
     
     fileprivate func showCountersSide(_ countersLayer: CountersLayer) {

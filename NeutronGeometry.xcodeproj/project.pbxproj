@@ -25,6 +25,8 @@
 		65181BA320EBB66C0058755F /* CountersLayerViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65181BA120EBB66C0058755F /* CountersLayerViewItem.xib */; };
 		65181BA520EBC56F0058755F /* CountersLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65181BA420EBC56F0058755F /* CountersLayer.swift */; };
 		6518DB7720B69FC4000B5C2A /* MCNPRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6518DB7620B69FC4000B5C2A /* MCNPRun.swift */; };
+		656C1392229D475E00749A03 /* ScintillatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656C1391229D475E00749A03 /* ScintillatorView.swift */; };
+		656C1394229D5ABF00749A03 /* Scintillator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656C1393229D5ABF00749A03 /* Scintillator.swift */; };
 		65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396120BC3DFA00F0D64E /* CounterSideView.swift */; };
 		65A2396420BC424F00F0D64E /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2396320BC424F00F0D64E /* CounterView.swift */; };
 		65C846412013B49E00E84562 /* MCNPInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C846402013B49E00E84562 /* MCNPInput.swift */; };
@@ -55,6 +57,8 @@
 		65181BA120EBB66C0058755F /* CountersLayerViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountersLayerViewItem.xib; sourceTree = "<group>"; };
 		65181BA420EBC56F0058755F /* CountersLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountersLayer.swift; sourceTree = "<group>"; };
 		6518DB7620B69FC4000B5C2A /* MCNPRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPRun.swift; sourceTree = "<group>"; };
+		656C1391229D475E00749A03 /* ScintillatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScintillatorView.swift; sourceTree = "<group>"; };
+		656C1393229D5ABF00749A03 /* Scintillator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scintillator.swift; sourceTree = "<group>"; };
 		65A2396120BC3DFA00F0D64E /* CounterSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterSideView.swift; sourceTree = "<group>"; };
 		65A2396320BC424F00F0D64E /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		65C846402013B49E00E84562 /* MCNPInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCNPInput.swift; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 				65181BA120EBB66C0058755F /* CountersLayerViewItem.xib */,
 				65DFC59520307B1200B55062 /* GeometryWindow.swift */,
 				65DFC591203075B800B55062 /* ChamberView.swift */,
+				656C1391229D475E00749A03 /* ScintillatorView.swift */,
 				5A7DB3612011191D00A0209E /* ProjectionView.swift */,
 				65DFC5932030784400B55062 /* GridView.swift */,
 				65A2396320BC424F00F0D64E /* CounterView.swift */,
@@ -142,6 +147,7 @@
 				5A4E7DB620BC9E6700092145 /* CounterType.swift */,
 				5AEAB59620AF22E3006EF80E /* Counter.swift */,
 				65181B9B20EB70830058755F /* Shield.swift */,
+				656C1393229D5ABF00749A03 /* Scintillator.swift */,
 				65181BA420EBC56F0058755F /* CountersLayer.swift */,
 			);
 			path = Model;
@@ -239,6 +245,7 @@
 				5A3C1614200E30C2004E281A /* ViewController.swift in Sources */,
 				65181BA220EBB66C0058755F /* CountersLayerViewItem.swift in Sources */,
 				65A2396420BC424F00F0D64E /* CounterView.swift in Sources */,
+				656C1392229D475E00749A03 /* ScintillatorView.swift in Sources */,
 				5A20550320177EDD0034EF33 /* Extensions.swift in Sources */,
 				65DFC5942030784400B55062 /* GridView.swift in Sources */,
 				5A3C1612200E30C2004E281A /* AppDelegate.swift in Sources */,
@@ -250,6 +257,7 @@
 				65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */,
 				5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */,
 				5A8465FD20BF297200BCC3C0 /* SourceType.swift in Sources */,
+				656C1394229D5ABF00749A03 /* Scintillator.swift in Sources */,
 				65DFC59620307B1200B55062 /* GeometryWindow.swift in Sources */,
 				5A84660120C8191600BCC3C0 /* SourceIsotope.swift in Sources */,
 				5A8465FF20BF2DFE00BCC3C0 /* SourceView.swift in Sources */,
