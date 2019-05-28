@@ -497,7 +497,7 @@ class ViewController: NSViewController {
         let moderatorLenght = moderatorLenghtField.floatValue/10
         let sourcePositionZ = sourcePositionField.floatValue/10
         let shield = Shield(thiknessX: shieldThicknessX.floatValue/10, thiknessY: shieldThicknessY.floatValue/10, boronPercent: shieldBoronPercent.floatValue)
-        let scintillator = Scintillator(size: scintillatorSizeField.floatValue/10, thikness: scintillatorThicknessField.floatValue/10, positionZ: scintillatorPositionZ()/10)
+        let scintillator: Scintillator? = useScintillator ? Scintillator(size: scintillatorSizeField.floatValue/10, thikness: scintillatorThicknessField.floatValue/10, positionZ: scintillatorPositionField.floatValue/10) : nil
         
         print("Vacuum chamber size: \(chamberSize) cm")
         print("Vacuum chamber thikness: \(chamberThinkness) cm")
@@ -506,8 +506,8 @@ class ViewController: NSViewController {
         print("Source position Z: \(sourcePositionZ) cm")
         print("Source type: \(sourceType.name)")
         print("Source isotope: \(sourceIsotope.name)")
-        print("Shield: \(shield)")
-        print("Scintillator: \(scintillator)")
+//        print("Shield: \(shield)")
+//        print("Scintillator: \(scintillator)")
         
         // MCNP
         let layers = counterLayers()
@@ -636,10 +636,6 @@ class ViewController: NSViewController {
         showChamber(.front)
     }
     
-    fileprivate func scintillatorPositionZ() -> Float {
-        return scintillatorThicknessField.floatValue/2 - scintillatorPositionField.floatValue
-    }
-    
     fileprivate func showScintillator(_ projection: Projection) {
         let isFront = projection == .front
         (isFront ? scintillatorFrontView : scintillatorSideView)?.removeFromSuperview()
@@ -648,7 +644,7 @@ class ViewController: NSViewController {
         let container = containerFor(projection)
         let containerSize = container.frame.size
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
-        let shift = isFront ? 0 : CGFloat(scintillatorPositionZ())
+        let shift = isFront ? 0 : CGFloat(scintillatorThicknessField.floatValue/2 - scintillatorPositionField.floatValue)
         let scintillator = ScintillatorView(frame: NSRect(x: center.x - shift, y: center.y, width: width, height: height))
         container.addSubview(scintillator)
         container.isHidden = !useScintillator

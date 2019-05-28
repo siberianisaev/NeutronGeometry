@@ -51,7 +51,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator?) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -106,10 +106,16 @@ c ==== CELLS =====
 \nc ----- Shield ------------
 10004 4 -0.94 5 -6 imp:n=1
 """
-        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield)
+        // TODO: change scintillator material density!
+        result += """
+\nc ----- Scintillator ------------
+10005 5 -0.94 -7 imp:n=1
+"""
+        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
-        result += materialsCard(shield: shield)
+        result += materialsCard(shield: shield, scintillator: scintillator)
+        // todo: scintillator tally
         result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
         result += controlCard(maxTime: maxTime)
@@ -153,7 +159,7 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, shield: Shield) -> String {
+    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, shield: Shield, scintillator: Scintillator?) -> String {
         let counterSurfaces = counters.values.sorted { (c1: Counter, c2: Counter) -> Bool in // Sorting is important there, see Counter -convertSurfaceId() method implementation
             return c1.type.rawValue < c2.type.rawValue
             }.map { (c: Counter) -> String in
@@ -161,14 +167,19 @@ c ==== CELLS =====
             }.joined(separator: "\n")
         let shieldY = (moderatorSize + shield.thiknessY)/2
         let shieldX = (moderatorLenght + shield.thiknessX)/2
-        return """
+        var result = """
         \n\nc ==== Surfaces ====
         1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-shieldX) \(shieldX) $ Internal Surface of Vacuum Chamber
         2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-shieldX) \(shieldX) $ External Surface of Vacuum Chamber
         5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Moderator
         6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of Geometry (Shield Size)
-        \(counterSurfaces)
         """
+        if let s = scintillator {
+            let min = -s.thikness + s.positionZ
+            result += "\n" + "7 RPP \(-s.size/2) \(s.size/2) \(-s.size/2) \(s.size/2) \(min) \(min + s.thikness) $ Scintillator"
+        }
+        result += "\n" + counterSurfaces
+        return result
     }
     
     fileprivate func modeCard() -> String {
@@ -177,8 +188,8 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func materialsCard(shield: Shield) -> String {
-        return """
+    fileprivate func materialsCard(shield: Shield, scintillator: Scintillator?) -> String {
+        var result = """
         \nc ---------------- MATERIALS ------------
         M1 6000.60c 1 1001.60c 2 $ Polyethylene
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
@@ -186,6 +197,10 @@ c ==== CELLS =====
         M3 2003.60c 1 $ He-3
         \(shield.materialCard(index: 4))
         """
+        if let s = scintillator?.materialCard(index: 5) {
+            result += "\n" + s
+        }
+        return result
     }
     
     fileprivate func overalTallyCoefficient(_ layers: [[CounterFrontView]]) -> Float {

@@ -20,4 +20,9 @@ class Scintillator {
         self.positionZ = positionZ
     }
     
+    func materialCard(index: Int) -> String {
+        // TODO: replace with CLYC:Ce or CLLBC:Ce
+        return "M\(index) 2003.60c 1 $ He-3"
+    }
+    
 }
