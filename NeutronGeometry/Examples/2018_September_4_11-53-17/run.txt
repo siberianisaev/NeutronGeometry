@@ -1,0 +1,16 @@
+cd 2018_September_4_11-53-17
+scp -r 2018_September_4_11-53-17.dat aisaev@sbgli2.in2p3.fr:.
+mcnpx i=2018_September_4_11-53-17.dat o=2018_September_4_11-53-17_o r=2018_September_4_11-53-17_r
+scp aisaev@sbgli2.in2p3.fr:./2018_September_4_11-53-17_o /Users/siberianisaev/Desktop/2018_September_4_11-53-17
+cd ..
+
+
+
+
+ssh -X aisaev@sbgli2.in2p3.fr
+source /libcern/mcnp/v27/sl5.8-x86_64/setup.sh
+
+
+
+
+rm *
