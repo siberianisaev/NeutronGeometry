@@ -134,9 +134,11 @@ class ViewController: NSViewController {
         case 3, 4:
             return .mayak
         case 5, 6:
+            return .aspekt7
+        case 7, 8:
             return .flerov
         default:
-            return .aspekt
+            return .aspekt4
         }
     }
     
@@ -444,7 +446,7 @@ class ViewController: NSViewController {
             } else if let p = preferenceIntFor(key: "PRESURE", preferences: values) { // Old geometry version support
                 switch p {
                 case 4:
-                    types[counterIndex] = .aspekt
+                    types[counterIndex] = .aspekt4
                 case 7:
                     types[counterIndex] = .flerov
                 default:

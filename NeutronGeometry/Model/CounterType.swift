@@ -10,13 +10,13 @@ import Foundation
 import Cocoa
 
 enum CounterType: Int, CaseCountable {
-    case aspekt = 0, flerov = 1, zaprudnya = 2, mayak = 3
+    case aspekt4 = 0, flerov = 1, zaprudnya = 2, mayak = 3, aspekt7 = 4
     
     static let count = CounterType.countCases()
     
     func presure() -> Float {
         switch self {
-        case .aspekt:
+        case .aspekt4:
             return 4.0
         default:
             return 7.0
@@ -26,8 +26,8 @@ enum CounterType: Int, CaseCountable {
     var name: String {
         let prefix: String
         switch self {
-        case .aspekt:
-            prefix = "Aspekt"
+        case .aspekt4, .aspekt7:
+            prefix = "Aspekt(\(self == .aspekt4) ? 4 : 7)"
         case .flerov:
             prefix = "Flerov Lab"
         case .zaprudnya:
@@ -43,10 +43,14 @@ enum CounterType: Int, CaseCountable {
         var green: CGFloat
         var blue: CGFloat
         switch self {
-        case .aspekt:
+        case .aspekt4:
             red = 217
             green = 110
             blue = 121
+        case .aspekt7:
+            red = 220
+            green = 50
+            blue = 20
         case .flerov:
             red = 69
             green = 136
@@ -64,7 +68,7 @@ enum CounterType: Int, CaseCountable {
     }
     
     func toggle() -> CounterType {
-        return CounterType(rawValue: rawValue + 1) ?? .aspekt
+        return CounterType(rawValue: rawValue + 1) ?? .aspekt4
     }
     
 }

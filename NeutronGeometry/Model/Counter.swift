@@ -12,18 +12,18 @@ class Counter {
     
     var lenght: Float {
         switch type {
-        case .aspekt:
+        case .aspekt4:
             return 49.0
         case .flerov:
             return 48.5
-        case .zaprudnya, .mayak:
+        case .zaprudnya, .mayak, .aspekt7:
             return 56
         }
     }
     
     var radius: Float {
         switch type {
-        case .aspekt, .mayak:
+        case .aspekt4, .mayak, .aspekt7:
             return 1.5
         default:
             return 1.6
@@ -43,13 +43,13 @@ class Counter {
     var capTop: Float {
         var value: Float
         switch type {
-        case .aspekt:
+        case .aspekt4:
             value = 1.5
         case .flerov:
             value = 3
         case .zaprudnya:
             value = 2.2
-        case .mayak:
+        case .mayak, .aspekt7:
             value = 2.0
         }
         return value - wallThikness
@@ -58,13 +58,13 @@ class Counter {
     var capBottom: Float {
         var value: Float
         switch type {
-        case .aspekt:
+        case .aspekt4:
             value = 1.5
         case .flerov:
             value = 1
         case .zaprudnya:
             value = 1.8
-        case .mayak:
+        case .mayak, .aspekt7:
             value = 2.0
         }
         return value - wallThikness
