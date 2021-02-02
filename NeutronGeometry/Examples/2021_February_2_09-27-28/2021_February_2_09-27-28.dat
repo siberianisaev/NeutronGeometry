@@ -1,0 +1,1015 @@
+Geometry for 116 detectors.
+c ==== CELLS =====
+10000 0 6 imp:n=0 $ Space Outside Shield
+10001 0 -1 -5 imp:n=1 $ Space Inside of Vacuum Chamber
+10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
+c ---------- Counter 1 ---------------------------
+10 3 -0.000875 71 -72 -75 imp:n=1 u=1 $ Couter's SV
+11 3 -0.000875 70 -71 -75 imp:n=1 u=1 $ Lower Complementation to SV
+12 3 -0.000875 72 -73 -75 imp:n=1 u=1 $ Upper Complementation to SV
+13 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=1 $ Wall of Counter
+14 0 (-69:74:76) imp:n=1 u=1 $ Space around Counter
+15 0 -77 -5 imp:n=1 fill=1 TRCL=(10.3 -2.0 0)
+c ---------- Counter 2 ---------------------------
+16 3 -0.000875 71 -72 -75 imp:n=1 u=2 $ Couter's SV
+17 3 -0.000875 70 -71 -75 imp:n=1 u=2 $ Lower Complementation to SV
+18 3 -0.000875 72 -73 -75 imp:n=1 u=2 $ Upper Complementation to SV
+19 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=2 $ Wall of Counter
+20 0 (-69:74:76) imp:n=1 u=2 $ Space around Counter
+21 0 -77 -5 imp:n=1 fill=2 TRCL=(10.3 2.0 0)
+c ---------- Counter 3 ---------------------------
+22 3 -0.000875 71 -72 -75 imp:n=1 u=3 $ Couter's SV
+23 3 -0.000875 70 -71 -75 imp:n=1 u=3 $ Lower Complementation to SV
+24 3 -0.000875 72 -73 -75 imp:n=1 u=3 $ Upper Complementation to SV
+25 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=3 $ Wall of Counter
+26 0 (-69:74:76) imp:n=1 u=3 $ Space around Counter
+27 0 -77 -5 imp:n=1 fill=3 TRCL=(2.0 10.3 0)
+c ---------- Counter 4 ---------------------------
+28 3 -0.000875 71 -72 -75 imp:n=1 u=4 $ Couter's SV
+29 3 -0.000875 70 -71 -75 imp:n=1 u=4 $ Lower Complementation to SV
+30 3 -0.000875 72 -73 -75 imp:n=1 u=4 $ Upper Complementation to SV
+31 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=4 $ Wall of Counter
+32 0 (-69:74:76) imp:n=1 u=4 $ Space around Counter
+33 0 -77 -5 imp:n=1 fill=4 TRCL=(-2.0 10.3 0)
+c ---------- Counter 5 ---------------------------
+34 3 -0.000875 71 -72 -75 imp:n=1 u=5 $ Couter's SV
+35 3 -0.000875 70 -71 -75 imp:n=1 u=5 $ Lower Complementation to SV
+36 3 -0.000875 72 -73 -75 imp:n=1 u=5 $ Upper Complementation to SV
+37 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=5 $ Wall of Counter
+38 0 (-69:74:76) imp:n=1 u=5 $ Space around Counter
+39 0 -77 -5 imp:n=1 fill=5 TRCL=(-10.3 2.0 0)
+c ---------- Counter 6 ---------------------------
+40 3 -0.000875 71 -72 -75 imp:n=1 u=6 $ Couter's SV
+41 3 -0.000875 70 -71 -75 imp:n=1 u=6 $ Lower Complementation to SV
+42 3 -0.000875 72 -73 -75 imp:n=1 u=6 $ Upper Complementation to SV
+43 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=6 $ Wall of Counter
+44 0 (-69:74:76) imp:n=1 u=6 $ Space around Counter
+45 0 -77 -5 imp:n=1 fill=6 TRCL=(-10.3 -2.0 0)
+c ---------- Counter 7 ---------------------------
+46 3 -0.000875 71 -72 -75 imp:n=1 u=7 $ Couter's SV
+47 3 -0.000875 70 -71 -75 imp:n=1 u=7 $ Lower Complementation to SV
+48 3 -0.000875 72 -73 -75 imp:n=1 u=7 $ Upper Complementation to SV
+49 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=7 $ Wall of Counter
+50 0 (-69:74:76) imp:n=1 u=7 $ Space around Counter
+51 0 -77 -5 imp:n=1 fill=7 TRCL=(-2.0 -10.3 0)
+c ---------- Counter 8 ---------------------------
+52 3 -0.000875 71 -72 -75 imp:n=1 u=8 $ Couter's SV
+53 3 -0.000875 70 -71 -75 imp:n=1 u=8 $ Lower Complementation to SV
+54 3 -0.000875 72 -73 -75 imp:n=1 u=8 $ Upper Complementation to SV
+55 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=8 $ Wall of Counter
+56 0 (-69:74:76) imp:n=1 u=8 $ Space around Counter
+57 0 -77 -5 imp:n=1 fill=8 TRCL=(2.0 -10.3 0)
+c ---------- Counter 9 ---------------------------
+58 3 -0.000875 71 -72 -75 imp:n=1 u=9 $ Couter's SV
+59 3 -0.000875 70 -71 -75 imp:n=1 u=9 $ Lower Complementation to SV
+60 3 -0.000875 72 -73 -75 imp:n=1 u=9 $ Upper Complementation to SV
+61 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=9 $ Wall of Counter
+62 0 (-69:74:76) imp:n=1 u=9 $ Space around Counter
+63 0 -77 -5 imp:n=1 fill=9 TRCL=(9.9 5.7 0)
+c ---------- Counter 10 ---------------------------
+64 3 -0.000875 71 -72 -75 imp:n=1 u=10 $ Couter's SV
+65 3 -0.000875 70 -71 -75 imp:n=1 u=10 $ Lower Complementation to SV
+66 3 -0.000875 72 -73 -75 imp:n=1 u=10 $ Upper Complementation to SV
+67 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=10 $ Wall of Counter
+68 0 (-69:74:76) imp:n=1 u=10 $ Space around Counter
+69 0 -77 -5 imp:n=1 fill=10 TRCL=(5.7 9.9 0)
+c ---------- Counter 11 ---------------------------
+70 3 -0.000875 71 -72 -75 imp:n=1 u=11 $ Couter's SV
+71 3 -0.000875 70 -71 -75 imp:n=1 u=11 $ Lower Complementation to SV
+72 3 -0.000875 72 -73 -75 imp:n=1 u=11 $ Upper Complementation to SV
+73 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=11 $ Wall of Counter
+74 0 (-69:74:76) imp:n=1 u=11 $ Space around Counter
+75 0 -77 -5 imp:n=1 fill=11 TRCL=(-5.7 9.9 0)
+c ---------- Counter 12 ---------------------------
+76 3 -0.000875 71 -72 -75 imp:n=1 u=12 $ Couter's SV
+77 3 -0.000875 70 -71 -75 imp:n=1 u=12 $ Lower Complementation to SV
+78 3 -0.000875 72 -73 -75 imp:n=1 u=12 $ Upper Complementation to SV
+79 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=12 $ Wall of Counter
+80 0 (-69:74:76) imp:n=1 u=12 $ Space around Counter
+81 0 -77 -5 imp:n=1 fill=12 TRCL=(-9.9 5.7 0)
+c ---------- Counter 13 ---------------------------
+82 3 -0.000875 71 -72 -75 imp:n=1 u=13 $ Couter's SV
+83 3 -0.000875 70 -71 -75 imp:n=1 u=13 $ Lower Complementation to SV
+84 3 -0.000875 72 -73 -75 imp:n=1 u=13 $ Upper Complementation to SV
+85 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=13 $ Wall of Counter
+86 0 (-69:74:76) imp:n=1 u=13 $ Space around Counter
+87 0 -77 -5 imp:n=1 fill=13 TRCL=(-9.9 -5.7 0)
+c ---------- Counter 14 ---------------------------
+88 3 -0.000875 71 -72 -75 imp:n=1 u=14 $ Couter's SV
+89 3 -0.000875 70 -71 -75 imp:n=1 u=14 $ Lower Complementation to SV
+90 3 -0.000875 72 -73 -75 imp:n=1 u=14 $ Upper Complementation to SV
+91 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=14 $ Wall of Counter
+92 0 (-69:74:76) imp:n=1 u=14 $ Space around Counter
+93 0 -77 -5 imp:n=1 fill=14 TRCL=(-5.7 -9.9 0)
+c ---------- Counter 15 ---------------------------
+94 3 -0.000875 71 -72 -75 imp:n=1 u=15 $ Couter's SV
+95 3 -0.000875 70 -71 -75 imp:n=1 u=15 $ Lower Complementation to SV
+96 3 -0.000875 72 -73 -75 imp:n=1 u=15 $ Upper Complementation to SV
+97 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=15 $ Wall of Counter
+98 0 (-69:74:76) imp:n=1 u=15 $ Space around Counter
+99 0 -77 -5 imp:n=1 fill=15 TRCL=(5.7 -9.9 0)
+c ---------- Counter 16 ---------------------------
+100 3 -0.000875 71 -72 -75 imp:n=1 u=16 $ Couter's SV
+101 3 -0.000875 70 -71 -75 imp:n=1 u=16 $ Lower Complementation to SV
+102 3 -0.000875 72 -73 -75 imp:n=1 u=16 $ Upper Complementation to SV
+103 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=16 $ Wall of Counter
+104 0 (-69:74:76) imp:n=1 u=16 $ Space around Counter
+105 0 -77 -5 imp:n=1 fill=16 TRCL=(9.9 -5.7 0)
+c ---------- Counter 17 ---------------------------
+106 3 -0.000875 71 -72 -75 imp:n=1 u=17 $ Couter's SV
+107 3 -0.000875 70 -71 -75 imp:n=1 u=17 $ Lower Complementation to SV
+108 3 -0.000875 72 -73 -75 imp:n=1 u=17 $ Upper Complementation to SV
+109 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=17 $ Wall of Counter
+110 0 (-69:74:76) imp:n=1 u=17 $ Space around Counter
+111 0 -77 -5 imp:n=1 fill=17 TRCL=(9.2 9.2 0)
+c ---------- Counter 18 ---------------------------
+112 3 -0.000875 71 -72 -75 imp:n=1 u=18 $ Couter's SV
+113 3 -0.000875 70 -71 -75 imp:n=1 u=18 $ Lower Complementation to SV
+114 3 -0.000875 72 -73 -75 imp:n=1 u=18 $ Upper Complementation to SV
+115 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=18 $ Wall of Counter
+116 0 (-69:74:76) imp:n=1 u=18 $ Space around Counter
+117 0 -77 -5 imp:n=1 fill=18 TRCL=(-9.2 9.2 0)
+c ---------- Counter 19 ---------------------------
+118 3 -0.000875 71 -72 -75 imp:n=1 u=19 $ Couter's SV
+119 3 -0.000875 70 -71 -75 imp:n=1 u=19 $ Lower Complementation to SV
+120 3 -0.000875 72 -73 -75 imp:n=1 u=19 $ Upper Complementation to SV
+121 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=19 $ Wall of Counter
+122 0 (-69:74:76) imp:n=1 u=19 $ Space around Counter
+123 0 -77 -5 imp:n=1 fill=19 TRCL=(-9.2 -9.2 0)
+c ---------- Counter 20 ---------------------------
+124 3 -0.000875 71 -72 -75 imp:n=1 u=20 $ Couter's SV
+125 3 -0.000875 70 -71 -75 imp:n=1 u=20 $ Lower Complementation to SV
+126 3 -0.000875 72 -73 -75 imp:n=1 u=20 $ Upper Complementation to SV
+127 2 -7.91 69 -74 -76 (-70:73:75) imp:n=1 u=20 $ Wall of Counter
+128 0 (-69:74:76) imp:n=1 u=20 $ Space around Counter
+129 0 -77 -5 imp:n=1 fill=20 TRCL=(9.2 -9.2 0)
+c ---------- Counter 21 ---------------------------
+130 3 -0.000875 62 -63 -66 imp:n=1 u=21 $ Couter's SV
+131 3 -0.000875 61 -62 -66 imp:n=1 u=21 $ Lower Complementation to SV
+132 3 -0.000875 63 -64 -66 imp:n=1 u=21 $ Upper Complementation to SV
+133 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=21 $ Wall of Counter
+134 0 (-60:65:67) imp:n=1 u=21 $ Space around Counter
+135 0 -68 -5 imp:n=1 fill=21 TRCL=(0.0 14.6 0)
+c ---------- Counter 22 ---------------------------
+136 3 -0.000875 62 -63 -66 imp:n=1 u=22 $ Couter's SV
+137 3 -0.000875 61 -62 -66 imp:n=1 u=22 $ Lower Complementation to SV
+138 3 -0.000875 63 -64 -66 imp:n=1 u=22 $ Upper Complementation to SV
+139 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=22 $ Wall of Counter
+140 0 (-60:65:67) imp:n=1 u=22 $ Space around Counter
+141 0 -68 -5 imp:n=1 fill=22 TRCL=(-14.6 0.0 0)
+c ---------- Counter 23 ---------------------------
+142 3 -0.000875 62 -63 -66 imp:n=1 u=23 $ Couter's SV
+143 3 -0.000875 61 -62 -66 imp:n=1 u=23 $ Lower Complementation to SV
+144 3 -0.000875 63 -64 -66 imp:n=1 u=23 $ Upper Complementation to SV
+145 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=23 $ Wall of Counter
+146 0 (-60:65:67) imp:n=1 u=23 $ Space around Counter
+147 0 -68 -5 imp:n=1 fill=23 TRCL=(-0.0 -14.6 0)
+c ---------- Counter 24 ---------------------------
+148 3 -0.000875 62 -63 -66 imp:n=1 u=24 $ Couter's SV
+149 3 -0.000875 61 -62 -66 imp:n=1 u=24 $ Lower Complementation to SV
+150 3 -0.000875 63 -64 -66 imp:n=1 u=24 $ Upper Complementation to SV
+151 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=24 $ Wall of Counter
+152 0 (-60:65:67) imp:n=1 u=24 $ Space around Counter
+153 0 -68 -5 imp:n=1 fill=24 TRCL=(14.6 -0.0 0)
+c ---------- Counter 25 ---------------------------
+154 3 -0.000875 62 -63 -66 imp:n=1 u=25 $ Couter's SV
+155 3 -0.000875 61 -62 -66 imp:n=1 u=25 $ Lower Complementation to SV
+156 3 -0.000875 63 -64 -66 imp:n=1 u=25 $ Upper Complementation to SV
+157 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=25 $ Wall of Counter
+158 0 (-60:65:67) imp:n=1 u=25 $ Space around Counter
+159 0 -68 -5 imp:n=1 fill=25 TRCL=(-14.5 4.6 0)
+c ---------- Counter 26 ---------------------------
+160 3 -0.000875 62 -63 -66 imp:n=1 u=26 $ Couter's SV
+161 3 -0.000875 61 -62 -66 imp:n=1 u=26 $ Lower Complementation to SV
+162 3 -0.000875 63 -64 -66 imp:n=1 u=26 $ Upper Complementation to SV
+163 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=26 $ Wall of Counter
+164 0 (-60:65:67) imp:n=1 u=26 $ Space around Counter
+165 0 -68 -5 imp:n=1 fill=26 TRCL=(-14.5 -4.5 0)
+c ---------- Counter 27 ---------------------------
+166 3 -0.000875 62 -63 -66 imp:n=1 u=27 $ Couter's SV
+167 3 -0.000875 61 -62 -66 imp:n=1 u=27 $ Lower Complementation to SV
+168 3 -0.000875 63 -64 -66 imp:n=1 u=27 $ Upper Complementation to SV
+169 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=27 $ Wall of Counter
+170 0 (-60:65:67) imp:n=1 u=27 $ Space around Counter
+171 0 -68 -5 imp:n=1 fill=27 TRCL=(-4.6 -14.5 0)
+c ---------- Counter 28 ---------------------------
+172 3 -0.000875 62 -63 -66 imp:n=1 u=28 $ Couter's SV
+173 3 -0.000875 61 -62 -66 imp:n=1 u=28 $ Lower Complementation to SV
+174 3 -0.000875 63 -64 -66 imp:n=1 u=28 $ Upper Complementation to SV
+175 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=28 $ Wall of Counter
+176 0 (-60:65:67) imp:n=1 u=28 $ Space around Counter
+177 0 -68 -5 imp:n=1 fill=28 TRCL=(4.5 -14.5 0)
+c ---------- Counter 29 ---------------------------
+178 3 -0.000875 62 -63 -66 imp:n=1 u=29 $ Couter's SV
+179 3 -0.000875 61 -62 -66 imp:n=1 u=29 $ Lower Complementation to SV
+180 3 -0.000875 63 -64 -66 imp:n=1 u=29 $ Upper Complementation to SV
+181 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=29 $ Wall of Counter
+182 0 (-60:65:67) imp:n=1 u=29 $ Space around Counter
+183 0 -68 -5 imp:n=1 fill=29 TRCL=(14.5 -4.6 0)
+c ---------- Counter 30 ---------------------------
+184 3 -0.000875 62 -63 -66 imp:n=1 u=30 $ Couter's SV
+185 3 -0.000875 61 -62 -66 imp:n=1 u=30 $ Lower Complementation to SV
+186 3 -0.000875 63 -64 -66 imp:n=1 u=30 $ Upper Complementation to SV
+187 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=30 $ Wall of Counter
+188 0 (-60:65:67) imp:n=1 u=30 $ Space around Counter
+189 0 -68 -5 imp:n=1 fill=30 TRCL=(14.5 4.5 0)
+c ---------- Counter 31 ---------------------------
+190 3 -0.000875 62 -63 -66 imp:n=1 u=31 $ Couter's SV
+191 3 -0.000875 61 -62 -66 imp:n=1 u=31 $ Lower Complementation to SV
+192 3 -0.000875 63 -64 -66 imp:n=1 u=31 $ Upper Complementation to SV
+193 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=31 $ Wall of Counter
+194 0 (-60:65:67) imp:n=1 u=31 $ Space around Counter
+195 0 -68 -5 imp:n=1 fill=31 TRCL=(4.6 14.5 0)
+c ---------- Counter 32 ---------------------------
+196 3 -0.000875 62 -63 -66 imp:n=1 u=32 $ Couter's SV
+197 3 -0.000875 61 -62 -66 imp:n=1 u=32 $ Lower Complementation to SV
+198 3 -0.000875 63 -64 -66 imp:n=1 u=32 $ Upper Complementation to SV
+199 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=32 $ Wall of Counter
+200 0 (-60:65:67) imp:n=1 u=32 $ Space around Counter
+201 0 -68 -5 imp:n=1 fill=32 TRCL=(-4.5 14.5 0)
+c ---------- Counter 33 ---------------------------
+202 3 -0.000875 62 -63 -66 imp:n=1 u=33 $ Couter's SV
+203 3 -0.000875 61 -62 -66 imp:n=1 u=33 $ Lower Complementation to SV
+204 3 -0.000875 63 -64 -66 imp:n=1 u=33 $ Upper Complementation to SV
+205 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=33 $ Wall of Counter
+206 0 (-60:65:67) imp:n=1 u=33 $ Space around Counter
+207 0 -68 -5 imp:n=1 fill=33 TRCL=(-14.1 -8.7 0)
+c ---------- Counter 34 ---------------------------
+208 3 -0.000875 62 -63 -66 imp:n=1 u=34 $ Couter's SV
+209 3 -0.000875 61 -62 -66 imp:n=1 u=34 $ Lower Complementation to SV
+210 3 -0.000875 63 -64 -66 imp:n=1 u=34 $ Upper Complementation to SV
+211 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=34 $ Wall of Counter
+212 0 (-60:65:67) imp:n=1 u=34 $ Space around Counter
+213 0 -68 -5 imp:n=1 fill=34 TRCL=(-8.7 -14.1 0)
+c ---------- Counter 35 ---------------------------
+214 3 -0.000875 62 -63 -66 imp:n=1 u=35 $ Couter's SV
+215 3 -0.000875 61 -62 -66 imp:n=1 u=35 $ Lower Complementation to SV
+216 3 -0.000875 63 -64 -66 imp:n=1 u=35 $ Upper Complementation to SV
+217 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=35 $ Wall of Counter
+218 0 (-60:65:67) imp:n=1 u=35 $ Space around Counter
+219 0 -68 -5 imp:n=1 fill=35 TRCL=(8.7 -14.1 0)
+c ---------- Counter 36 ---------------------------
+220 3 -0.000875 62 -63 -66 imp:n=1 u=36 $ Couter's SV
+221 3 -0.000875 61 -62 -66 imp:n=1 u=36 $ Lower Complementation to SV
+222 3 -0.000875 63 -64 -66 imp:n=1 u=36 $ Upper Complementation to SV
+223 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=36 $ Wall of Counter
+224 0 (-60:65:67) imp:n=1 u=36 $ Space around Counter
+225 0 -68 -5 imp:n=1 fill=36 TRCL=(14.1 -8.7 0)
+c ---------- Counter 37 ---------------------------
+226 3 -0.000875 62 -63 -66 imp:n=1 u=37 $ Couter's SV
+227 3 -0.000875 61 -62 -66 imp:n=1 u=37 $ Lower Complementation to SV
+228 3 -0.000875 63 -64 -66 imp:n=1 u=37 $ Upper Complementation to SV
+229 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=37 $ Wall of Counter
+230 0 (-60:65:67) imp:n=1 u=37 $ Space around Counter
+231 0 -68 -5 imp:n=1 fill=37 TRCL=(14.1 8.7 0)
+c ---------- Counter 38 ---------------------------
+232 3 -0.000875 62 -63 -66 imp:n=1 u=38 $ Couter's SV
+233 3 -0.000875 61 -62 -66 imp:n=1 u=38 $ Lower Complementation to SV
+234 3 -0.000875 63 -64 -66 imp:n=1 u=38 $ Upper Complementation to SV
+235 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=38 $ Wall of Counter
+236 0 (-60:65:67) imp:n=1 u=38 $ Space around Counter
+237 0 -68 -5 imp:n=1 fill=38 TRCL=(8.7 14.1 0)
+c ---------- Counter 39 ---------------------------
+238 3 -0.000875 62 -63 -66 imp:n=1 u=39 $ Couter's SV
+239 3 -0.000875 61 -62 -66 imp:n=1 u=39 $ Lower Complementation to SV
+240 3 -0.000875 63 -64 -66 imp:n=1 u=39 $ Upper Complementation to SV
+241 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=39 $ Wall of Counter
+242 0 (-60:65:67) imp:n=1 u=39 $ Space around Counter
+243 0 -68 -5 imp:n=1 fill=39 TRCL=(-8.7 14.1 0)
+c ---------- Counter 40 ---------------------------
+244 3 -0.000875 62 -63 -66 imp:n=1 u=40 $ Couter's SV
+245 3 -0.000875 61 -62 -66 imp:n=1 u=40 $ Lower Complementation to SV
+246 3 -0.000875 63 -64 -66 imp:n=1 u=40 $ Upper Complementation to SV
+247 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=40 $ Wall of Counter
+248 0 (-60:65:67) imp:n=1 u=40 $ Space around Counter
+249 0 -68 -5 imp:n=1 fill=40 TRCL=(-14.1 8.7 0)
+c ---------- Counter 41 ---------------------------
+250 3 -0.000875 62 -63 -66 imp:n=1 u=41 $ Couter's SV
+251 3 -0.000875 61 -62 -66 imp:n=1 u=41 $ Lower Complementation to SV
+252 3 -0.000875 63 -64 -66 imp:n=1 u=41 $ Upper Complementation to SV
+253 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=41 $ Wall of Counter
+254 0 (-60:65:67) imp:n=1 u=41 $ Space around Counter
+255 0 -68 -5 imp:n=1 fill=41 TRCL=(-12.5 -12.4 0)
+c ---------- Counter 42 ---------------------------
+256 3 -0.000875 62 -63 -66 imp:n=1 u=42 $ Couter's SV
+257 3 -0.000875 61 -62 -66 imp:n=1 u=42 $ Lower Complementation to SV
+258 3 -0.000875 63 -64 -66 imp:n=1 u=42 $ Upper Complementation to SV
+259 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=42 $ Wall of Counter
+260 0 (-60:65:67) imp:n=1 u=42 $ Space around Counter
+261 0 -68 -5 imp:n=1 fill=42 TRCL=(12.4 -12.5 0)
+c ---------- Counter 43 ---------------------------
+262 3 -0.000875 62 -63 -66 imp:n=1 u=43 $ Couter's SV
+263 3 -0.000875 61 -62 -66 imp:n=1 u=43 $ Lower Complementation to SV
+264 3 -0.000875 63 -64 -66 imp:n=1 u=43 $ Upper Complementation to SV
+265 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=43 $ Wall of Counter
+266 0 (-60:65:67) imp:n=1 u=43 $ Space around Counter
+267 0 -68 -5 imp:n=1 fill=43 TRCL=(12.5 12.4 0)
+c ---------- Counter 44 ---------------------------
+268 3 -0.000875 62 -63 -66 imp:n=1 u=44 $ Couter's SV
+269 3 -0.000875 61 -62 -66 imp:n=1 u=44 $ Lower Complementation to SV
+270 3 -0.000875 63 -64 -66 imp:n=1 u=44 $ Upper Complementation to SV
+271 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=44 $ Wall of Counter
+272 0 (-60:65:67) imp:n=1 u=44 $ Space around Counter
+273 0 -68 -5 imp:n=1 fill=44 TRCL=(-12.4 12.5 0)
+c ---------- Counter 45 ---------------------------
+274 3 -0.000875 62 -63 -66 imp:n=1 u=45 $ Couter's SV
+275 3 -0.000875 61 -62 -66 imp:n=1 u=45 $ Lower Complementation to SV
+276 3 -0.000875 63 -64 -66 imp:n=1 u=45 $ Upper Complementation to SV
+277 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=45 $ Wall of Counter
+278 0 (-60:65:67) imp:n=1 u=45 $ Space around Counter
+279 0 -68 -5 imp:n=1 fill=45 TRCL=(-2.7 -18.6 0)
+c ---------- Counter 46 ---------------------------
+280 3 -0.000875 62 -63 -66 imp:n=1 u=46 $ Couter's SV
+281 3 -0.000875 61 -62 -66 imp:n=1 u=46 $ Lower Complementation to SV
+282 3 -0.000875 63 -64 -66 imp:n=1 u=46 $ Upper Complementation to SV
+283 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=46 $ Wall of Counter
+284 0 (-60:65:67) imp:n=1 u=46 $ Space around Counter
+285 0 -68 -5 imp:n=1 fill=46 TRCL=(2.6 -18.6 0)
+c ---------- Counter 47 ---------------------------
+286 3 -0.000875 62 -63 -66 imp:n=1 u=47 $ Couter's SV
+287 3 -0.000875 61 -62 -66 imp:n=1 u=47 $ Lower Complementation to SV
+288 3 -0.000875 63 -64 -66 imp:n=1 u=47 $ Upper Complementation to SV
+289 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=47 $ Wall of Counter
+290 0 (-60:65:67) imp:n=1 u=47 $ Space around Counter
+291 0 -68 -5 imp:n=1 fill=47 TRCL=(18.6 -2.7 0)
+c ---------- Counter 48 ---------------------------
+292 3 -0.000875 62 -63 -66 imp:n=1 u=48 $ Couter's SV
+293 3 -0.000875 61 -62 -66 imp:n=1 u=48 $ Lower Complementation to SV
+294 3 -0.000875 63 -64 -66 imp:n=1 u=48 $ Upper Complementation to SV
+295 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=48 $ Wall of Counter
+296 0 (-60:65:67) imp:n=1 u=48 $ Space around Counter
+297 0 -68 -5 imp:n=1 fill=48 TRCL=(18.6 2.6 0)
+c ---------- Counter 49 ---------------------------
+298 3 -0.000875 62 -63 -66 imp:n=1 u=49 $ Couter's SV
+299 3 -0.000875 61 -62 -66 imp:n=1 u=49 $ Lower Complementation to SV
+300 3 -0.000875 63 -64 -66 imp:n=1 u=49 $ Upper Complementation to SV
+301 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=49 $ Wall of Counter
+302 0 (-60:65:67) imp:n=1 u=49 $ Space around Counter
+303 0 -68 -5 imp:n=1 fill=49 TRCL=(2.7 18.6 0)
+c ---------- Counter 50 ---------------------------
+304 3 -0.000875 62 -63 -66 imp:n=1 u=50 $ Couter's SV
+305 3 -0.000875 61 -62 -66 imp:n=1 u=50 $ Lower Complementation to SV
+306 3 -0.000875 63 -64 -66 imp:n=1 u=50 $ Upper Complementation to SV
+307 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=50 $ Wall of Counter
+308 0 (-60:65:67) imp:n=1 u=50 $ Space around Counter
+309 0 -68 -5 imp:n=1 fill=50 TRCL=(-2.6 18.6 0)
+c ---------- Counter 51 ---------------------------
+310 3 -0.000875 62 -63 -66 imp:n=1 u=51 $ Couter's SV
+311 3 -0.000875 61 -62 -66 imp:n=1 u=51 $ Lower Complementation to SV
+312 3 -0.000875 63 -64 -66 imp:n=1 u=51 $ Upper Complementation to SV
+313 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=51 $ Wall of Counter
+314 0 (-60:65:67) imp:n=1 u=51 $ Space around Counter
+315 0 -68 -5 imp:n=1 fill=51 TRCL=(-18.6 2.7 0)
+c ---------- Counter 52 ---------------------------
+316 3 -0.000875 62 -63 -66 imp:n=1 u=52 $ Couter's SV
+317 3 -0.000875 61 -62 -66 imp:n=1 u=52 $ Lower Complementation to SV
+318 3 -0.000875 63 -64 -66 imp:n=1 u=52 $ Upper Complementation to SV
+319 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=52 $ Wall of Counter
+320 0 (-60:65:67) imp:n=1 u=52 $ Space around Counter
+321 0 -68 -5 imp:n=1 fill=52 TRCL=(-18.6 -2.6 0)
+c ---------- Counter 53 ---------------------------
+322 3 -0.000875 62 -63 -66 imp:n=1 u=53 $ Couter's SV
+323 3 -0.000875 61 -62 -66 imp:n=1 u=53 $ Lower Complementation to SV
+324 3 -0.000875 63 -64 -66 imp:n=1 u=53 $ Upper Complementation to SV
+325 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=53 $ Wall of Counter
+326 0 (-60:65:67) imp:n=1 u=53 $ Space around Counter
+327 0 -68 -5 imp:n=1 fill=53 TRCL=(7.4 -18.1 0)
+c ---------- Counter 54 ---------------------------
+328 3 -0.000875 62 -63 -66 imp:n=1 u=54 $ Couter's SV
+329 3 -0.000875 61 -62 -66 imp:n=1 u=54 $ Lower Complementation to SV
+330 3 -0.000875 63 -64 -66 imp:n=1 u=54 $ Upper Complementation to SV
+331 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=54 $ Wall of Counter
+332 0 (-60:65:67) imp:n=1 u=54 $ Space around Counter
+333 0 -68 -5 imp:n=1 fill=54 TRCL=(18.1 -7.6 0)
+c ---------- Counter 55 ---------------------------
+334 3 -0.000875 62 -63 -66 imp:n=1 u=55 $ Couter's SV
+335 3 -0.000875 61 -62 -66 imp:n=1 u=55 $ Lower Complementation to SV
+336 3 -0.000875 63 -64 -66 imp:n=1 u=55 $ Upper Complementation to SV
+337 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=55 $ Wall of Counter
+338 0 (-60:65:67) imp:n=1 u=55 $ Space around Counter
+339 0 -68 -5 imp:n=1 fill=55 TRCL=(18.1 7.4 0)
+c ---------- Counter 56 ---------------------------
+340 3 -0.000875 62 -63 -66 imp:n=1 u=56 $ Couter's SV
+341 3 -0.000875 61 -62 -66 imp:n=1 u=56 $ Lower Complementation to SV
+342 3 -0.000875 63 -64 -66 imp:n=1 u=56 $ Upper Complementation to SV
+343 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=56 $ Wall of Counter
+344 0 (-60:65:67) imp:n=1 u=56 $ Space around Counter
+345 0 -68 -5 imp:n=1 fill=56 TRCL=(7.6 18.1 0)
+c ---------- Counter 57 ---------------------------
+346 3 -0.000875 62 -63 -66 imp:n=1 u=57 $ Couter's SV
+347 3 -0.000875 61 -62 -66 imp:n=1 u=57 $ Lower Complementation to SV
+348 3 -0.000875 63 -64 -66 imp:n=1 u=57 $ Upper Complementation to SV
+349 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=57 $ Wall of Counter
+350 0 (-60:65:67) imp:n=1 u=57 $ Space around Counter
+351 0 -68 -5 imp:n=1 fill=57 TRCL=(-7.4 18.1 0)
+c ---------- Counter 58 ---------------------------
+352 3 -0.000875 62 -63 -66 imp:n=1 u=58 $ Couter's SV
+353 3 -0.000875 61 -62 -66 imp:n=1 u=58 $ Lower Complementation to SV
+354 3 -0.000875 63 -64 -66 imp:n=1 u=58 $ Upper Complementation to SV
+355 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=58 $ Wall of Counter
+356 0 (-60:65:67) imp:n=1 u=58 $ Space around Counter
+357 0 -68 -5 imp:n=1 fill=58 TRCL=(-18.1 7.6 0)
+c ---------- Counter 59 ---------------------------
+358 3 -0.000875 62 -63 -66 imp:n=1 u=59 $ Couter's SV
+359 3 -0.000875 61 -62 -66 imp:n=1 u=59 $ Lower Complementation to SV
+360 3 -0.000875 63 -64 -66 imp:n=1 u=59 $ Upper Complementation to SV
+361 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=59 $ Wall of Counter
+362 0 (-60:65:67) imp:n=1 u=59 $ Space around Counter
+363 0 -68 -5 imp:n=1 fill=59 TRCL=(-18.1 -7.4 0)
+c ---------- Counter 60 ---------------------------
+364 3 -0.000875 62 -63 -66 imp:n=1 u=60 $ Couter's SV
+365 3 -0.000875 61 -62 -66 imp:n=1 u=60 $ Lower Complementation to SV
+366 3 -0.000875 63 -64 -66 imp:n=1 u=60 $ Upper Complementation to SV
+367 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=60 $ Wall of Counter
+368 0 (-60:65:67) imp:n=1 u=60 $ Space around Counter
+369 0 -68 -5 imp:n=1 fill=60 TRCL=(-7.6 -18.1 0)
+c ---------- Counter 61 ---------------------------
+370 3 -0.000875 62 -63 -66 imp:n=1 u=61 $ Couter's SV
+371 3 -0.000875 61 -62 -66 imp:n=1 u=61 $ Lower Complementation to SV
+372 3 -0.000875 63 -64 -66 imp:n=1 u=61 $ Upper Complementation to SV
+373 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=61 $ Wall of Counter
+374 0 (-60:65:67) imp:n=1 u=61 $ Space around Counter
+375 0 -68 -5 imp:n=1 fill=61 TRCL=(12.1 -16.6 0)
+c ---------- Counter 62 ---------------------------
+376 3 -0.000875 62 -63 -66 imp:n=1 u=62 $ Couter's SV
+377 3 -0.000875 61 -62 -66 imp:n=1 u=62 $ Lower Complementation to SV
+378 3 -0.000875 63 -64 -66 imp:n=1 u=62 $ Upper Complementation to SV
+379 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=62 $ Wall of Counter
+380 0 (-60:65:67) imp:n=1 u=62 $ Space around Counter
+381 0 -68 -5 imp:n=1 fill=62 TRCL=(16.6 -12.2 0)
+c ---------- Counter 63 ---------------------------
+382 3 -0.000875 62 -63 -66 imp:n=1 u=63 $ Couter's SV
+383 3 -0.000875 61 -62 -66 imp:n=1 u=63 $ Lower Complementation to SV
+384 3 -0.000875 63 -64 -66 imp:n=1 u=63 $ Upper Complementation to SV
+385 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=63 $ Wall of Counter
+386 0 (-60:65:67) imp:n=1 u=63 $ Space around Counter
+387 0 -68 -5 imp:n=1 fill=63 TRCL=(16.6 12.1 0)
+c ---------- Counter 64 ---------------------------
+388 3 -0.000875 62 -63 -66 imp:n=1 u=64 $ Couter's SV
+389 3 -0.000875 61 -62 -66 imp:n=1 u=64 $ Lower Complementation to SV
+390 3 -0.000875 63 -64 -66 imp:n=1 u=64 $ Upper Complementation to SV
+391 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=64 $ Wall of Counter
+392 0 (-60:65:67) imp:n=1 u=64 $ Space around Counter
+393 0 -68 -5 imp:n=1 fill=64 TRCL=(12.2 16.6 0)
+c ---------- Counter 65 ---------------------------
+394 3 -0.000875 62 -63 -66 imp:n=1 u=65 $ Couter's SV
+395 3 -0.000875 61 -62 -66 imp:n=1 u=65 $ Lower Complementation to SV
+396 3 -0.000875 63 -64 -66 imp:n=1 u=65 $ Upper Complementation to SV
+397 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=65 $ Wall of Counter
+398 0 (-60:65:67) imp:n=1 u=65 $ Space around Counter
+399 0 -68 -5 imp:n=1 fill=65 TRCL=(-12.1 16.6 0)
+c ---------- Counter 66 ---------------------------
+400 3 -0.000875 62 -63 -66 imp:n=1 u=66 $ Couter's SV
+401 3 -0.000875 61 -62 -66 imp:n=1 u=66 $ Lower Complementation to SV
+402 3 -0.000875 63 -64 -66 imp:n=1 u=66 $ Upper Complementation to SV
+403 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=66 $ Wall of Counter
+404 0 (-60:65:67) imp:n=1 u=66 $ Space around Counter
+405 0 -68 -5 imp:n=1 fill=66 TRCL=(-16.6 12.2 0)
+c ---------- Counter 67 ---------------------------
+406 3 -0.000875 62 -63 -66 imp:n=1 u=67 $ Couter's SV
+407 3 -0.000875 61 -62 -66 imp:n=1 u=67 $ Lower Complementation to SV
+408 3 -0.000875 63 -64 -66 imp:n=1 u=67 $ Upper Complementation to SV
+409 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=67 $ Wall of Counter
+410 0 (-60:65:67) imp:n=1 u=67 $ Space around Counter
+411 0 -68 -5 imp:n=1 fill=67 TRCL=(-16.6 -12.1 0)
+c ---------- Counter 68 ---------------------------
+412 3 -0.000875 62 -63 -66 imp:n=1 u=68 $ Couter's SV
+413 3 -0.000875 61 -62 -66 imp:n=1 u=68 $ Lower Complementation to SV
+414 3 -0.000875 63 -64 -66 imp:n=1 u=68 $ Upper Complementation to SV
+415 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=68 $ Wall of Counter
+416 0 (-60:65:67) imp:n=1 u=68 $ Space around Counter
+417 0 -68 -5 imp:n=1 fill=68 TRCL=(-12.2 -16.6 0)
+c ---------- Counter 69 ---------------------------
+418 3 -0.000875 80 -81 -84 imp:n=1 u=69 $ Couter's SV
+419 3 -0.000875 79 -80 -84 imp:n=1 u=69 $ Lower Complementation to SV
+420 3 -0.000875 81 -82 -84 imp:n=1 u=69 $ Upper Complementation to SV
+421 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=69 $ Wall of Counter
+422 0 (-78:83:85) imp:n=1 u=69 $ Space around Counter
+423 0 -86 -5 imp:n=1 fill=69 TRCL=(22.0 -0.1 0)
+c ---------- Counter 70 ---------------------------
+424 3 -0.000875 80 -81 -84 imp:n=1 u=70 $ Couter's SV
+425 3 -0.000875 79 -80 -84 imp:n=1 u=70 $ Lower Complementation to SV
+426 3 -0.000875 81 -82 -84 imp:n=1 u=70 $ Upper Complementation to SV
+427 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=70 $ Wall of Counter
+428 0 (-78:83:85) imp:n=1 u=70 $ Space around Counter
+429 0 -86 -5 imp:n=1 fill=70 TRCL=(0.1 22.0 0)
+c ---------- Counter 71 ---------------------------
+430 3 -0.000875 80 -81 -84 imp:n=1 u=71 $ Couter's SV
+431 3 -0.000875 79 -80 -84 imp:n=1 u=71 $ Lower Complementation to SV
+432 3 -0.000875 81 -82 -84 imp:n=1 u=71 $ Upper Complementation to SV
+433 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=71 $ Wall of Counter
+434 0 (-78:83:85) imp:n=1 u=71 $ Space around Counter
+435 0 -86 -5 imp:n=1 fill=71 TRCL=(-22.0 0.1 0)
+c ---------- Counter 72 ---------------------------
+436 3 -0.000875 80 -81 -84 imp:n=1 u=72 $ Couter's SV
+437 3 -0.000875 79 -80 -84 imp:n=1 u=72 $ Lower Complementation to SV
+438 3 -0.000875 81 -82 -84 imp:n=1 u=72 $ Upper Complementation to SV
+439 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=72 $ Wall of Counter
+440 0 (-78:83:85) imp:n=1 u=72 $ Space around Counter
+441 0 -86 -5 imp:n=1 fill=72 TRCL=(-0.1 -22.0 0)
+c ---------- Counter 73 ---------------------------
+442 3 -0.000875 62 -63 -66 imp:n=1 u=73 $ Couter's SV
+443 3 -0.000875 61 -62 -66 imp:n=1 u=73 $ Lower Complementation to SV
+444 3 -0.000875 63 -64 -66 imp:n=1 u=73 $ Upper Complementation to SV
+445 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=73 $ Wall of Counter
+446 0 (-60:65:67) imp:n=1 u=73 $ Space around Counter
+447 0 -68 -5 imp:n=1 fill=73 TRCL=(16.2 16.1 0)
+c ---------- Counter 75 ---------------------------
+448 3 -0.000875 62 -63 -66 imp:n=1 u=75 $ Couter's SV
+449 3 -0.000875 61 -62 -66 imp:n=1 u=75 $ Lower Complementation to SV
+450 3 -0.000875 63 -64 -66 imp:n=1 u=75 $ Upper Complementation to SV
+451 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=75 $ Wall of Counter
+452 0 (-60:65:67) imp:n=1 u=75 $ Space around Counter
+453 0 -68 -5 imp:n=1 fill=75 TRCL=(-16.2 -16.1 0)
+c ---------- Counter 76 ---------------------------
+454 3 -0.000875 62 -63 -66 imp:n=1 u=76 $ Couter's SV
+455 3 -0.000875 61 -62 -66 imp:n=1 u=76 $ Lower Complementation to SV
+456 3 -0.000875 63 -64 -66 imp:n=1 u=76 $ Upper Complementation to SV
+457 2 -7.91 60 -65 -67 (-61:64:66) imp:n=1 u=76 $ Wall of Counter
+458 0 (-60:65:67) imp:n=1 u=76 $ Space around Counter
+459 0 -68 -5 imp:n=1 fill=76 TRCL=(16.1 -16.2 0)
+c ---------- Counter 74 ---------------------------
+460 3 -0.000875 80 -81 -84 imp:n=1 u=74 $ Couter's SV
+461 3 -0.000875 79 -80 -84 imp:n=1 u=74 $ Lower Complementation to SV
+462 3 -0.000875 81 -82 -84 imp:n=1 u=74 $ Upper Complementation to SV
+463 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=74 $ Wall of Counter
+464 0 (-78:83:85) imp:n=1 u=74 $ Space around Counter
+465 0 -86 -5 imp:n=1 fill=74 TRCL=(-16.1 16.2 0)
+c ---------- Counter 77 ---------------------------
+466 3 -0.000875 80 -81 -84 imp:n=1 u=77 $ Couter's SV
+467 3 -0.000875 79 -80 -84 imp:n=1 u=77 $ Lower Complementation to SV
+468 3 -0.000875 81 -82 -84 imp:n=1 u=77 $ Upper Complementation to SV
+469 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=77 $ Wall of Counter
+470 0 (-78:83:85) imp:n=1 u=77 $ Space around Counter
+471 0 -86 -5 imp:n=1 fill=77 TRCL=(4.4 22.4 0)
+c ---------- Counter 78 ---------------------------
+472 3 -0.000875 80 -81 -84 imp:n=1 u=78 $ Couter's SV
+473 3 -0.000875 79 -80 -84 imp:n=1 u=78 $ Lower Complementation to SV
+474 3 -0.000875 81 -82 -84 imp:n=1 u=78 $ Upper Complementation to SV
+475 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=78 $ Wall of Counter
+476 0 (-78:83:85) imp:n=1 u=78 $ Space around Counter
+477 0 -86 -5 imp:n=1 fill=78 TRCL=(-4.3 22.4 0)
+c ---------- Counter 79 ---------------------------
+478 3 -0.000875 80 -81 -84 imp:n=1 u=79 $ Couter's SV
+479 3 -0.000875 79 -80 -84 imp:n=1 u=79 $ Lower Complementation to SV
+480 3 -0.000875 81 -82 -84 imp:n=1 u=79 $ Upper Complementation to SV
+481 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=79 $ Wall of Counter
+482 0 (-78:83:85) imp:n=1 u=79 $ Space around Counter
+483 0 -86 -5 imp:n=1 fill=79 TRCL=(-22.4 4.4 0)
+c ---------- Counter 80 ---------------------------
+484 3 -0.000875 80 -81 -84 imp:n=1 u=80 $ Couter's SV
+485 3 -0.000875 79 -80 -84 imp:n=1 u=80 $ Lower Complementation to SV
+486 3 -0.000875 81 -82 -84 imp:n=1 u=80 $ Upper Complementation to SV
+487 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=80 $ Wall of Counter
+488 0 (-78:83:85) imp:n=1 u=80 $ Space around Counter
+489 0 -86 -5 imp:n=1 fill=80 TRCL=(-22.4 -4.3 0)
+c ---------- Counter 81 ---------------------------
+490 3 -0.000875 80 -81 -84 imp:n=1 u=81 $ Couter's SV
+491 3 -0.000875 79 -80 -84 imp:n=1 u=81 $ Lower Complementation to SV
+492 3 -0.000875 81 -82 -84 imp:n=1 u=81 $ Upper Complementation to SV
+493 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=81 $ Wall of Counter
+494 0 (-78:83:85) imp:n=1 u=81 $ Space around Counter
+495 0 -86 -5 imp:n=1 fill=81 TRCL=(-4.4 -22.4 0)
+c ---------- Counter 82 ---------------------------
+496 3 -0.000875 80 -81 -84 imp:n=1 u=82 $ Couter's SV
+497 3 -0.000875 79 -80 -84 imp:n=1 u=82 $ Lower Complementation to SV
+498 3 -0.000875 81 -82 -84 imp:n=1 u=82 $ Upper Complementation to SV
+499 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=82 $ Wall of Counter
+500 0 (-78:83:85) imp:n=1 u=82 $ Space around Counter
+501 0 -86 -5 imp:n=1 fill=82 TRCL=(4.3 -22.4 0)
+c ---------- Counter 83 ---------------------------
+502 3 -0.000875 80 -81 -84 imp:n=1 u=83 $ Couter's SV
+503 3 -0.000875 79 -80 -84 imp:n=1 u=83 $ Lower Complementation to SV
+504 3 -0.000875 81 -82 -84 imp:n=1 u=83 $ Upper Complementation to SV
+505 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=83 $ Wall of Counter
+506 0 (-78:83:85) imp:n=1 u=83 $ Space around Counter
+507 0 -86 -5 imp:n=1 fill=83 TRCL=(22.4 -4.4 0)
+c ---------- Counter 84 ---------------------------
+508 3 -0.000875 80 -81 -84 imp:n=1 u=84 $ Couter's SV
+509 3 -0.000875 79 -80 -84 imp:n=1 u=84 $ Lower Complementation to SV
+510 3 -0.000875 81 -82 -84 imp:n=1 u=84 $ Upper Complementation to SV
+511 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=84 $ Wall of Counter
+512 0 (-78:83:85) imp:n=1 u=84 $ Space around Counter
+513 0 -86 -5 imp:n=1 fill=84 TRCL=(22.4 4.3 0)
+c ---------- Counter 85 ---------------------------
+514 3 -0.000875 80 -81 -84 imp:n=1 u=85 $ Couter's SV
+515 3 -0.000875 79 -80 -84 imp:n=1 u=85 $ Lower Complementation to SV
+516 3 -0.000875 81 -82 -84 imp:n=1 u=85 $ Upper Complementation to SV
+517 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=85 $ Wall of Counter
+518 0 (-78:83:85) imp:n=1 u=85 $ Space around Counter
+519 0 -86 -5 imp:n=1 fill=85 TRCL=(-11.4 21.6 0)
+c ---------- Counter 86 ---------------------------
+520 3 -0.000875 80 -81 -84 imp:n=1 u=86 $ Couter's SV
+521 3 -0.000875 79 -80 -84 imp:n=1 u=86 $ Lower Complementation to SV
+522 3 -0.000875 81 -82 -84 imp:n=1 u=86 $ Upper Complementation to SV
+523 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=86 $ Wall of Counter
+524 0 (-78:83:85) imp:n=1 u=86 $ Space around Counter
+525 0 -86 -5 imp:n=1 fill=86 TRCL=(-21.4 11.7 0)
+c ---------- Counter 87 ---------------------------
+526 3 -0.000875 80 -81 -84 imp:n=1 u=87 $ Couter's SV
+527 3 -0.000875 79 -80 -84 imp:n=1 u=87 $ Lower Complementation to SV
+528 3 -0.000875 81 -82 -84 imp:n=1 u=87 $ Upper Complementation to SV
+529 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=87 $ Wall of Counter
+530 0 (-78:83:85) imp:n=1 u=87 $ Space around Counter
+531 0 -86 -5 imp:n=1 fill=87 TRCL=(-21.6 -11.4 0)
+c ---------- Counter 88 ---------------------------
+532 3 -0.000875 80 -81 -84 imp:n=1 u=88 $ Couter's SV
+533 3 -0.000875 79 -80 -84 imp:n=1 u=88 $ Lower Complementation to SV
+534 3 -0.000875 81 -82 -84 imp:n=1 u=88 $ Upper Complementation to SV
+535 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=88 $ Wall of Counter
+536 0 (-78:83:85) imp:n=1 u=88 $ Space around Counter
+537 0 -86 -5 imp:n=1 fill=88 TRCL=(-11.7 -21.4 0)
+c ---------- Counter 89 ---------------------------
+538 3 -0.000875 80 -81 -84 imp:n=1 u=89 $ Couter's SV
+539 3 -0.000875 79 -80 -84 imp:n=1 u=89 $ Lower Complementation to SV
+540 3 -0.000875 81 -82 -84 imp:n=1 u=89 $ Upper Complementation to SV
+541 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=89 $ Wall of Counter
+542 0 (-78:83:85) imp:n=1 u=89 $ Space around Counter
+543 0 -86 -5 imp:n=1 fill=89 TRCL=(11.4 -21.6 0)
+c ---------- Counter 90 ---------------------------
+544 3 -0.000875 80 -81 -84 imp:n=1 u=90 $ Couter's SV
+545 3 -0.000875 79 -80 -84 imp:n=1 u=90 $ Lower Complementation to SV
+546 3 -0.000875 81 -82 -84 imp:n=1 u=90 $ Upper Complementation to SV
+547 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=90 $ Wall of Counter
+548 0 (-78:83:85) imp:n=1 u=90 $ Space around Counter
+549 0 -86 -5 imp:n=1 fill=90 TRCL=(21.4 -11.7 0)
+c ---------- Counter 91 ---------------------------
+550 3 -0.000875 80 -81 -84 imp:n=1 u=91 $ Couter's SV
+551 3 -0.000875 79 -80 -84 imp:n=1 u=91 $ Lower Complementation to SV
+552 3 -0.000875 81 -82 -84 imp:n=1 u=91 $ Upper Complementation to SV
+553 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=91 $ Wall of Counter
+554 0 (-78:83:85) imp:n=1 u=91 $ Space around Counter
+555 0 -86 -5 imp:n=1 fill=91 TRCL=(21.6 11.4 0)
+c ---------- Counter 92 ---------------------------
+556 3 -0.000875 80 -81 -84 imp:n=1 u=92 $ Couter's SV
+557 3 -0.000875 79 -80 -84 imp:n=1 u=92 $ Lower Complementation to SV
+558 3 -0.000875 81 -82 -84 imp:n=1 u=92 $ Upper Complementation to SV
+559 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=92 $ Wall of Counter
+560 0 (-78:83:85) imp:n=1 u=92 $ Space around Counter
+561 0 -86 -5 imp:n=1 fill=92 TRCL=(11.7 21.4 0)
+c ---------- Counter 93 ---------------------------
+562 3 -0.000875 80 -81 -84 imp:n=1 u=93 $ Couter's SV
+563 3 -0.000875 79 -80 -84 imp:n=1 u=93 $ Lower Complementation to SV
+564 3 -0.000875 81 -82 -84 imp:n=1 u=93 $ Upper Complementation to SV
+565 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=93 $ Wall of Counter
+566 0 (-78:83:85) imp:n=1 u=93 $ Space around Counter
+567 0 -86 -5 imp:n=1 fill=93 TRCL=(-23.7 8.7 0)
+c ---------- Counter 94 ---------------------------
+568 3 -0.000875 80 -81 -84 imp:n=1 u=94 $ Couter's SV
+569 3 -0.000875 79 -80 -84 imp:n=1 u=94 $ Lower Complementation to SV
+570 3 -0.000875 81 -82 -84 imp:n=1 u=94 $ Upper Complementation to SV
+571 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=94 $ Wall of Counter
+572 0 (-78:83:85) imp:n=1 u=94 $ Space around Counter
+573 0 -86 -5 imp:n=1 fill=94 TRCL=(-23.8 -8.4 0)
+c ---------- Counter 95 ---------------------------
+574 3 -0.000875 80 -81 -84 imp:n=1 u=95 $ Couter's SV
+575 3 -0.000875 79 -80 -84 imp:n=1 u=95 $ Lower Complementation to SV
+576 3 -0.000875 81 -82 -84 imp:n=1 u=95 $ Upper Complementation to SV
+577 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=95 $ Wall of Counter
+578 0 (-78:83:85) imp:n=1 u=95 $ Space around Counter
+579 0 -86 -5 imp:n=1 fill=95 TRCL=(-8.7 -23.7 0)
+c ---------- Counter 96 ---------------------------
+580 3 -0.000875 80 -81 -84 imp:n=1 u=96 $ Couter's SV
+581 3 -0.000875 79 -80 -84 imp:n=1 u=96 $ Lower Complementation to SV
+582 3 -0.000875 81 -82 -84 imp:n=1 u=96 $ Upper Complementation to SV
+583 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=96 $ Wall of Counter
+584 0 (-78:83:85) imp:n=1 u=96 $ Space around Counter
+585 0 -86 -5 imp:n=1 fill=96 TRCL=(8.4 -23.8 0)
+c ---------- Counter 97 ---------------------------
+586 3 -0.000875 80 -81 -84 imp:n=1 u=97 $ Couter's SV
+587 3 -0.000875 79 -80 -84 imp:n=1 u=97 $ Lower Complementation to SV
+588 3 -0.000875 81 -82 -84 imp:n=1 u=97 $ Upper Complementation to SV
+589 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=97 $ Wall of Counter
+590 0 (-78:83:85) imp:n=1 u=97 $ Space around Counter
+591 0 -86 -5 imp:n=1 fill=97 TRCL=(23.7 -8.7 0)
+c ---------- Counter 98 ---------------------------
+592 3 -0.000875 80 -81 -84 imp:n=1 u=98 $ Couter's SV
+593 3 -0.000875 79 -80 -84 imp:n=1 u=98 $ Lower Complementation to SV
+594 3 -0.000875 81 -82 -84 imp:n=1 u=98 $ Upper Complementation to SV
+595 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=98 $ Wall of Counter
+596 0 (-78:83:85) imp:n=1 u=98 $ Space around Counter
+597 0 -86 -5 imp:n=1 fill=98 TRCL=(23.8 8.4 0)
+c ---------- Counter 99 ---------------------------
+598 3 -0.000875 80 -81 -84 imp:n=1 u=99 $ Couter's SV
+599 3 -0.000875 79 -80 -84 imp:n=1 u=99 $ Lower Complementation to SV
+600 3 -0.000875 81 -82 -84 imp:n=1 u=99 $ Upper Complementation to SV
+601 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=99 $ Wall of Counter
+602 0 (-78:83:85) imp:n=1 u=99 $ Space around Counter
+603 0 -86 -5 imp:n=1 fill=99 TRCL=(8.7 23.7 0)
+c ---------- Counter 100 ---------------------------
+604 3 -0.000875 80 -81 -84 imp:n=1 u=100 $ Couter's SV
+605 3 -0.000875 79 -80 -84 imp:n=1 u=100 $ Lower Complementation to SV
+606 3 -0.000875 81 -82 -84 imp:n=1 u=100 $ Upper Complementation to SV
+607 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=100 $ Wall of Counter
+608 0 (-78:83:85) imp:n=1 u=100 $ Space around Counter
+609 0 -86 -5 imp:n=1 fill=100 TRCL=(-8.4 23.8 0)
+c ---------- Counter 101 ---------------------------
+610 3 -0.000875 80 -81 -84 imp:n=1 u=101 $ Couter's SV
+611 3 -0.000875 79 -80 -84 imp:n=1 u=101 $ Lower Complementation to SV
+612 3 -0.000875 81 -82 -84 imp:n=1 u=101 $ Upper Complementation to SV
+613 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=101 $ Wall of Counter
+614 0 (-78:83:85) imp:n=1 u=101 $ Space around Counter
+615 0 -86 -5 imp:n=1 fill=101 TRCL=(-20.7 -15.3 0)
+c ---------- Counter 102 ---------------------------
+616 3 -0.000875 80 -81 -84 imp:n=1 u=102 $ Couter's SV
+617 3 -0.000875 79 -80 -84 imp:n=1 u=102 $ Lower Complementation to SV
+618 3 -0.000875 81 -82 -84 imp:n=1 u=102 $ Upper Complementation to SV
+619 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=102 $ Wall of Counter
+620 0 (-78:83:85) imp:n=1 u=102 $ Space around Counter
+621 0 -86 -5 imp:n=1 fill=102 TRCL=(-15.6 -20.6 0)
+c ---------- Counter 103 ---------------------------
+622 3 -0.000875 80 -81 -84 imp:n=1 u=103 $ Couter's SV
+623 3 -0.000875 79 -80 -84 imp:n=1 u=103 $ Lower Complementation to SV
+624 3 -0.000875 81 -82 -84 imp:n=1 u=103 $ Upper Complementation to SV
+625 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=103 $ Wall of Counter
+626 0 (-78:83:85) imp:n=1 u=103 $ Space around Counter
+627 0 -86 -5 imp:n=1 fill=103 TRCL=(15.3 -20.7 0)
+c ---------- Counter 104 ---------------------------
+628 3 -0.000875 80 -81 -84 imp:n=1 u=104 $ Couter's SV
+629 3 -0.000875 79 -80 -84 imp:n=1 u=104 $ Lower Complementation to SV
+630 3 -0.000875 81 -82 -84 imp:n=1 u=104 $ Upper Complementation to SV
+631 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=104 $ Wall of Counter
+632 0 (-78:83:85) imp:n=1 u=104 $ Space around Counter
+633 0 -86 -5 imp:n=1 fill=104 TRCL=(20.6 -15.6 0)
+c ---------- Counter 105 ---------------------------
+634 3 -0.000875 80 -81 -84 imp:n=1 u=105 $ Couter's SV
+635 3 -0.000875 79 -80 -84 imp:n=1 u=105 $ Lower Complementation to SV
+636 3 -0.000875 81 -82 -84 imp:n=1 u=105 $ Upper Complementation to SV
+637 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=105 $ Wall of Counter
+638 0 (-78:83:85) imp:n=1 u=105 $ Space around Counter
+639 0 -86 -5 imp:n=1 fill=105 TRCL=(20.7 15.3 0)
+c ---------- Counter 106 ---------------------------
+640 3 -0.000875 80 -81 -84 imp:n=1 u=106 $ Couter's SV
+641 3 -0.000875 79 -80 -84 imp:n=1 u=106 $ Lower Complementation to SV
+642 3 -0.000875 81 -82 -84 imp:n=1 u=106 $ Upper Complementation to SV
+643 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=106 $ Wall of Counter
+644 0 (-78:83:85) imp:n=1 u=106 $ Space around Counter
+645 0 -86 -5 imp:n=1 fill=106 TRCL=(15.6 20.6 0)
+c ---------- Counter 107 ---------------------------
+646 3 -0.000875 80 -81 -84 imp:n=1 u=107 $ Couter's SV
+647 3 -0.000875 79 -80 -84 imp:n=1 u=107 $ Lower Complementation to SV
+648 3 -0.000875 81 -82 -84 imp:n=1 u=107 $ Upper Complementation to SV
+649 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=107 $ Wall of Counter
+650 0 (-78:83:85) imp:n=1 u=107 $ Space around Counter
+651 0 -86 -5 imp:n=1 fill=107 TRCL=(-15.3 20.7 0)
+c ---------- Counter 108 ---------------------------
+652 3 -0.000875 80 -81 -84 imp:n=1 u=108 $ Couter's SV
+653 3 -0.000875 79 -80 -84 imp:n=1 u=108 $ Lower Complementation to SV
+654 3 -0.000875 81 -82 -84 imp:n=1 u=108 $ Upper Complementation to SV
+655 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=108 $ Wall of Counter
+656 0 (-78:83:85) imp:n=1 u=108 $ Space around Counter
+657 0 -86 -5 imp:n=1 fill=108 TRCL=(-20.6 15.6 0)
+c ---------- Counter 109 ---------------------------
+658 3 -0.000875 80 -81 -84 imp:n=1 u=109 $ Couter's SV
+659 3 -0.000875 79 -80 -84 imp:n=1 u=109 $ Lower Complementation to SV
+660 3 -0.000875 81 -82 -84 imp:n=1 u=109 $ Upper Complementation to SV
+661 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=109 $ Wall of Counter
+662 0 (-78:83:85) imp:n=1 u=109 $ Space around Counter
+663 0 -86 -5 imp:n=1 fill=109 TRCL=(-2.3 -26.5 0)
+c ---------- Counter 110 ---------------------------
+664 3 -0.000875 80 -81 -84 imp:n=1 u=110 $ Couter's SV
+665 3 -0.000875 79 -80 -84 imp:n=1 u=110 $ Lower Complementation to SV
+666 3 -0.000875 81 -82 -84 imp:n=1 u=110 $ Upper Complementation to SV
+667 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=110 $ Wall of Counter
+668 0 (-78:83:85) imp:n=1 u=110 $ Space around Counter
+669 0 -86 -5 imp:n=1 fill=110 TRCL=(2.1 -26.5 0)
+c ---------- Counter 111 ---------------------------
+670 3 -0.000875 80 -81 -84 imp:n=1 u=111 $ Couter's SV
+671 3 -0.000875 79 -80 -84 imp:n=1 u=111 $ Lower Complementation to SV
+672 3 -0.000875 81 -82 -84 imp:n=1 u=111 $ Upper Complementation to SV
+673 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=111 $ Wall of Counter
+674 0 (-78:83:85) imp:n=1 u=111 $ Space around Counter
+675 0 -86 -5 imp:n=1 fill=111 TRCL=(26.5 -2.3 0)
+c ---------- Counter 112 ---------------------------
+676 3 -0.000875 80 -81 -84 imp:n=1 u=112 $ Couter's SV
+677 3 -0.000875 79 -80 -84 imp:n=1 u=112 $ Lower Complementation to SV
+678 3 -0.000875 81 -82 -84 imp:n=1 u=112 $ Upper Complementation to SV
+679 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=112 $ Wall of Counter
+680 0 (-78:83:85) imp:n=1 u=112 $ Space around Counter
+681 0 -86 -5 imp:n=1 fill=112 TRCL=(26.5 2.1 0)
+c ---------- Counter 113 ---------------------------
+682 3 -0.000875 80 -81 -84 imp:n=1 u=113 $ Couter's SV
+683 3 -0.000875 79 -80 -84 imp:n=1 u=113 $ Lower Complementation to SV
+684 3 -0.000875 81 -82 -84 imp:n=1 u=113 $ Upper Complementation to SV
+685 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=113 $ Wall of Counter
+686 0 (-78:83:85) imp:n=1 u=113 $ Space around Counter
+687 0 -86 -5 imp:n=1 fill=113 TRCL=(2.3 26.5 0)
+c ---------- Counter 114 ---------------------------
+688 3 -0.000875 80 -81 -84 imp:n=1 u=114 $ Couter's SV
+689 3 -0.000875 79 -80 -84 imp:n=1 u=114 $ Lower Complementation to SV
+690 3 -0.000875 81 -82 -84 imp:n=1 u=114 $ Upper Complementation to SV
+691 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=114 $ Wall of Counter
+692 0 (-78:83:85) imp:n=1 u=114 $ Space around Counter
+693 0 -86 -5 imp:n=1 fill=114 TRCL=(-2.1 26.5 0)
+c ---------- Counter 115 ---------------------------
+694 3 -0.000875 80 -81 -84 imp:n=1 u=115 $ Couter's SV
+695 3 -0.000875 79 -80 -84 imp:n=1 u=115 $ Lower Complementation to SV
+696 3 -0.000875 81 -82 -84 imp:n=1 u=115 $ Upper Complementation to SV
+697 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=115 $ Wall of Counter
+698 0 (-78:83:85) imp:n=1 u=115 $ Space around Counter
+699 0 -86 -5 imp:n=1 fill=115 TRCL=(-26.5 2.3 0)
+c ---------- Counter 116 ---------------------------
+700 3 -0.000875 80 -81 -84 imp:n=1 u=116 $ Couter's SV
+701 3 -0.000875 79 -80 -84 imp:n=1 u=116 $ Lower Complementation to SV
+702 3 -0.000875 81 -82 -84 imp:n=1 u=116 $ Upper Complementation to SV
+703 2 -7.91 78 -83 -85 (-79:82:84) imp:n=1 u=116 $ Wall of Counter
+704 0 (-78:83:85) imp:n=1 u=116 $ Space around Counter
+705 0 -86 -5 imp:n=1 fill=116 TRCL=(-26.5 -2.1 0)
+c ----- Moderator ------------
+10003 1 -0.92 2 -5
+        #15 #21 #27 #33 #39 #45 #51 #57 #63 #69 #75 #81
+        #87 #93 #99 #105 #111 #117 #123 #129 #135 #141 #147 #153 #159
+        #165 #171 #177 #183 #189 #195 #201 #207 #213 #219 #225 #231 #237
+        #243 #249 #255 #261 #267 #273 #279 #285 #291 #297 #303 #309 #315
+        #321 #327 #333 #339 #345 #351 #357 #363 #369 #375 #381 #387 #393
+        #399 #405 #411 #417 #423 #429 #435 #441 #447 #453 #459 #465 #471
+        #477 #483 #489 #495 #501 #507 #513 #519 #525 #531 #537 #543 #549
+        #555 #561 #567 #573 #579 #585 #591 #597 #603 #609 #615 #621 #627
+        #633 #639 #645 #651 #657 #663 #669 #675 #681 #687 #693 #699 #705
+        imp:n=1
+c ----- Shield ------------
+10004 4 -0.94 5 -6 imp:n=1
+
+c ==== Surfaces ====
+1 RPP -7.6 7.6 -7.6 7.6 -32.5 32.5 $ Internal Surface of Vacuum Chamber
+2 RPP -7.75 7.75 -7.75 7.75 -32.5 32.5 $ External Surface of Vacuum Chamber
+5 RPP -32.5 32.5 -32.5 32.5 -31.0 31.0 $ External Surface of Moderator
+6 RPP -35.0 35.0 -35.0 35.0 -32.5 32.5 $ Border of Geometry (Shield Size)
+c ***** Counter Aspekt(true ? 4 : 7), 4 atm. *************************
+51 pz -24.5
+52 pz -24.45
+53 pz -23.0
+54 pz 23.0
+55 pz 24.45
+56 pz 24.5
+57 cz 1.45
+58 cz 1.5
+59 cz 1.52
+c ***** Counter Flerov Lab, 7 atm. *************************
+60 pz -24.25
+61 pz -24.2
+62 pz -23.25
+63 pz 21.25
+64 pz 24.2
+65 pz 24.25
+66 cz 1.5500001
+67 cz 1.6
+68 cz 1.62
+c ***** Counter Zaprudnya, 7 atm. *************************
+69 pz -28.0
+70 pz -27.95
+71 pz -26.2
+72 pz 25.800001
+73 pz 27.95
+74 pz 28.0
+75 cz 1.5500001
+76 cz 1.6
+77 cz 1.62
+c ***** Counter Mayak, 7 atm. *************************
+78 pz -28.0
+79 pz -27.95
+80 pz -26.0
+81 pz 26.0
+82 pz 27.95
+83 pz 28.0
+84 cz 1.45
+85 cz 1.5
+86 cz 1.52
+c ***** Counter Aspekt(false ? 4 : 7), 7 atm. *************************
+87 pz -28.0
+88 pz -27.95
+89 pz -26.0
+90 pz 26.0
+91 pz 27.95
+92 pz 28.0
+93 cz 1.45
+94 cz 1.5
+95 cz 1.52
+
+MODE N
+c ---------------- SOURCE ------------
+SDEF erg=d1 pos=0 0 0.0 wgt=1.0
+SP1 -3 1.025 2.926
+c ---------------- MATERIALS ------------
+M1 6000.60c 1 1001.60c 2 $ Polyethylene
+M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
+      29000.50c -0.01 $ Stainless Steel
+M3 2003.60c 1 $ He-3
+M4 6000.60c 0.316667 1001.60c 0.633333
+      5010.60c 0.012422 5011.60c 0.037578 $ Boron(5.0%)-Polyethylene
+c ---------------- TALLY ------------
+F4:N 10 114i 700 (10 114i 700)
+FM4 (0.061086 3 103)
+FQ4 f e
+F14:N (10 16 22 28 34 40 46 52)
+FM14 (0.550235 3 103) $ 8 Detectors of Layer 1
+F24:N (58 64 70 76 82 88 94 100)
+FM24 (0.550235 3 103) $ 8 Detectors of Layer 2
+F34:N (106 112 118 124)
+FM34 (0.275118 3 103) $ 4 Detectors of Layer 3
+F44:N (130 136 142 148)
+FM44 (0.235437 3 103) $ 4 Detectors of Layer 4
+F54:N (154 160 166 172 178 184 190 196)
+FM54 (0.470874 3 103) $ 8 Detectors of Layer 5
+F64:N (202 208 214 220 226 232 238 244)
+FM64 (0.470874 3 103) $ 8 Detectors of Layer 6
+F74:N (250 256 262 268)
+FM74 (0.235437 3 103) $ 4 Detectors of Layer 7
+F84:N (274 280 286 292 298 304 310 316)
+FM84 (0.470874 3 103) $ 8 Detectors of Layer 8
+F94:N (322 328 334 340 346 352 358 364)
+FM94 (0.470874 3 103) $ 8 Detectors of Layer 9
+F104:N (370 376 382 388 394 400 406 412)
+FM104 (0.470874 3 103) $ 8 Detectors of Layer 10
+F114:N (418 424 430 436)
+FM114 (0.240764 3 103) $ 4 Detectors of Layer 11
+F124:N (442 448 454)
+FM124 (0.176578 3 103) $ 3 Detectors of Layer 12
+F134:N (460)
+FM134 (0.060191 3 103) $ 1 Detectors of Layer 13
+F144:N (466 472 478 484 490 496 502 508)
+FM144 (0.481527 3 103) $ 8 Detectors of Layer 14
+F154:N (514 520 526 532 538 544 550 556)
+FM154 (0.481527 3 103) $ 8 Detectors of Layer 15
+F164:N (562 568 574 580 586 592 598 604)
+FM164 (0.481527 3 103) $ 8 Detectors of Layer 16
+F174:N (610 616 622 628 634 640 646 652)
+FM174 (0.481527 3 103) $ 8 Detectors of Layer 17
+F184:N (658 664 670 676 682 688 694 700)
+FM184 (0.481527 3 103) $ 8 Detectors of Layer 18
+T0 0 100 200 300 400 500
+       600 700 800 900 1000 1100 1200
+       1300 1400 1500 1600 1700 1800 1900
+       2000 2100 2200 2300 2400 2500 2600
+       2700 2800 2900 3000 3100 3200 3300
+       3400 3500 3600 3700 3800 3900 4000
+       4100 4200 4300 4400 4500 4600 4700
+       4800 4900 5000 5100 5200 5300 5400
+       5500 5600 5700 5800 5900 6000 6100
+       6200 6300 6400 6500 6600 6700 6800
+       6900 7000 7100 7200 7300 7400 7500
+       7600 7700 7800 7900 8000 8100 8200
+       8300 8400 8500 8600 8700 8800 8900
+       9000 9100 9200 9300 9400 9500 9600
+       9700 9800 9900 10000 10100 10200 10300
+       10400 10500 10600 10700 10800 10900 11000
+       11100 11200 11300 11400 11500 11600 11700
+       11800 11900 12000 12100 12200 12300 12400
+       12500 12600 12700 12800 12900 13000 13100
+       13200 13300 13400 13500 13600 13700 13800
+       13900 14000 14100 14200 14300 14400 14500
+       14600 14700 14800 14900 15000 15100 15200
+       15300 15400 15500 15600 15700 15800 15900
+       16000 16100 16200 16300 16400 16500 16600
+       16700 16800 16900 17000 17100 17200 17300
+       17400 17500 17600 17700 17800 17900 18000
+       18100 18200 18300 18400 18500 18600 18700
+       18800 18900 19000 19100 19200 19300 19400
+       19500 19600 19700 19800 19900 20000 20100
+       20200 20300 20400 20500 20600 20700 20800
+       20900 21000 21100 21200 21300 21400 21500
+       21600 21700 21800 21900 22000 22100 22200
+       22300 22400 22500 22600 22700 22800 22900
+       23000 23100 23200 23300 23400 23500 23600
+       23700 23800 23900 24000 24100 24200 24300
+       24400 24500 24600 24700 24800 24900 25000
+       25100 25200 25300 25400 25500 25600 25700
+       25800 25900 26000 26100 26200 26300 26400
+       26500 26600 26700 26800 26900 27000 27100
+       27200 27300 27400 27500 27600 27700 27800
+       27900 28000 28100 28200 28300 28400 28500
+       28600 28700 28800 28900 29000 29100 29200
+       29300 29400 29500 29600 29700 29800 29900
+       30000 30100 30200 30300 30400 30500 30600
+       30700 30800 30900 31000 31100 31200 31300
+       31400 31500 31600 31700 31800 31900 32000
+       32100 32200 32300 32400 32500 32600 32700
+       32800 32900 33000 33100 33200 33300 33400
+       33500 33600 33700 33800 33900 34000 34100
+       34200 34300 34400 34500 34600 34700 34800
+       34900 35000 35100 35200 35300 35400 35500
+       35600 35700 35800 35900 36000 36100 36200
+       36300 36400 36500 36600 36700 36800 36900
+       37000 37100 37200 37300 37400 37500 37600
+       37700 37800 37900 38000 38100 38200 38300
+       38400 38500 38600 38700 38800 38900 39000
+       39100 39200 39300 39400 39500 39600 39700
+       39800 39900 40000 40100 40200 40300 40400
+       40500 40600 40700 40800 40900 41000 41100
+       41200 41300 41400 41500 41600 41700 41800
+       41900 42000 42100 42200 42300 42400 42500
+       42600 42700 42800 42900 43000 43100 43200
+       43300 43400 43500 43600 43700 43800 43900
+       44000 44100 44200 44300 44400 44500 44600
+       44700 44800 44900 45000 45100 45200 45300
+       45400 45500 45600 45700 45800 45900 46000
+       46100 46200 46300 46400 46500 46600 46700
+       46800 46900 47000 47100 47200 47300 47400
+       47500 47600 47700 47800 47900 48000 48100
+       48200 48300 48400 48500 48600 48700 48800
+       48900 49000 49100 49200 49300 49400 49500
+       49600 49700 49800 49900 50000 50100 50200
+       50300 50400 50500 50600 50700 50800 50900
+       51000 51100 51200
+NPS 1000000000
+CTME 15

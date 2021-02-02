@@ -1,0 +1,16 @@
+cd 2021_February_2_09-27-28
+scp -r 2021_February_2_09-27-28.dat aisaev@sbgli2.in2p3.fr:.
+mcnpx i=2021_February_2_09-27-28.dat o=2021_February_2_09-27-28_o r=2021_February_2_09-27-28_r
+scp aisaev@sbgli2.in2p3.fr:./2021_February_2_09-27-28_o /Users/siberianisaev/Desktop/2021_February_2_09-27-28
+cd ..
+
+
+
+
+ssh -X aisaev@sbgli2.in2p3.fr
+source /libcern/mcnp/v27/sl5.8-x86_64/setup.sh
+
+
+
+
+rm *
