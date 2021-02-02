@@ -11,6 +11,7 @@ import Foundation
 class MCNPInput {
     
     fileprivate let npReactionId = 103 // (n,p) reaction
+    fileprivate let naReactionId = 107 // (n,alpha) reaction
     
     fileprivate var _counters: [CounterType: Counter]?
     fileprivate var counters: [CounterType: Counter] {
@@ -106,11 +107,12 @@ c ==== CELLS =====
 \nc ----- Shield ------------
 10004 4 -0.94 5 -6 imp:n=1
 """
-// TODO: change scintillator material density!
-//        result += """
-//\nc ----- Scintillator ------------
-//10005 5 -0.94 -7 imp:n=1
-//"""
+        if scintillator != nil {
+            result += """
+\nc ----- Scintillator ------------
+10005 5 -4.08 -7 imp:n=1
+"""
+        }
         result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
