@@ -22,7 +22,10 @@ class Scintillator {
     
     func materialCard(index: Int) -> String {
         // Cs2LiLa(Br6)90%(Cl6)10%:Ce --- Cs 2 Li6 0.95 Li7 0.05 La 1 Br 4.8 Cl 1.2 Ce 1
-        return "M\(index) 55133.50c 2 3006.42c 0.95 3007.42c 0.05 57139.26y 1 35079.55c 4.8 17000.35c 1.2 58140.30y 1 $ CLLBC:Ce"
+        return """
+M\(index) 55133.50c -0.1819 3006.42c -0.0864 3007.42c -0.0045 57139.26y
+      -0.0909 35079.55c -0.4364 17000.35c -0.109 58140.30y -0.0909
+"""
     }
     
 }
