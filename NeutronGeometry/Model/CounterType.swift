@@ -27,7 +27,8 @@ enum CounterType: Int, CaseCountable {
         let prefix: String
         switch self {
         case .aspekt4, .aspekt7:
-            prefix = "Aspekt(\(self == .aspekt4) ? 4 : 7)"
+            let atm = self == .aspekt4 ? 4 : 7
+            prefix = "Aspekt(\(atm))"
         case .flerov:
             prefix = "Flerov Lab"
         case .zaprudnya:

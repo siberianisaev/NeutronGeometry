@@ -59,7 +59,7 @@ class MCNPInput {
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
 10000 0 6 imp:n=0 $ Space Outside Shield
-10001 0 -1 -5 imp:n=1 $ Space Inside of Vacuum Chamber
+10001 0 -1 -5 \(scintillator != nil ? "7" : "") imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
         let counterCellsCount = 5
@@ -118,7 +118,7 @@ c ==== CELLS =====
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
         result += materialsCard(shield: shield, scintillator: scintillator)
         // todo: scintillator tally
-        result += tallyCard(layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
+        result += tallyCard(scintillator: scintillator, layers: layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
         result += timeCard()
         result += controlCard(maxTime: maxTime)
         return result
@@ -200,7 +200,7 @@ c ==== CELLS =====
         \(shield.materialCard(index: 4))
         """
         if let s = scintillator?.materialCard(index: 5) {
-            result += "\n" + s
+            result += "\n" + s + "\nM6 3006 $ Li-6"
         }
         return result
     }
@@ -218,7 +218,7 @@ c ==== CELLS =====
         return result
     }
     
-    fileprivate func tallyCard(_ layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
+    fileprivate func tallyCard(scintillator: Scintillator?, layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
 \nc ---------------- TALLY ------------
@@ -259,6 +259,13 @@ FQ4 f e
             let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
             let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
+        }
+        if let _ = scintillator {
+            result += """
+\nc ---------------- Scintillator ------------
+F\(1)4:N 10005
+FM\(1)4 (-1 6 \(naReactionId))
+"""
         }
         return result
     }
