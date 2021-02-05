@@ -263,8 +263,8 @@ FQ4 f e
         if let _ = scintillator {
             result += """
 \nc ---------------- Scintillator ------------
-F\(1)4:N 10005
-FM\(1)4 (-1 6 \(naReactionId))
+F\(i+1)4:N 10005
+FM\(i+1)4 (-1 6 \(naReactionId))
 """
         }
         return result
