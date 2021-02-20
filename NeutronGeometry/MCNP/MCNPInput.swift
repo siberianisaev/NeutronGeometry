@@ -201,7 +201,7 @@ c ==== CELLS =====
         \(shield.materialCard(index: 4))
         """
         if let s = scintillator?.materialCard(index: 5) {
-            result += "\n" + s + "\nM6 3006 $ Li-6"
+            result += "\n" + s + "\nM6 3006 1 $ Li-6"
         }
         return result
     }
