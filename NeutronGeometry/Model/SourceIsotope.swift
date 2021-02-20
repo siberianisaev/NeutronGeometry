@@ -12,7 +12,7 @@ import Foundation
  Watt spectrum
  */
 enum SourceIsotope: Int, CaseCountable {
-    case Pu240, Pu242, Cm242, Cm244, Cf252
+    case Pu240, Pu242, Cm242, Cm244, Cm248, Cf252
     
     var name: String {
         switch self {
@@ -24,6 +24,8 @@ enum SourceIsotope: Int, CaseCountable {
             return "Cm-242"
         case .Cm244:
             return "Cm-244"
+        case .Cm248:
+            return "Cm-248"
         case .Cf252:
             return "Cf-252"
         }
@@ -39,6 +41,8 @@ enum SourceIsotope: Int, CaseCountable {
             return 0.891
         case .Cm244:
             return 0.906
+        case .Cm248:
+            return 0.8084
         case .Cf252:
             return 1.025
         }
@@ -54,6 +58,8 @@ enum SourceIsotope: Int, CaseCountable {
             return 4.046
         case .Cm244:
             return 3.848
+        case .Cm248:
+            return 4.536
         case .Cf252:
             return 2.926
         }
