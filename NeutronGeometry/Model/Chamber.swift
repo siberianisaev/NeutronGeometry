@@ -25,8 +25,8 @@ class Chamber {
         let min = sizeOrRadius - thickness
         if isCylindrical {
             return """
-                \(indexes[0]) RCC 0 0 \(-shieldX) 0 0 \(shieldX) \(min)  $ Internal Surface of Vacuum Chamber
-                \(indexes[1]) RCC 0 0 \(-shieldX) 0 0 \(shieldX) \(max) $ External Surface of Vacuum Chamber
+                \(indexes[0]) CZ \(min)  $ Internal Surface of Vacuum Chamber
+                \(indexes[1]) CZ \(max) $ External Surface of Vacuum Chamber
                 """
         } else {
             return """
