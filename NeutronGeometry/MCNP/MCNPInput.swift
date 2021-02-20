@@ -258,7 +258,7 @@ FQ4 f e
             let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
-        if let _ = scintillator {
+        if scintillator != nil {
             result += """
 \nc ---------------- Scintillator ------------
 F\(i+1)4:N 10005
