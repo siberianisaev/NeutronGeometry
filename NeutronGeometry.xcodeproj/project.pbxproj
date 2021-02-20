@@ -20,6 +20,7 @@
 		5A8465FF20BF2DFE00BCC3C0 /* SourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8465FE20BF2DFE00BCC3C0 /* SourceView.swift */; };
 		5A84660120C8191600BCC3C0 /* SourceIsotope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A84660020C8191600BCC3C0 /* SourceIsotope.swift */; };
 		5AEAB59720AF22E3006EF80E /* Counter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEAB59620AF22E3006EF80E /* Counter.swift */; };
+		65036BFA25E1086F00856D7E /* Chamber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65036BF925E1086F00856D7E /* Chamber.swift */; };
 		65181B9C20EB70830058755F /* Shield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65181B9B20EB70830058755F /* Shield.swift */; };
 		65181BA220EBB66C0058755F /* CountersLayerViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65181BA020EBB66C0058755F /* CountersLayerViewItem.swift */; };
 		65181BA320EBB66C0058755F /* CountersLayerViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65181BA120EBB66C0058755F /* CountersLayerViewItem.xib */; };
@@ -52,6 +53,7 @@
 		5A8465FE20BF2DFE00BCC3C0 /* SourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceView.swift; sourceTree = "<group>"; };
 		5A84660020C8191600BCC3C0 /* SourceIsotope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceIsotope.swift; sourceTree = "<group>"; };
 		5AEAB59620AF22E3006EF80E /* Counter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Counter.swift; sourceTree = "<group>"; };
+		65036BF925E1086F00856D7E /* Chamber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chamber.swift; sourceTree = "<group>"; };
 		65181B9B20EB70830058755F /* Shield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shield.swift; sourceTree = "<group>"; };
 		65181BA020EBB66C0058755F /* CountersLayerViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountersLayerViewItem.swift; sourceTree = "<group>"; };
 		65181BA120EBB66C0058755F /* CountersLayerViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountersLayerViewItem.xib; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				65181B9B20EB70830058755F /* Shield.swift */,
 				656C1393229D5ABF00749A03 /* Scintillator.swift */,
 				65181BA420EBC56F0058755F /* CountersLayer.swift */,
+				65036BF925E1086F00856D7E /* Chamber.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				65A2396220BC3DFA00F0D64E /* CounterSideView.swift in Sources */,
 				5A7DB3622011191D00A0209E /* ProjectionView.swift in Sources */,
 				5A8465FD20BF297200BCC3C0 /* SourceType.swift in Sources */,
+				65036BFA25E1086F00856D7E /* Chamber.swift in Sources */,
 				656C1394229D5ABF00749A03 /* Scintillator.swift in Sources */,
 				65DFC59620307B1200B55062 /* GeometryWindow.swift in Sources */,
 				5A84660120C8191600BCC3C0 /* SourceIsotope.swift in Sources */,

@@ -36,6 +36,13 @@ class ViewController: NSViewController {
     @IBOutlet weak var scintillatorPositionField: NSTextField!
     @IBOutlet weak var chamberSizeField: NSTextField!
     @IBOutlet weak var chamberThicknessField: NSTextField!
+    @IBOutlet weak var chamberIsCylindricalButton: NSButton!
+    @IBInspectable var chamberIsCylindrical: Bool = false {
+        didSet {
+            chamberIsCylindricalButton?.state = chamberIsCylindrical ? .on : .off
+            updateButton(nil)
+        }
+    }
     @IBOutlet weak var moderatorSizeField: NSTextField!
     @IBOutlet weak var moderatorLenghtField: NSTextField!
     @IBOutlet weak var sourcePositionField: NSTextField!
@@ -292,7 +299,7 @@ class ViewController: NSViewController {
         // MODERATOR
         strings.append(keyModerator + " \(keySize)=\(moderatorSizeField.integerValue) \(keyLenght)=\(moderatorLenghtField.integerValue)")
         // CHAMBER
-        strings.append(keyChamber + " \(keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
+        strings.append(keyChamber + " \(chamberIsCylindrical ? keyRadius : keySize)=\(chamberSizeField.integerValue) \(keyThickness)=\(chamberThicknessField.integerValue)")
         // SCINTILLATOR
         if useScintillator {
             strings.append(keyScintillator + " \(keySize)=\(scintillatorSizeField.integerValue) \(keyThickness)=\(scintillatorThicknessField.integerValue) \(keyZ)=\(scintillatorPositionField.integerValue)")
@@ -396,8 +403,14 @@ class ViewController: NSViewController {
             moderatorLenghtField.integerValue = lenght
         }
         // CHAMBER
-        if let values = dict[keyChamber], let size = preferenceIntFor(key: keySize, preferences: values), let thickness = preferenceIntFor(key: keyThickness, preferences: values) {
-            chamberSizeField.integerValue = size
+        if let values = dict[keyChamber], let thickness = preferenceIntFor(key: keyThickness, preferences: values) {
+            if let size = preferenceIntFor(key: keySize, preferences: values) {
+                chamberSizeField.integerValue = size
+                chamberIsCylindrical = false
+            } else if let radius = preferenceIntFor(key: keyRadius, preferences: values) {
+                chamberSizeField.integerValue = radius
+                chamberIsCylindrical = true
+            }
             chamberThicknessField.integerValue = thickness
         }
         // SCINTILLATOR
@@ -493,16 +506,15 @@ class ViewController: NSViewController {
             print("Counter: \(counter.index), center: (\(center.x), \(center.y)) cm, type: \(counter.type.name)")
         }
         
-        let chamberSize = chamberSizeField.floatValue/10
-        let chamberThinkness = chamberThicknessField.floatValue/10
+        let chamber = Chamber(sizeOrRadius: chamberSizeField.floatValue/10, thickness: chamberThicknessField.floatValue/10, isCylindrical: chamberIsCylindrical)
         let moderatorSize = moderatorSizeField.floatValue/10
         let moderatorLenght = moderatorLenghtField.floatValue/10
         let sourcePositionZ = sourcePositionField.floatValue/10
         let shield = Shield(thiknessX: shieldThicknessX.floatValue/10, thiknessY: shieldThicknessY.floatValue/10, boronPercent: shieldBoronPercent.floatValue)
         let scintillator: Scintillator? = useScintillator ? Scintillator(size: scintillatorSizeField.floatValue/10, thikness: scintillatorThicknessField.floatValue/10, positionZ: scintillatorPositionField.floatValue/10) : nil
         
-        print("Vacuum chamber size: \(chamberSize) cm")
-        print("Vacuum chamber thikness: \(chamberThinkness) cm")
+        print("Vacuum chamber size|radius: \(chamber.sizeOrRadius) cm")
+        print("Vacuum chamber thikness: \(chamber.thickness) cm")
         print("Moderator size: \(moderatorSize) cm")
         print("Moderator lenght: \(moderatorLenght) cm")
         print("Source position Z: \(sourcePositionZ) cm")
@@ -514,7 +526,7 @@ class ViewController: NSViewController {
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamberMax: chamberSize, chamberMin: (chamberSize - chamberThinkness), moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield, scintillator: scintillator)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield, scintillator: scintillator)
         print(result)
         
         // Files
@@ -620,12 +632,21 @@ class ViewController: NSViewController {
     fileprivate func showChamber(_ projection: Projection) {
         let isFront = projection == .front
         (isFront ? chamberFrontView : chamberSideView)?.removeFromSuperview()
-        let width = isFront ? CGFloat(chamberSizeField.floatValue) : shieldWidth(projection)
-        let height = CGFloat(chamberSizeField.floatValue)
+        var size = CGFloat(chamberSizeField.floatValue)
+        if chamberIsCylindrical {
+            size *= 2
+        }
+        let width = isFront ? size : shieldWidth(projection)
+        let height = size
         let container = containerFor(projection)
         let containerSize = container.frame.size
         let center = CGPoint(x: containerSize.width/2 - width/2, y: containerSize.height/2 - height/2)
         let chamber = ChamberView(frame: NSRect(x: center.x, y: center.y, width: width, height: height), thickness: CGFloat(chamberThicknessField.floatValue))
+        if isFront, chamberIsCylindrical {
+            chamber.wantsLayer = true
+            chamber.layer?.cornerRadius = size/2
+            chamber.layer?.masksToBounds = true
+        }
         container.addSubview(chamber)
         isFront ? (chamberFrontView = chamber) : (chamberSideView = chamber)
     }

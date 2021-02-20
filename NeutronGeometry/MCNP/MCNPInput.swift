@@ -52,7 +52,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator?) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamber: Chamber, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator?) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -113,7 +113,7 @@ c ==== CELLS =====
 10005 5 -4.08 -7 imp:n=1
 """
         }
-        result += surfacesCard(chamberMax: chamberMax, chamberMin: chamberMin, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
+        result += surfacesCard(chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
         result += modeCard()
         result += sourceCard(type: sourceType, isotope: sourceIsotope, sourcePositionZ: sourcePositionZ)
         result += materialsCard(shield: shield, scintillator: scintillator)
@@ -161,7 +161,7 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func surfacesCard(chamberMax: Float, chamberMin: Float, moderatorSize: Float, moderatorLenght: Float, shield: Shield, scintillator: Scintillator?) -> String {
+    fileprivate func surfacesCard(chamber: Chamber, moderatorSize: Float, moderatorLenght: Float, shield: Shield, scintillator: Scintillator?) -> String {
         let counterSurfaces = counters.values.sorted { (c1: Counter, c2: Counter) -> Bool in // Sorting is important there, see Counter -convertSurfaceId() method implementation
             return c1.type.rawValue < c2.type.rawValue
             }.map { (c: Counter) -> String in
@@ -171,8 +171,9 @@ c ==== CELLS =====
         let shieldX = (moderatorLenght + shield.thiknessX)/2
         var result = """
         \n\nc ==== Surfaces ====
-        1 RPP \(-chamberMin/2) \(chamberMin/2) \(-chamberMin/2) \(chamberMin/2) \(-shieldX) \(shieldX) $ Internal Surface of Vacuum Chamber
-        2 RPP \(-chamberMax/2) \(chamberMax/2) \(-chamberMax/2) \(chamberMax/2) \(-shieldX) \(shieldX) $ External Surface of Vacuum Chamber
+        """
+        result += "\n" + chamber.surfaces([1, 2], shieldX: shieldX) + "\n"
+        result += """
         5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Moderator
         6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of Geometry (Shield Size)
         """
