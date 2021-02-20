@@ -223,9 +223,6 @@ c ==== CELLS =====
         let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
 \nc ---------------- TALLY ------------
-\nc ----- Scintillator ------------
-F4:N 10005
-FM4 (1 5 \(naReactionId))
 \nc ----- He3-counters ------------
 F4:N \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
 FM4 (\(overalCoefficient) 3 \(npReactionId))
@@ -264,8 +261,8 @@ FQ4 f e
         if let _ = scintillator {
             result += """
 \nc ---------------- Scintillator ------------
-F\(1)4:N 10005
-FM\(1)4 (-1 6 \(naReactionId))
+F\(i+1)4:N 10005
+FM\(i+1)4 (-1 6 \(naReactionId))
 """
         }
         return result
