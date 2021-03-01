@@ -119,7 +119,7 @@ c ==== CELLS =====
         result += materialsCard(shield: shield, scintillator: scintillator)
         // todo: scintillator tally
         result += tallyCard(scintillator: scintillator, layers: layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
-        result += timeCard()
+        result += tallyTimeCard()
         result += controlCard(maxTime: maxTime)
         return result
     }
@@ -137,7 +137,7 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func timeCard() -> String {
+    fileprivate func tallyTimeCard() -> String {
         let max = 51200
         let step = 100
         var steps = ""

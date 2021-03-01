@@ -73,7 +73,7 @@ class MCNPOutput {
                         let time = timeValues[row]
                         line.append(time)
                         if row == 0 {
-                            headers.append("Time")
+                            headers.append("Time in Shakes") // 1 shake = 1E-8 seconds
                         }
                     } else {
                         let dataIndex = (column-1) / 2
