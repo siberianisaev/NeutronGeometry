@@ -38,14 +38,18 @@ class MCNPOutput {
         }
     }
     
-    var tallyMeans = [String]() {
+    var tallies = [MCNPResult]() {
         didSet {
-            var result = "Tally means for layers:\n" + tallyMeans.joined(separator: "\n")
-            let numbers = tallyMeans.map { (s: String) -> Double in
-                return Double(s)!
+            var result = "Tally means for layers:\n" + tallies.map{ $0.toString() }.joined(separator: "\n")
+            var totalTally: Double = 0
+            var errorsSquaresSumm: Double = 0
+            for tally in tallies {
+                totalTally += tally.value
+                errorsSquaresSumm += pow(tally.error, 2)
             }
-            let efficiency = Float(numbers.reduce(0, +) * 100)
-            result += "\n\nEfficiency:\n\(efficiency.stringWith(precision: 2))%"
+            let efficiency = Float(totalTally * 100)
+            let error = Float(errorsSquaresSumm.squareRoot() * 100)
+            result += "\n\nEfficiency:\n\(efficiency.stringWith(precision: 2)) ± \(error.stringWith(precision: 2))%"
             print(result)
             if let resultsFilePath = resultsFilePath {
                 let path = resultsFilePath + "_efficiency.txt"
@@ -188,7 +192,7 @@ class MCNPOutput {
     fileprivate func handleTally(_ lines: [String]) {
         let tallyChart = "tally"
         let count = lines.count
-        var means = [String]()
+        var tallies = [MCNPResult]()
         if count > 0 {
             var i = 0
             while i < count {
@@ -203,11 +207,16 @@ class MCNPOutput {
                             let l = lines[j]
                             if l.replacingOccurrences(of: " ", with: "").isEmpty {
                                 if let last = values.last { // last line of tally charts
-                                    // nps mean error vov slope fom ...
+                                    // nps[0] mean[1] error[2] vov slope fom ... nps[0] mean[1] error[2] vov slope    fom
                                     let components = last.components(separatedBy: CharacterSet.whitespaces).filter { (s: String) -> Bool in
-                                        return !s.isEmpty && s.contains("E") // TODO: use tablesCount to appropriatly handle count of means
+                                        return !s.isEmpty
                                     }
-                                    means.append(contentsOf: components)
+                                    for i in 0...components.count-1 {
+                                        if components[i].contains("E") {
+                                            let tally = MCNPResult(valueAndError: (components[i], components[i+1]))
+                                            tallies.append(tally)
+                                        }
+                                    }
                                 }
                                 i = j
                                 break
@@ -224,8 +233,8 @@ class MCNPOutput {
                 i += 1
             }
         }
-        means.removeFirst() // filter overal "tally 4", we use only layers tally.
-        tallyMeans = means
+        tallies.removeFirst() // filter overal "tally 4", we use only layers tally.
+        self.tallies = tallies
     }
     
 }
