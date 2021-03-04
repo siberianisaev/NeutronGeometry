@@ -42,7 +42,7 @@ enum SourceIsotope: Int, CaseCountable {
         case .Cm244:
             return 0.906
         case .Cm248:
-            return 0.8084
+            return 0.808387
         case .Cf252:
             return 1.025
         }
@@ -59,7 +59,7 @@ enum SourceIsotope: Int, CaseCountable {
         case .Cm244:
             return 3.848
         case .Cm248:
-            return 4.536
+            return 4.53623
         case .Cf252:
             return 2.926
         }
