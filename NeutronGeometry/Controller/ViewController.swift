@@ -54,6 +54,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var maxTimeField: NSTextField!
     @IBOutlet weak var sourceIsotopeButton: NSPopUpButton!
     @IBOutlet weak var countersInfoButton: NSButton!
+    @IBOutlet weak var tCardMaxField: NSTextField!
+    @IBOutlet weak var tCardStepField: NSTextField!
     
     fileprivate var sourceType: SourceType = .point
     

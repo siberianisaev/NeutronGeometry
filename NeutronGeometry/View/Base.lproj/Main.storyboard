@@ -1233,6 +1233,51 @@
                                                         <binding destination="XfG-lQ-9wD" name="value" keyPath="self.chamberIsCylindrical" id="YEh-IK-GRn"/>
                                                     </connections>
                                                 </button>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6IM-dR-SFO">
+                                                    <rect key="frame" x="536" y="28" width="94" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="128" drawsBackground="YES" id="Dy9-gV-wkY">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q9c-Nt-zNu">
+                                                    <rect key="frame" x="531" y="52" width="98" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Time max, mks" id="f4j-kZ-mVp">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cH9-lv-Rkh">
+                                                    <rect key="frame" x="641" y="28" width="94" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="1" drawsBackground="YES" id="OIf-eA-6IT">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7wW-bD-0Nt">
+                                                    <rect key="frame" x="636" y="52" width="98" height="17"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Step, mks" id="MG4-18-jL5">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xbV-mA-Da2">
+                                                    <rect key="frame" x="460" y="31" width="70" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="T card" id="bcB-S1-UUT">
+                                                        <font key="font" metaFont="system" size="16"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
                                             </subviews>
                                         </customView>
                                     </subviews>
@@ -1242,7 +1287,7 @@
                                     <rect key="frame" x="1" y="893" width="1998" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hoB-V4-ngD">
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="hoB-V4-ngD">
                                     <rect key="frame" x="-100" y="-100" width="15" height="884"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1277,6 +1322,8 @@
                         <outlet property="sideView" destination="nl5-fF-Iqp" id="uzF-3K-TvW"/>
                         <outlet property="sourceIsotopeButton" destination="nho-vc-10B" id="EUn-SR-HPv"/>
                         <outlet property="sourcePositionField" destination="RA7-T3-re5" id="rhD-1n-Ty0"/>
+                        <outlet property="tCardMaxField" destination="6IM-dR-SFO" id="tJn-R3-KgU"/>
+                        <outlet property="tCardStepField" destination="cH9-lv-Rkh" id="7Lw-Pq-cEw"/>
                         <outlet property="updateButton" destination="e0X-tU-ZqR" id="Rv1-YD-Nhv"/>
                     </connections>
                 </viewController>
