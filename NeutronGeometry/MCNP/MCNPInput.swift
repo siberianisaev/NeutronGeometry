@@ -52,7 +52,7 @@ class MCNPInput {
         return mcnpLayers
     }
     
-    func generateWith(counterViewLayers: [[CounterFrontView]], chamber: Chamber, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator?) -> String {
+    func generateWith(counterViewLayers: [[CounterFrontView]], chamber: Chamber, moderatorSize: Float, moderatorLenght: Float, maxTime: Int, sourcePositionZ: Float, sourceType: SourceType, sourceIsotope: SourceIsotope, shield: Shield, scintillator: Scintillator?, tCardMax: Int, tCardStep: Int) -> String {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
@@ -119,7 +119,7 @@ c ==== CELLS =====
         result += materialsCard(shield: shield, scintillator: scintillator)
         // todo: scintillator tally
         result += tallyCard(scintillator: scintillator, layers: layers, firstCounterCellId: ids.first!, totalDetectorsCount: totalDetectorsCount, lastCounterCellId: ids.last!)
-        result += tallyTimeCard()
+        result += tallyTimeCard(max: tCardMax, step: tCardStep)
         result += controlCard(maxTime: maxTime)
         return result
     }
@@ -137,9 +137,7 @@ c ==== CELLS =====
         """
     }
     
-    fileprivate func tallyTimeCard() -> String {
-        let max = 51200
-        let step = 100
+    fileprivate func tallyTimeCard(max: Int, step: Int) -> String {
         var steps = ""
         var i = 0
         var j = 0

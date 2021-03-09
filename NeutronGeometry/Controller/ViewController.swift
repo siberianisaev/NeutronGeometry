@@ -285,6 +285,8 @@ class ViewController: NSViewController {
     fileprivate let keyEven = "EVEN_COUNTER_SHIFT_ANGLE"
     fileprivate let keyPercent = "PERCENT"
     fileprivate let keyShield = "SHIELD"
+    fileprivate let keyTimes = "TIMES"
+    fileprivate let keyMax = "MAX"
     
     fileprivate func getGeometry() -> String {
         var strings = [String]()
@@ -314,6 +316,8 @@ class ViewController: NSViewController {
         strings.append(keySource + " \(keyZ)=\(sourcePositionField.integerValue) \(keyType)=\(sourceType.rawValue) \(keyIsotope)=\(sourceIsotope.rawValue)")
         // SHIELD
         strings.append(keyShield + " \(keyThickness)\(keyX)=\(shieldThicknessX.integerValue) \(keyThickness)\(keyY)=\(shieldThicknessY.integerValue) \(keyPercent)=\(shieldBoronPercent.integerValue)")
+        // TIMES
+        strings.append(keyTimes + " \(keyMax)=\(tCardMaxField.integerValue) \(keyStep)=\(tCardStepField.integerValue)")
         return strings.joined(separator: "\n")
     }
     
@@ -449,6 +453,11 @@ class ViewController: NSViewController {
             shieldThicknessY.integerValue = y
             shieldBoronPercent.integerValue = p
         }
+        // TIMES
+        if let values = dict[keyTimes], let max = preferenceIntFor(key: keyMax, preferences: values), let step = preferenceIntFor(key: keyStep, preferences: values) {
+            tCardMaxField.integerValue = max
+            tCardStepField.integerValue = step
+        }
         
         // COUNTERS
         var i = 1
@@ -514,6 +523,8 @@ class ViewController: NSViewController {
         let sourcePositionZ = sourcePositionField.floatValue/10
         let shield = Shield(thiknessX: shieldThicknessX.floatValue/10, thiknessY: shieldThicknessY.floatValue/10, boronPercent: shieldBoronPercent.floatValue)
         let scintillator: Scintillator? = useScintillator ? Scintillator(size: scintillatorSizeField.floatValue/10, thikness: scintillatorThicknessField.floatValue/10, positionZ: scintillatorPositionField.floatValue/10) : nil
+        let tCardMax = tCardMaxField.integerValue * 100
+        let tCardStep = tCardStepField.integerValue * 100
         
         print("Vacuum chamber size|radius: \(chamber.sizeOrRadius) cm")
         print("Vacuum chamber thikness: \(chamber.thickness) cm")
@@ -522,13 +533,15 @@ class ViewController: NSViewController {
         print("Source position Z: \(sourcePositionZ) cm")
         print("Source type: \(sourceType.name)")
         print("Source isotope: \(sourceIsotope.name)")
+        print("T card max: \(tCardMax) shakes")
+        print("T card step: \(tCardStep) shakes")
 //        print("Shield: \(shield)")
 //        print("Scintillator: \(scintillator)")
         
         // MCNP
         let layers = counterLayers()
         print("------- MCNP Input -------")
-        let result = MCNPInput().generateWith(counterViewLayers: layers, chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield, scintillator: scintillator)
+        let result = MCNPInput().generateWith(counterViewLayers: layers, chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, maxTime: maxTimeField.integerValue, sourcePositionZ: sourcePositionZ, sourceType: sourceType, sourceIsotope: sourceIsotope, shield: shield, scintillator: scintillator, tCardMax: tCardMax, tCardStep: tCardStep)
         print(result)
         
         // Files
