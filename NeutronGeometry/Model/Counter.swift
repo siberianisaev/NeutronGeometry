@@ -15,9 +15,13 @@ class Counter {
         case .aspekt4:
             return 49.0
         case .flerov:
-            return 48.5
-        case .zaprudnya, .mayak, .aspekt7:
+            return 50.0
+        case .zaprudnya:
+            return 56.8
+        case .aspekt7:
             return 56
+        case .mayak:
+            return 62.7
         }
     }
     
