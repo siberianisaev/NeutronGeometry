@@ -59,7 +59,7 @@ class MCNPInput {
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
 10000 0 6 imp:n=0 $ Space Outside Shield
-10001 0 -1 -5 \(scintillator != nil ? "7" : "") imp:n=1 $ Space Inside of Vacuum Chamber
+10001 0 -1 -5 \(scintillator != nil ? "#10005" : "") imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
         let counterCellsCount = 5
@@ -110,7 +110,7 @@ c ==== CELLS =====
         if scintillator != nil {
             result += """
 \nc ----- Scintillator ------------
-10005 5 -4.08 -7 imp:n=1
+10005 3 -\(0.000125 * 7) -7 imp:n=1
 """
         }
         result += surfacesCard(chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
@@ -198,9 +198,9 @@ c ==== CELLS =====
         M3 2003.60c 1 $ He-3
         \(shield.materialCard(index: 4))
         """
-        if let s = scintillator?.materialCard(index: 5) {
-            result += "\n" + s + "\nM6 3006 1 $ Li-6"
-        }
+//        if let s = scintillator?.materialCard(index: 5) {
+//            result += "\n" + s + "\nM6 3006 1 $ Li-6"
+//        }
         return result
     }
     
@@ -216,7 +216,6 @@ c ==== CELLS =====
         }
         return result
     }
-    
     fileprivate func tallyCard(scintillator: Scintillator?, layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
@@ -225,7 +224,7 @@ c ----- He3-counters ------------
 F4:N \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
 FM4 (\(overalCoefficient) 3 \(npReactionId))
 FQ4 f e
-"""        
+"""
         //AI input lines are limited to 80 columns
         var i = 0
         for layer in layers {
@@ -233,7 +232,7 @@ FQ4 f e
             let indexes = layer.map({ (c: CounterFrontView) -> String in
                 return String(c.mcnpCellId)
             })
-            
+
             var s1Indexes = ""
             var j = 0
             for index in indexes {
@@ -249,18 +248,18 @@ FQ4 f e
                 s1Indexes += index
             }
             let s1 = "F\(i)4:N (\(s1Indexes))"
-            
+
             let detectorsCount = layer.count
             let counter = counters[layer.first!.type]!
             let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
             let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
-        if scintillator != nil {
+        if let s = scintillator {
             result += """
 \nc ---------------- Scintillator ------------
 F\(i+1)4:N 10005
-FM\(i+1)4 (-1 6 \(naReactionId))
+FM\(i+1)4 (\(s.tallyCoefficient()) 3 \(npReactionId))
 """
         }
         return result

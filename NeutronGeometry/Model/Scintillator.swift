@@ -28,4 +28,16 @@ M\(index) 55133.60c -0.1819 3006.50c -0.0864 3007.55c -0.0045
 """
     }
     
+    /*
+     In cm^3.
+     */
+    func volume() -> Float {
+        return pow(size, 2) * thikness
+    }
+    
+    func tallyCoefficient() -> Float {
+        let v = volume()
+        return Counter.tallyCoefficient(presure: 7, volume: v)
+    }
+    
 }

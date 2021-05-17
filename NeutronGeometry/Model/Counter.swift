@@ -118,16 +118,20 @@ class Counter {
         return base * height
     }
     
+    func tallyCoefficient() -> Float {
+        return Counter.tallyCoefficient(presure: type.presure(), volume: activeAreaVolume())
+    }
+    
     /**
      Atoms count get from Mendeleev-Clapeyron equation converted to MCNP format.
      */
-    func tallyCoefficient() -> Float {
-        let presure = type.presure() * 101325 // Pa
-        let volume = activeAreaVolume() / 1e6 // m^3
+    class func tallyCoefficient(presure: Float, volume: Float) -> Float {
+        let p = presure * 101325 // Pa
+        let v = volume / 1e6 // m^3
         let temperature: Float = 20 + 273.15 // °K
         let avogadro: Float = 0.602214085775 // * 1e-24
         let R: Float = 8.31445984849
-        let coefficient = (presure * volume * avogadro) / (temperature * R) // atoms count * 1e-24
+        let coefficient = (p * v * avogadro) / (temperature * R) // atoms count * 1e-24
         return coefficient
     }
     
