@@ -10,6 +10,7 @@ import Foundation
 
 class MCNPInput {
     
+    fileprivate let ngReactionId = 102 // (n,gamma) reaction
     fileprivate let npReactionId = 103 // (n,p) reaction
     fileprivate let naReactionId = 107 // (n,alpha) reaction
     
@@ -59,7 +60,7 @@ class MCNPInput {
 Geometry for \(totalDetectorsCount) detectors.
 c ==== CELLS =====
 10000 0 6 imp:n=0 $ Space Outside Shield
-10001 0 -1 -5 \(scintillator != nil ? "7" : "") imp:n=1 $ Space Inside of Vacuum Chamber
+10001 0 -1 -5 \(scintillator != nil ? "#10005" : "") imp:n=1 $ Space Inside of Vacuum Chamber
 10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
 """
         let counterCellsCount = 5
@@ -110,7 +111,7 @@ c ==== CELLS =====
         if scintillator != nil {
             result += """
 \nc ----- Scintillator ------------
-10005 5 -4.08 -7 imp:n=1
+10005 5 -7.9 -7 imp:n=1
 """
         }
         result += surfacesCard(chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
@@ -260,7 +261,7 @@ FQ4 f e
             result += """
 \nc ---------------- Scintillator ------------
 F\(i+1)4:N 10005
-FM\(i+1)4 (-1 6 \(naReactionId))
+FM\(i+1)4 (5.525 5 \(ngReactionId))
 """
         }
         return result
