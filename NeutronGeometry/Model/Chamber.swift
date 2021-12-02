@@ -25,13 +25,13 @@ class Chamber {
         let min = sizeOrRadius - thickness
         if isCylindrical {
             return """
-                \(indexes[0]) CZ \(min)  $ Internal Surface of Vacuum Chamber
-                \(indexes[1]) CZ \(max) $ External Surface of Vacuum Chamber
+                \(indexes[0]) CZ \(min)  $ Internal surface of vacuum chamber
+                \(indexes[1]) CZ \(max) $ external surface of vacuum chamber
                 """
         } else {
             return """
-                \(indexes[0]) RPP \(-min/2) \(min/2) \(-min/2) \(min/2) \(-shieldX) \(shieldX) $ Internal Surface of Vacuum Chamber
-                \(indexes[1]) RPP \(-max/2) \(max/2) \(-max/2) \(max/2) \(-shieldX) \(shieldX) $ External Surface of Vacuum Chamber
+                \(indexes[0]) RPP \(-min/2) \(min/2) \(-min/2) \(min/2) \(-shieldX) \(shieldX) $ Internal surface of vacuum chamber
+                \(indexes[1]) RPP \(-max/2) \(max/2) \(-max/2) \(max/2) \(-shieldX) \(shieldX) $ External surface of vacuum chamber
                 """
         }
     }

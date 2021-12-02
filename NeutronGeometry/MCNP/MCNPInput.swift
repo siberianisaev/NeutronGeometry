@@ -56,11 +56,11 @@ class MCNPInput {
         let layers = convertViewLayersToMCNP(counterViewLayers)
         let totalDetectorsCount = layers.joined().count
         var result = """
-Geometry for \(totalDetectorsCount) detectors.
-c ==== CELLS =====
-10000 0 6 imp:n=0 $ Space Outside Shield
-10001 0 -1 -5 \(scintillator != nil ? "7" : "") imp:n=1 $ Space Inside of Vacuum Chamber
-10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of Vacuum Chamber
+c THE ASSEMBLY OF \(totalDetectorsCount) COUNTERS
+c CELLS
+10000 0 6 imp:n=0 $ Space outside shield
+10001 0 -1 -5 \(scintillator != nil ? "7" : "") imp:n=1 $ Space inside of vacuum chamber
+10002 2 -7.9 -2 1 -5 imp:n=1 $ Wall of vacuum chamber
 """
         let counterCellsCount = 5
         var id = 10
@@ -98,19 +98,16 @@ c ==== CELLS =====
             excludedIdsString += id
         }
         result += """
-\nc ----- Moderator ------------
-10003 1 -0.92 2 -5
+\n10003 1 -0.92 2 -5
         \(excludedIdsString)
-        imp:n=1
+        imp:n=1 $ Moderator
 """
         result += """
-\nc ----- Shield ------------
-10004 4 -0.94 5 -6 imp:n=1
+\n10004 4 -0.94 5 -6 imp:n=1 $ Shield
 """
         if scintillator != nil {
             result += """
-\nc ----- Scintillator ------------
-10005 5 -4.08 -7 imp:n=1
+\n10005 5 -4.08 -7 imp:n=1 $ Scintillator
 """
         }
         result += surfacesCard(chamber: chamber, moderatorSize: moderatorSize, moderatorLenght: moderatorLenght, shield: shield, scintillator: scintillator)
@@ -131,7 +128,7 @@ c ==== CELLS =====
         }
         let sdefString = sdef.joined(separator: " ")
         return """
-        \nc ---------------- SOURCE ------------
+        \nc SOURCE
         SDEF \(sdefString)
         SP1 -3 \(isotope.coefficientA) \(isotope.coefficientB)
         """
@@ -155,7 +152,8 @@ c ==== CELLS =====
             i += step
         }
         return """
-        \nT0 \(steps)
+        \nc TALLY TIME
+        T0 \(steps)
         """
     }
     
@@ -168,12 +166,12 @@ c ==== CELLS =====
         let shieldY = (moderatorSize + shield.thiknessY)/2
         let shieldX = (moderatorLenght + shield.thiknessX)/2
         var result = """
-        \n\nc ==== Surfaces ====
+        \nc SURFACES
         """
         result += "\n" + chamber.surfaces([1, 2], shieldX: shieldX) + "\n"
         result += """
-        5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External Surface of Moderator
-        6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of Geometry (Shield Size)
+        5 RPP \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorSize/2) \(moderatorSize/2) \(-moderatorLenght/2) \(moderatorLenght/2) $ External surface of moderator
+        6 RPP \(-shieldY) \(shieldY) \(-shieldY) \(shieldY) \(-shieldX) \(shieldX) $ Border of geometry
         """
         if let s = scintillator {
             let min = -s.thikness + s.positionZ
@@ -185,16 +183,16 @@ c ==== CELLS =====
     
     fileprivate func modeCard() -> String {
         return """
-        \n\nMODE N
+        \nMODE N
         """
     }
     
     fileprivate func materialsCard(shield: Shield, scintillator: Scintillator?) -> String {
         var result = """
-        \nc ---------------- MATERIALS ------------
+        \nc MATERIALS
         M1 6000.60c 1 1001.60c 2 $ Polyethylene
         M2 24000.42c -0.19 26000.21c -0.69 25055.50c -0.02 28000.42c -0.09
-              29000.50c -0.01 $ Stainless Steel
+              29000.50c -0.01 $ Stainless steel
         M3 2003.60c 1 $ He-3
         \(shield.materialCard(index: 4))
         """
@@ -220,8 +218,7 @@ c ==== CELLS =====
     fileprivate func tallyCard(scintillator: Scintillator?, layers: [[CounterFrontView]], firstCounterCellId: Int, totalDetectorsCount: Int, lastCounterCellId: Int) -> String {
         let overalCoefficient = overalTallyCoefficient(layers).stringWith(precision: 6)
         var result = """
-\nc ---------------- TALLY ------------
-c ----- He3-counters ------------
+\nc TALLIES
 F4:N \(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId) (\(firstCounterCellId) \(totalDetectorsCount-2)i \(lastCounterCellId))
 FM4 (\(overalCoefficient) 3 \(npReactionId))
 FQ4 f e
@@ -253,12 +250,12 @@ FQ4 f e
             let detectorsCount = layer.count
             let counter = counters[layer.first!.type]!
             let coefficient = (counter.tallyCoefficient() * Float(detectorsCount)).stringWith(precision: 6)
-            let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Detectors of Layer \(i)"
+            let s2 = "FM\(i)4 (\(coefficient) 3 \(npReactionId)) $ \(detectorsCount) Counters of layer \(i)"
             result += "\n" + s1 + "\n" + s2
         }
         if scintillator != nil {
             result += """
-\nc ---------------- Scintillator ------------
+\nc Scintillator
 F\(i+1)4:N 10005
 FM\(i+1)4 (-1 6 \(naReactionId))
 """
@@ -268,7 +265,8 @@ FM\(i+1)4 (-1 6 \(naReactionId))
     
     fileprivate func controlCard(maxTime: Int) -> String {
         return """
-        \nNPS 1000000000
+        \nc OUTPUT CONTROL
+        NPS 1000000000
         CTME \(maxTime)\n
         """
     }

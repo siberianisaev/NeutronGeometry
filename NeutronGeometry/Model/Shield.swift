@@ -30,7 +30,7 @@ class Shield {
         let precision = 6
         return """
 M\(index) 6000.60c \(C.stringWith(precision: precision)) 1001.60c \(H.stringWith(precision: precision))
-      5010.60c \(B10.stringWith(precision: precision)) 5011.60c \(B11.stringWith(precision: precision)) $ Boron(\(boronPercent)%)-Polyethylene
+      5010.60c \(B10.stringWith(precision: precision)) 5011.60c \(B11.stringWith(precision: precision)) $ Polyethylene with boron (5%)
 """
     }
     

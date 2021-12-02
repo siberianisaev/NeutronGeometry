@@ -143,11 +143,9 @@ class ViewController: NSViewController {
         case 3, 4:
             return .mayak
         case 5, 6:
-            return .aspekt7
-        case 7, 8:
             return .flerov
         default:
-            return .aspekt4
+            return .flerov
         }
     }
     
@@ -467,15 +465,6 @@ class ViewController: NSViewController {
             // Presure
             if let t = preferenceIntFor(key: keyType, preferences: values), let type = CounterType(rawValue: t) {
                 types[counterIndex] = type
-            } else if let p = preferenceIntFor(key: "PRESURE", preferences: values) { // Old geometry version support
-                switch p {
-                case 4:
-                    types[counterIndex] = .aspekt4
-                case 7:
-                    types[counterIndex] = .flerov
-                default:
-                    break
-                }
             }
             // Manually set positions
             var p: CGPoint? = nil

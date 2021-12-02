@@ -12,26 +12,17 @@ class Counter {
     
     var lenght: Float {
         switch type {
-        case .aspekt4:
-            return 49.0
         case .flerov:
             return 50.0
         case .zaprudnya:
             return 56.8
-        case .aspekt7:
-            return 56
         case .mayak:
             return 62.7
         }
     }
     
     var radius: Float {
-        switch type {
-        case .aspekt4, .mayak, .aspekt7:
-            return 1.5
-        default:
-            return 1.6
-        }
+        return type == .mayak ? 1.5 : 1.6
     }
     
     var type: CounterType = .flerov
@@ -47,13 +38,11 @@ class Counter {
     var capTop: Float {
         var value: Float
         switch type {
-        case .aspekt4:
-            value = 1.5
         case .flerov:
             value = 3
         case .zaprudnya:
             value = 2.2
-        case .mayak, .aspekt7:
+        case .mayak:
             value = 2.0
         }
         return value - wallThikness
@@ -62,13 +51,11 @@ class Counter {
     var capBottom: Float {
         var value: Float
         switch type {
-        case .aspekt4:
-            value = 1.5
         case .flerov:
             value = 1
         case .zaprudnya:
             value = 1.8
-        case .mayak, .aspekt7:
+        case .mayak:
             value = 2.0
         }
         return value - wallThikness
@@ -135,12 +122,12 @@ class Counter {
         let start = startSurfaceId
         let density = self.density
         return """
-        \nc ---------- Counter \(index) ---------------------------
-        \(id) 3 -\(density) \(start+2) -\(start+3) -\(start+6) imp:n=1 u=\(index) $ Couter's SV
-        \(id+1) 3 -\(density) \(start+1) -\(start+2) -\(start+6) imp:n=1 u=\(index) $ Lower Complementation to SV
-        \(id+2) 3 -\(density) \(start+3) -\(start+4) -\(start+6) imp:n=1 u=\(index) $ Upper Complementation to SV
-        \(id+3) 2 -7.91 \(start) -\(start+5) -\(start+7) (-\(start+1):\(start+4):\(start+6)) imp:n=1 u=\(index) $ Wall of Counter
-        \(id+4) 0 (-\(start):\(start+5):\(start+7)) imp:n=1 u=\(index) $ Space around Counter
+        \nc Counter \(index)
+        \(id) 3 -\(density) \(start+2) -\(start+3) -\(start+6) imp:n=1 u=\(index)
+        \(id+1) 3 -\(density) \(start+1) -\(start+2) -\(start+6) imp:n=1 u=\(index)
+        \(id+2) 3 -\(density) \(start+3) -\(start+4) -\(start+6) imp:n=1 u=\(index)
+        \(id+3) 2 -7.91 \(start) -\(start+5) -\(start+7) (-\(start+1):\(start+4):\(start+6)) imp:n=1 u=\(index)
+        \(id+4) 0 (-\(start):\(start+5):\(start+7)) imp:n=1 u=\(index)
         \(id+5) 0 -\(start+8) -5 imp:n=1 fill=\(index) TRCL=(\(TRCL))
         """
     }
@@ -156,7 +143,7 @@ class Counter {
     func mcnpSurfaces() -> String {
         let start = startSurfaceId
         return """
-        c ***** Counter \(type.name) *************************
+        c \(type.name) counter
         \(start) pz -\(pzOutside)
         \(start+1) pz -\(pzInside)
         \(start+2) pz -\(pzActiveAreaBottom)
