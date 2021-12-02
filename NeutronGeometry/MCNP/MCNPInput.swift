@@ -166,7 +166,7 @@ c CELLS
         let shieldY = (moderatorSize + shield.thiknessY)/2
         let shieldX = (moderatorLenght + shield.thiknessX)/2
         var result = """
-        \nc SURFACES
+        \n\nc SURFACES
         """
         result += "\n" + chamber.surfaces([1, 2], shieldX: shieldX) + "\n"
         result += """
@@ -183,7 +183,7 @@ c CELLS
     
     fileprivate func modeCard() -> String {
         return """
-        \nMODE N
+        \n\nMODE N
         """
     }
     
